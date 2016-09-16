@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 11, 2016 at 11:27 AM
+-- Generation Time: Sep 12, 2016 at 06:35 AM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -80,6 +80,7 @@ CREATE TABLE `evaluators` (
   `id` int(10) UNSIGNED NOT NULL,
   `exercise_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
+  `type` tinyint(1) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
@@ -261,7 +262,8 @@ ALTER TABLE `evaluations`
 --
 ALTER TABLE `evaluators`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `evaluators_ibfk_1` (`exercise_id`);
+  ADD KEY `evaluators_ibfk_1` (`exercise_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `exercises`
@@ -311,7 +313,8 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `subjects`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `subjects_ibfk_1` (`exercise_id`);
+  ADD KEY `subjects_ibfk_1` (`exercise_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -416,7 +419,8 @@ ALTER TABLE `evaluations`
 -- Constraints for table `evaluators`
 --
 ALTER TABLE `evaluators`
-  ADD CONSTRAINT `evaluators_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `evaluators_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `evaluators_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `factors`
@@ -448,7 +452,8 @@ ALTER TABLE `sessions`
 -- Constraints for table `subjects`
 --
 ALTER TABLE `subjects`
-  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `subjects_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
