@@ -69,7 +69,7 @@ and Fuzzy Comprehensive Evaluation Approach.
 
 <h3>Significance of the study</h3>
 <ol>
-<li>This work will be most important to Nigeria University Commission (<a href="http://nuc.edu.ng/">NUC</a>) for evaluation of lecturer in Nigeria University</li>
+<li>This work will be most important to Nigeria University Commission (<a href="http://nuc.edu.ng/" target="_new">NUC</a>) for evaluation of lecturer in Nigeria University</li>
 <li>Promotion is a way of appreciating someone's effort in job places and also motivate him\her to put more effort, 
 a system of evaluating lecturer's performance and grading him/her for promotion will encourage the lecturer to put more effort in delivering their
  course outline and to have a cordial relationship with the students.
@@ -88,13 +88,13 @@ though other department faculty and tertiary institutions in the country can ado
 <h3>Designed and Developed by:</h3>
 <ul style="list-style: square">
 <li>Umaru Adamu (M.Sc, Computer Science, University of Nigeria Nsukka)</li>
-<li><a href="https://www.linkedin.com/in/jcnwobodo">Nwobodo Chukwuemeka</a> (B.Sc, Computer Science '017, University of Nigeria Nsukka)</li>
+<li><a href="https://www.linkedin.com/in/jcnwobodo" target="_new">Nwobodo Chukwuemeka</a> (B.Sc, Computer Science '017, University of Nigeria Nsukka)</li>
 </ul>
 
 <h3>Key References</h3>
 <ul>
     <li>
-        <a href="http://www.wseas.org/multimedia/journals/information/2013/035709-204.pdf" target="_blank">
+        <a href="http://www.wseas.org/multimedia/journals/information/2013/035709-204.pdf" target="_new">
         An Evaluation of Teaching Performance: The Fuzzy AHP and Comprehensive Evaluation Approach by Quang Hung Do and Jeng-Fung Chen
         </a>
     </li>
