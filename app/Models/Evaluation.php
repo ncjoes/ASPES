@@ -29,7 +29,7 @@ class Evaluation extends Model
      */
     public function subject()
     {
-        return $this->belongsTo('App\Models\Subject');
+        return $this->belongsTo(Subject::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class Evaluation extends Model
      */
     public function evaluator()
     {
-        return $this->belongsTo('App\Models\Evaluator');
+        return $this->belongsTo(Evaluator::class);
     }
 
     /**
@@ -45,7 +45,7 @@ class Evaluation extends Model
      */
     public function comment()
     {
-        return $this->belongsTo('App\Models\Comment');
+        return $this->belongsTo(Comment::class);
     }
 
     /**
@@ -53,6 +53,6 @@ class Evaluation extends Model
      */
     public function factor()
     {
-        return $this->belongsTo('App\Models\Factor');
+        return $this->belongsTo(Factor::class);
     }
 }

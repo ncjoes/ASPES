@@ -40,7 +40,7 @@ class User extends Authenticatable
      */
     public function roles()
     {
-        return $this->belongsToMany('App\Models\Role')->withTimestamps();
+        return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
     /**
@@ -48,7 +48,7 @@ class User extends Authenticatable
      */
     public function sessions()
     {
-        return $this->hasMany('App\Models\Session');
+        return $this->hasMany(Session::class);
     }
 
     /**
@@ -57,7 +57,7 @@ class User extends Authenticatable
      */
     public function exercises($role=self::ER_EVALUATOR)
     {
-        return $this->belongsToMany('App\Models\Exercise', $role);
+        return $this->belongsToMany(Exercise::class, $role);
     }
 
     /**
@@ -65,13 +65,13 @@ class User extends Authenticatable
      */
     public function sent_invitations()
     {
-        return $this->hasMany('App\Models\Invitation');
+        return $this->hasMany(Invitation::class);
     }
 
     /**
      * @return string
      */
-    public function _names()
+    public function names()
     {
         return ($this->first_name." ".$this->middle_name." ".$this->last_name);
     }
@@ -80,7 +80,7 @@ class User extends Authenticatable
      * @param Role $role
      * @return mixed
      */
-    public function _hasRole(Role $role)
+    public function hasRole(Role $role)
     {
         return $this->roles->contains($role);
     }
@@ -88,7 +88,7 @@ class User extends Authenticatable
     /**
      * @return bool
      */
-    public function _isAdmin()
+    public function isAdmin()
     {
         return in_array($this::ROLE_ADMIN, $this->roles->pluck('name')->all());
     }
@@ -97,7 +97,7 @@ class User extends Authenticatable
      * @param $email
      * @return mixed
      */
-    public static function _getByEmail($email)
+    public static function getByEmail($email)
     {
         return self::where('email', $email);
     }

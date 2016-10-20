@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Exercise
+ *
  * @package App\Models
  */
 class Exercise extends Model
@@ -27,7 +28,7 @@ class Exercise extends Model
     /**
      *
      */
-    const ER_SUBJECT   = 'subjects';
+    const ER_SUBJECT = 'subjects';
     /**
      *
      */
@@ -38,7 +39,7 @@ class Exercise extends Model
      */
     public function fcvs()
     {
-        return $this->hasMany('App\Models\FCV');
+        return $this->hasMany(FCV::class);
     }
 
     /**
@@ -46,7 +47,7 @@ class Exercise extends Model
      */
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment');
+        return $this->hasMany(Comment::class);
     }
 
     /**
@@ -54,7 +55,7 @@ class Exercise extends Model
      */
     public function factors()
     {
-        return $this->hasMany('App\Models\Factor');
+        return $this->hasMany(Factor::class);
     }
 
     /**
@@ -62,7 +63,7 @@ class Exercise extends Model
      */
     public function subjects()
     {
-        return $this->hasMany('App\Models\Subject');
+        return $this->hasMany(Subject::class);
     }
 
     /**
@@ -70,16 +71,17 @@ class Exercise extends Model
      */
     public function evaluators()
     {
-        return $this->hasMany('App\Models\Evaluator');
+        return $this->hasMany(Evaluator::class);
     }
 
     /**
      * @param string $role
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function concerned_users($role=self::ER_EVALUATOR)
+    public function concerned_users($role = self::ER_EVALUATOR)
     {
-        return $this->belongsToMany('App\Models\User', $role);
+        return $this->belongsToMany(User::class, $role);
     }
 
     /**
@@ -87,7 +89,7 @@ class Exercise extends Model
      */
     public function factor_comparisons()
     {
-        return $this->hasManyThrough('App\Models\Comparison', 'App\Models\Evaluator');
+        return $this->hasManyThrough(Comparison::class, Evaluator::class);
     }
 
     /**
@@ -95,24 +97,26 @@ class Exercise extends Model
      */
     public function subject_evaluations()
     {
-        return $this->hasManyThrough('App\Models\Evaluation', 'App\Models\Subject');
+        return $this->hasManyThrough(Evaluation::class, Subject::class);
     }
 
     /**
      * @return array
      */
-    public function _getComparisonMatrices()
+    public function getComparisonMatrices()
     {
         $data = [];
+
         return $data;
     }
 
     /**
      * @return array
      */
-    public function _getRepresentativeCM()
+    public function getRepresentativeCM()
     {
         $data = [];
+
         return $data;
     }
 
@@ -122,6 +126,7 @@ class Exercise extends Model
     public function getFactorWeights()
     {
         $data = [];
+
         return $data;
     }
 }

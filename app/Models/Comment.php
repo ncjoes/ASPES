@@ -29,7 +29,7 @@ class Comment extends Model
      */
     public function exercise()
     {
-        return $this->belongsTo('App\Models\Exercise');
+        return $this->belongsTo(Exercise::class);
     }
 
     /**
@@ -37,6 +37,6 @@ class Comment extends Model
      */
     public function evaluations()
     {
-        return $this->hasMany('App\Models\Evaluation');
+        return $this->hasMany(Exercise::class);
     }
 }

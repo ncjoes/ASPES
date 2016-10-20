@@ -17,7 +17,7 @@ class Invitation extends Model
      */
     public function sender()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -25,6 +25,6 @@ class Invitation extends Model
      */
     public function exercise()
     {
-        return $this->belongsTo('App\Models\Exercise');
+        return $this->belongsTo(Exercise::class);
     }
 }

@@ -29,7 +29,7 @@ class Evaluator extends Model
      */
     public function profile()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class Evaluator extends Model
      */
     public function exercise()
     {
-        return $this->belongsTo('App\Models\Exercise');
+        return $this->belongsTo(Exercise::class);
     }
 
     /**
@@ -45,7 +45,7 @@ class Evaluator extends Model
      */
     public function evaluations()
     {
-        return $this->hasMany('App\Models\Evaluation');
+        return $this->hasMany(Evaluation::class);
     }
 
     /**
@@ -53,6 +53,6 @@ class Evaluator extends Model
      */
     public function comparisons()
     {
-        return $this->hasMany('App\Models\Comparison');
+        return $this->hasMany(Comparison::class);
     }
 }

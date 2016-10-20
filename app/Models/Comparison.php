@@ -29,7 +29,7 @@ class Comparison extends Model
      */
     public function factor1()
     {
-        return $this->belongsTo('App\Models\Factor', 'f1_id');
+        return $this->belongsTo(Factor::class, 'f1_id');
     }
 
     /**
@@ -37,7 +37,7 @@ class Comparison extends Model
      */
     public function factor2()
     {
-        return $this->belongsTo('App\Models\Factor', 'f2_id');
+        return $this->belongsTo(Factor::class, 'f2_id');
     }
 
     /**
@@ -45,7 +45,7 @@ class Comparison extends Model
      */
     public function fcv()
     {
-        return $this->belongsTo('App\Models\FCV');
+        return $this->belongsTo(FCV::class);
     }
 
     /**
@@ -53,6 +53,6 @@ class Comparison extends Model
      */
     public function evaluator()
     {
-        return $this->belongsTo('App\Models\Evaluator');
+        return $this->belongsTo(Evaluator::class);
     }
 }

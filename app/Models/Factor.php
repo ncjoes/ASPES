@@ -29,7 +29,7 @@ class Factor extends Model
      */
     public function exercise()
     {
-        return $this->belongsTo('App\Models\Exercise');
+        return $this->belongsTo(Exercise::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class Factor extends Model
      */
     public function evaluations()
     {
-        return $this->hasMany('App\Models\Evaluation');
+        return $this->hasMany(Evaluation::class);
     }
 
     /**
@@ -45,7 +45,7 @@ class Factor extends Model
      */
     public function comparisons()
     {
-        return $this->hasMany('App\Models\Comparison', 'f1_id');
+        return $this->hasMany(Comparison::class, 'f1_id');
     }
 
     /**
@@ -53,7 +53,7 @@ class Factor extends Model
      */
     public function parent()
     {
-        return $this->find($this->parent_id);
+        return self::find($this->parent_id);
     }
 
     /**
@@ -61,6 +61,6 @@ class Factor extends Model
      */
     public function sub_factors()
     {
-        return $this->where('parent_id', $this->id);
+        return self::where('parent_id', $this->id);
     }
 }
