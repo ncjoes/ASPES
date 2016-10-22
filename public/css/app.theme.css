@@ -1,0 +1,540 @@
+/** Fonts **/
+body {
+    font-size: 12px !important;
+    font-weight: 400;
+
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.font-sm {
+    font-size: 10px !important;
+}
+
+.font-lg {
+    font-size: 16px !important;
+}
+
+.font-inherit {
+    font-size: inherit !important;
+}
+
+.font-xl {
+    font-size: 18px !important;
+}
+
+.font-bold {
+    font-weight: 500 !important;
+}
+
+.font-line-through, .ngn {
+    text-decoration: line-through;
+}
+
+/** Buttons **/
+.btn {
+    padding: 0 1rem;
+}
+
+.btn-sm, .btn-group-sm > .btn {
+    height: 20px;
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1.1 !important;
+}
+
+.btn-xs, .btn-group-xs > .btn {
+    padding: 2px 4px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+/** Shadows **/
+.outline-all {
+    border: 1px solid #dddddd;
+}
+
+.outline-top {
+    border-top: 1px solid #dddddd;
+}
+
+.z-depth-half {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 2px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+.border-shadow-top {
+    box-shadow: inset 0 7px 40px -20px rgba(0, 0, 0, 0.4);
+}
+
+.border-shadow-top-out {
+    box-shadow: inset 0 -7px 40px -20px rgba(0, 0, 0, 0.4);
+}
+
+/** Display **/
+.inline-item, .inline-box {
+    display: inline-block;
+}
+
+.inline-item {
+    padding: 0 10px;
+}
+
+/** Padding and Margin**/
+.no-padding {
+    padding: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.tiny-padding {
+    padding: 0.5em;
+}
+
+.padding-top-1em {
+    padding-top: 1em !important;
+}
+
+.padding-btm-1em {
+    padding-bottom: 1em !important;
+}
+
+.padding-top-2em {
+    padding-top: 2em !important;
+}
+
+.padding-btm-2em {
+    padding-bottom: 2em !important;
+}
+
+.padding-top-4em {
+    padding-top: 4em !important;
+}
+
+.padding-btm-4em {
+    padding-bottom: 4em !important;
+}
+
+.margin-btm-1em {
+    margin-bottom: 1em !important;
+}
+
+@media all {
+    /** Heights **/
+    .sh-10vh {
+        min-height: 10vh;
+        height: auto;
+    }
+
+    .sh-15vh {
+        min-height: 15vh;
+        height: auto;
+    }
+
+    .sh-20vh {
+        min-height: 20vh;
+        height: auto;
+    }
+
+    .sh-25vh {
+        min-height: 25vh!important;
+        height: auto;
+    }
+
+    .sh-30vh {
+        min-height: 30vh!important;
+        height: auto;
+    }
+
+    .sh-40vh {
+        min-height: 40vh!important;
+        height: auto;
+    }
+
+    .sh-50vh {
+        min-height: 50vh!important;
+        height: auto;
+    }
+
+    .sh-60vh {
+        min-height: 60vh !important;
+        height: auto;
+    }
+
+    .sh-70vh {
+        min-height: 70vh !important;
+        height: auto;
+    }
+
+    .sh-75vh {
+        min-height: 75vh;
+        height: auto;
+    }
+
+    .sh-80vh {
+        min-height: 80vh;
+        height: auto;
+    }
+
+    .sh-90vh {
+        min-height: 90vh;
+        height: auto;
+    }
+
+    .sh-100vh {
+        min-height: 100vh;
+        height: auto;
+    }
+
+    /** Col offset **/
+    .offset-s0 {
+        margin-left: 0 !important;
+    }
+
+    /** Col offset **/
+    .offset-s0 {
+        margin-left: 0 !important;
+    }
+
+    /** Alignment **/
+    .align-s-left {
+        text-align: left !important;
+        align-content: flex-start !important;
+    }
+
+    .align-s-centre {
+        text-align: center !important;
+        align-content: center !important;
+    }
+
+    .align-s-right {
+        text-align: right !important;
+        align-content: flex-end !important;
+    }
+
+    /** Container **/
+    .container {
+        width: 94% !important;
+    }
+}
+
+@media (min-width: 600px) {
+    /** Heights **/
+    .mh-10vh {
+        min-height: 10vh;
+        height: auto;
+    }
+
+    .mh-15vh {
+        min-height: 15vh;
+        height: auto;
+    }
+
+    .mh-20vh {
+        min-height: 20vh;
+        height: auto;
+    }
+
+    .mh-25vh {
+        min-height: 25vh;
+        height: auto;
+    }
+
+    .mh-30vh {
+        min-height: 30vh;
+        height: auto;
+    }
+
+    .mh-40vh {
+        min-height: 40vh;
+        height: auto;
+    }
+
+    .mh-50vh {
+        min-height: 50vh;
+        height: auto;
+    }
+
+    .mh-60vh {
+        min-height: 60vh;
+        height: auto;
+    }
+
+    .mh-70vh {
+        min-height: 70vh;
+        height: auto;
+    }
+
+    .mh-75vh {
+        min-height: 75vh;
+        height: auto;
+    }
+
+    .mh-80vh {
+        min-height: 80vh;
+        height: auto;
+    }
+
+    .mh-90vh {
+        min-height: 90vh;
+        height: auto;
+    }
+
+    .mh-100vh {
+        min-height: 100vh;
+        height: auto;
+    }
+
+    /** Col offset **/
+    .offset-m0 {
+        margin-left: 0 !important;
+    }
+
+    /** Alignment **/
+    .align-m-left {
+        text-align: left !important;
+        align-content: flex-start !important;
+    }
+
+    .align-m-centre {
+        text-align: center !important;
+        align-content: center !important;
+    }
+
+    .align-m-right {
+        text-align: right !important;
+        align-content: flex-end !important;
+    }
+}
+
+@media (min-width: 993px) {
+    /** Heights **/
+    .lh-10vh {
+        min-height: 10vh!important;
+        height: auto;
+    }
+
+    .lh-15vh {
+        min-height: 15vh!important;
+        height: auto;
+    }
+
+    .lh-20vh {
+        min-height: 20vh!important;
+        height: auto;
+    }
+
+    .lh-25vh {
+        min-height: 25vh!important;
+        height: auto;
+    }
+
+    .lh-30vh {
+        min-height: 30vh !important;
+        height: auto;
+    }
+
+    .lh-40vh {
+        min-height: 40vh !important;
+        height: auto;
+    }
+
+    .lh-50vh {
+        min-height: 50vh!important;
+        height: auto;
+    }
+
+    .lh-60vh {
+        min-height: 60vh!important;
+        height: auto;
+    }
+
+    .lh-70vh {
+        min-height: 70vh!important;
+        height: auto;
+    }
+
+    .lh-75vh {
+        min-height: 75vh!important;
+        height: auto;
+    }
+
+    .lh-80vh {
+        min-height: 80vh !important;
+        height: auto;
+    }
+
+    .lh-90vh {
+        min-height: 90vh !important;
+        height: auto;
+    }
+
+    .lh-100vh {
+        min-height: 100vh!important;
+        height: auto;
+    }
+
+    /** Col offset **/
+    .offset-l0 {
+        margin-left: 0 !important;
+    }
+
+    /** Alignment **/
+    .align-l-left {
+        text-align: left !important;
+        align-content: flex-start !important;
+    }
+
+    .align-l-centre {
+        text-align: center !important;
+        align-content: center !important;
+    }
+
+    .align-l-right {
+        text-align: right !important;
+        align-content: flex-end !important;
+    }
+
+    /** Container **/
+    .container {
+        width: 90%;
+        max-width: 1264px;
+    }
+
+    /** Hang Ups **/
+    .hanged-l {
+        position: relative;
+        top: -50px;
+    }
+}
+
+.full-height {
+    height: 100%;
+}
+
+.full-width {
+    width: 100% !important;
+}
+
+.thumbnail-card .card-image img {
+    width: auto;
+}
+
+.thumbnail-card .card-image img.big {
+    max-width: 400px;
+    max-height: 600px;
+}
+
+.thumbnail-card .card-title {
+    font-size: 14px !important;
+    line-height: 100% !important;
+    margin-bottom: 0.5em !important;
+    font-weight: 500;
+}
+
+.thumbnail-card .card-action {
+    font-size: 11px !important;
+}
+
+.thumbnail-card .card-action, .thumbnail-card .card-content {
+    padding: 8px 5px;
+}
+
+nav ul a {
+    transition: background-color .3s;
+    transition-property: background-color;
+    transition-duration: 0.3s;
+    transition-timing-function: initial;
+    transition-delay: initial;
+    font-size: 1rem;
+    color: #000;
+    display: block;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.side-nav li > a > i.material-icons {
+    display: inline-block;
+    clear: both;
+    height: 48px;
+    margin-right: 12px;
+}
+
+nav a, nav .btn {
+    font-size: 13px !important;
+}
+
+nav .material-icons {
+    font-size: 15px;
+}
+
+nav .dropdown-content {
+    min-width: 14%;
+    width: auto !important;
+    top: 60px !important;
+    font-size: 80% !important;
+    font-weight: 400 !important;
+}
+
+nav .dropdown-content li {
+    min-height: 24px !important;
+    height: auto !important;
+}
+
+nav .dropdown-content .divider {
+    min-height: 0 !important;
+    height: 1px !important;
+}
+
+nav .dropdown-content a {
+    padding: 6px 6px 6px 10px;
+    color: black !important;
+}
+
+input.prefixed {
+    padding-left: 30px;
+    box-sizing: inherit;
+}
+
+label.prefixed {
+    position: absolute;
+    left: 0;
+}
+
+.file-tracker.row {
+    padding: 0;
+    margin-bottom: 2em;
+}
+
+.file-tracker.row .progress, .file-tracker.row .row, .file-tracker.row .input-field {
+    margin: 0;
+}
+
+.file-tracker.row .progress, .file-tracker.row .determinant {
+    border-radius: 0;
+}
+
+.file-tracker .input-field input {
+    font-size: 12px !important;
+}
+
+textarea.materialize-textarea {
+    resize: vertical;
+}
+
+
+.logo{
+    max-height: 56px;
+}
+
+@media only screen and (min-width: 601px){
+    .logo{
+        max-height: 64px;
+    }
+}
