@@ -7,13 +7,52 @@
  **/
 
 /**
- * @param $controller
- * @param $method
- * @param array $args
- * @param $namespace
+ * @param string $action    Controller@method
+ * @param string $namespace No backslash at the beginning or end
+ * @param array $args       key->value pairs or just simple array
+ *
  * @return mixed
  */
-function delegate($controller, $method, $args=[], $namespace='App\Http\Controllers')
+function run_action($action, $namespace = null, $args = [])
 {
-    return app()->make($namespace."\\".$controller)->callAction($method, $args);
+    $request = request();
+    $action = 'App\Http\Controllers' . ($namespace ? '\\' . $namespace . '\\' . $action : '\\' . $action);
+
+    list($class) = explode('@', $action);
+    $method = explode('@', $action)[1];
+
+    $reflector = new ReflectionMethod($class, $method);
+
+    $pass = [];
+    foreach ($reflector->getParameters() as $param) {
+
+        /* @var $param ReflectionParameter */
+        if (isset($args[$param->getName()])) {
+            $pass[] = $args[$param->getName()];
+        } elseif ($param->getType() == get_class($request)) {
+            $pass[] = $request;
+        } else {
+            $pass[] = $param->getDefaultValue();
+        }
+    }
+
+    return $reflector->invokeArgs(new $class, $pass);
+}
+
+function redirectOnAuthSuccess()
+{
+    return url()->route('app.home');
+}
+
+/**
+ * @param $data
+ *
+ * @return \Illuminate\Http\JsonResponse
+ */
+function to_json($data)
+{
+    if (is_json($data))
+        return $data;
+
+    return response()->json($data);
 }
