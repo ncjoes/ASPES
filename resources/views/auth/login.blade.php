@@ -88,12 +88,12 @@
                         <div class="row divider"></div>
                         <div class="row center-align">
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.signup') }}">
+                                <a href="{{ url()->route('auth.signup') }}" class="font-sm">
                                     <span class="hide-on-small-only">Don't have an account?</span> Sign Up
                                 </a>
                             </div>
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.password.reset') }}">
+                                <a href="{{ url()->route('auth.password.reset') }}" class="font-sm">
                                     <span class="hide-on-small-only">Forgot Your Password?</span> Reset Password
                                 </a>
                             </div>
@@ -109,34 +109,24 @@
     <script src="{{ asset('js/app.utils.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#login-form').submit(function (e) {
+            var form = $('#login-form');
+            form.submit(function (e) {
                 e.preventDefault();
                 $this = $('#login-form');
 
                 $.post($this.prop('action'), $this.serialize(), null, 'json')
                         .done(function (response) {
                             if (response.status == true) {
-                                window.location = response.redirect;
+                                notify($('#notify'), response);
+                                setTimeout(function () {
+                                    window.location = response.data.redirect;
+                                }, 1000);
                             } else {
                                 notify($('#notify'), response);
                             }
                         })
                         .fail(function (xhr) {
-                            if (xhr.status == 422) {
-                                var text = [];
-                                var response = xhr.responseJSON;
-                                if ('email' in response) {
-                                    text.push(response.email.join("<br/>"));
-                                }
-                                if ('password' in response) {
-                                    text.push(response.password.join("<br/>"));
-                                }
-                                var notification = {
-                                    'message': text.join('<br/>'),
-                                    'status': false
-                                };
-                                notify($('#notify'), notification);
-                            }
+                            handleHttpErrors(xhr, form)
                         });
             });
         });

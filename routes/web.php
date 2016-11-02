@@ -55,6 +55,23 @@ Route::group(['namespace' => 'Web'], function () {
         });
 
         Route::match(['get', 'post'], 'settings', ['as' => 'settings', 'uses' => 'AdminController@settings']);
+
+        Route::group(['prefix' => 'notifications', 'as' => 'notes.'], function () {
+            Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listNotifications']);
+            Route::get('get', ['as' => 'get', 'uses' => 'AdminController@getNotificationInfo']);
+            Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateNotification']);
+            Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteNotification']);
+        });
+
+    });
+
+    //-------------USER ACCOUNT ROUTES-----------------//
+    Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth' => 'auth']], function () {
+
+        Route::get('/', ['as' => 'showOrGet', 'uses' => 'ProfileController@showOrGet']);
+        Route::post('update', ['as' => 'update', 'uses' => 'ProfileController@update']);
+        Route::post('photo', ['as' => 'photo', 'uses' => 'ProfileController@photo']);
+        Route::post('password', ['as' => 'password', 'uses' => 'ProfileController@password']);
     });
 
 });

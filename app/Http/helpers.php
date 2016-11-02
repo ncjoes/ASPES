@@ -6,3 +6,17 @@
  * Time:    2:37 PM
  **/
 
+/**
+ * @param $view
+ * @param $data
+ *
+ * @return mixed
+ */
+function iResponse($view, $data)
+{
+    if (request()->wantsJson()) {
+        return response()->json($data);
+    }
+
+    return view($view, $data);
+}

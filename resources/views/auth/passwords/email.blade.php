@@ -31,7 +31,7 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <input id="email" name="email" type="email" class="validate center-align" required>
+                                <input id="email" name="email" type="email" class="validate" required>
                                 <label for="email">E-Mail Address</label>
                             </div>
                         </div>
@@ -40,8 +40,8 @@
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s12 center-align">
-                                <button type="submit" class="btn z-depth-half center">
+                            <div class="input-field col s12 right-align">
+                                <button type="submit" class="btn z-depth-half">
                                     Send Password Reset Link
                                 </button>
                             </div>
@@ -49,12 +49,12 @@
                         <div class="row divider"></div>
                         <div class="row center-align">
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.signup') }}">
+                                <a href="{{ url()->route('auth.signup') }}" class="font-sm">
                                     <span class="hide-on-small-only">Don't have an account?</span> Sign Up
                                 </a>
                             </div>
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.login') }}">
+                                <a href="{{ url()->route('auth.login') }}" class="font-sm">
                                     Log-In with email
                                 </a>
                             </div>
@@ -70,7 +70,8 @@
     <script src="{{ asset('js/app.utils.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#email-form').submit(function (e) {
+            var form = $('#email-form');
+            form.submit(function (e) {
                 e.preventDefault();
                 $this = $('#email-form');
 
@@ -84,18 +85,7 @@
                             }
                         })
                         .fail(function (xhr) {
-                            if (xhr.status == 422) {
-                                var text = [];
-                                var response = xhr.responseJSON;
-                                if ('email' in response) {
-                                    text.push(response.email.join("<br/>"));
-                                }
-                                var notification = {
-                                    'message': text.join('<br/>'),
-                                    'status': false
-                                };
-                                notify($('#notify'), notification);
-                            }
+                            handleHttpErrors(xhr, form)
                         });
             });
         });

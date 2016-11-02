@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
+use Validator;
 
 class RegisterController extends Controller
 {
@@ -42,35 +46,69 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'first_name' => 'required|max:255',
+            'last_name'  => 'required|max:255',
+            'email'      => 'required|email|max:255|unique:users',
+            'password'   => 'required|min:6|confirmed',
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+        $validator->validate();
+
+        $data = [];
+        $user = $this->create($request->all());
+        event(new Registered($user));
+        $this->guard()->login($user);
+
+        $data['message'] = Lang::get('auth.registration_ok');
+        $data['status'] = true;
+        $data['data']['user'] = $user;
+
+        if ($request->wantsJson()) {
+            $data['data']['redirect'] = $this->redirectPath();
+
+            return response()->json($data)->setStatusCode(201);
+        }
+
+        return redirect($this->redirectPath());
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  array $data
+     *
      * @return User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        $role = Role::findByName(User::ROLE_ACADEMIA);
+
+        $user = User::create([
+            'first_name' => $data['first_name'],
+            'last_name'  => $data['last_name'],
+            'slug'       => User::makeSlug($data['first_name'].' '.$data['last_name']),
+            'email'      => $data['email'],
+            'phone'      => $data['phone'],
+            'password'   => bcrypt($data['password']),
         ]);
+        $user->roles()->attach($role);
+
+        return $user;
     }
 
     public function redirectPath()
     {
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
+        return url()->route('app.home');
     }
 }

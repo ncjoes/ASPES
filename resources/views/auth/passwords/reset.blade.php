@@ -77,33 +77,25 @@
     <script src="{{ asset('js/app.utils.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#reset-form').submit(function (e) {
+            var form = $('#reset-form');
+            form.submit(function (e) {
                 e.preventDefault();
                 $this = $('#reset-form');
 
                 $.post($this.prop('action'), $this.serialize(), null, 'json')
                         .done(function (response) {
-                            if (response.status == true && 'redirect' in response) {
-                                window.location = response.redirect;
+                            if ('redirect' in response) {
+                                notify($('#notify'), response);
+                                setTimeout(function () {
+                                    window.location = response.data.redirect;
+                                }, 1000);
                             }
-                            notify($('#notify'), response);
+                            else {
+                                notify($('#notify'), response);
+                            }
                         })
                         .fail(function (xhr) {
-                            if (xhr.status == 422) {
-                                var text = [];
-                                var response = xhr.responseJSON;
-                                if ('email' in response) {
-                                    text.push(response.email.join("<br/>"));
-                                }
-                                if ('password' in response) {
-                                    text.push(response.password.join("<br/>"));
-                                }
-                                var notification = {
-                                    'message': text.join('<br/>'),
-                                    'status': false
-                                };
-                                notify($('#notify'), notification);
-                            }
+                            handleHttpErrors(xhr, form)
                         });
             });
         });

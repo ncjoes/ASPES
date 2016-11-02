@@ -1,6 +1,6 @@
 /** Fonts **/
 body {
-    font-size: 12px !important;
+    font-size: 13px !important;
     font-weight: 400;
 
     display: flex;
@@ -13,19 +13,19 @@ main {
 }
 
 .font-sm {
-    font-size: 10px !important;
+    font-size: 11px !important;
 }
 
 .font-lg {
-    font-size: 16px !important;
-}
-
-.font-inherit {
-    font-size: inherit !important;
+    font-size: 15px !important;
 }
 
 .font-xl {
     font-size: 18px !important;
+}
+
+.font-inherit {
+    font-size: inherit !important;
 }
 
 .font-bold {
@@ -453,9 +453,8 @@ nav ul a {
     transition-timing-function: initial;
     transition-delay: initial;
     font-size: 1rem;
-    color: #000;
     display: block;
-    padding: 0 10px;
+    padding: 0 5px;
     cursor: pointer;
 }
 
@@ -464,14 +463,6 @@ nav ul a {
     clear: both;
     height: 48px;
     margin-right: 12px;
-}
-
-nav a, nav .btn {
-    font-size: 13px !important;
-}
-
-nav .material-icons {
-    font-size: 15px;
 }
 
 nav .dropdown-content {
@@ -494,7 +485,6 @@ nav .dropdown-content .divider {
 
 nav .dropdown-content a {
     padding: 6px 6px 6px 10px;
-    color: black !important;
 }
 
 input.prefixed {

@@ -40,17 +40,17 @@
 
                         <div class="row">
                             <div class="col s12">
-                                <h6 class="font-bold">Sign Up with email and phone</h6>
+                                <h5 class="font-bold">Sign Up with Email</h5>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="input-field col m6 s12">
-                                <input id="first_name" name="first_name" type="text" class="validate">
+                                <input id="first_name" name="first_name" type="text" class="validate" required>
                                 <label for="first_name">First Name</label>
                             </div>
                             <div class="input-field col m6 s12">
-                                <input id="last_name" name="last_name" type="text" class="validate">
+                                <input id="last_name" name="last_name" type="text" class="validate" required>
                                 <label for="last_name">Last Name</label>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                         <div class="row divider"></div>
                         <div class="row center-align">
                             <div class="col s12">
-                                <a href="{{ url()->route('auth.login') }}">
+                                <a href="{{ url()->route('auth.login') }}" class="font-sm">
                                     Already have an account? Log In
                                 </a>
                             </div>
@@ -112,39 +112,31 @@
     <script src="{{ asset('js/app.utils.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#reg-form').submit(function (e) {
+            var form = $('#reg-form');
+            form.submit(function (e) {
                 e.preventDefault();
                 $this = $('#reg-form');
 
-                $.post($this.prop('action'), $this.serialize(), null, 'json')
-                        .done(function (response) {
-                            if (response.status == true) {
-                                window.location = response.redirect;
-                            }
-                            else {
-                                notify($('#notify'), response);
-                            }
-                        })
-                        .fail(function (xhr) {
-                            if(xhr.status == 422){
-                                var text = [];
-                                var response = xhr.responseJSON;
-                                if('email' in response) {
-                                    text.push(response.email.join("<br/>"));
+                try {
+                    $.post($this.prop('action'), $this.serialize(), null, 'json')
+                            .done(function (response) {
+                                if (response.status == true) {
+                                    notify($('#notify'), response);
+                                    setTimeout(function () {
+                                        window.location = response.data.redirect;
+                                    }, 1000);
                                 }
-                                if('phone' in response) {
-                                    text.push(response.phone.join("<br/>"));
+                                else {
+                                    notify($('#notify'), response);
                                 }
-                                if('password' in response) {
-                                    text.push(response.password.join("<br/>"));
-                                }
-                                var notification = {
-                                    'message' : text.join('<br/>'),
-                                    'status' : false
-                                };
-                                notify($('#notify'), notification);
-                            }
-                        });
+                            })
+                            .fail(function (xhr) {
+                                handleHttpErrors(xhr, form)
+                            });
+                }
+                catch (e) {
+                    console.log(e)
+                }
             });
         });
     </script>

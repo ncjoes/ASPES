@@ -15,5 +15,9 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'blocked' => 'Your account has been blocked temporary. Please contact the admin for further assistance.',
+    'login_ok' => 'You have been logged in successfully.',
+    'registration_ok' => 'Congratulation, your account have been created successfully',
+    'invalid_data' => 'Please check the details you supplied and try again.'
 
 ];

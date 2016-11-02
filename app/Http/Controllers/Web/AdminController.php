@@ -15,7 +15,9 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return ['title' => 'Admin Dashboard'];
+        $data = ['title' => 'Admin Dashboard'];
+
+        return iResponse('admin.dashboard', $data);
     }
 
     public function listExercises()
@@ -71,6 +73,26 @@ class AdminController extends Controller
     public function settings()
     {
         return ['title' => 'App Settings'];
+    }
+
+    public function listNotifications()
+    {
+        return ['title' => 'Fetching notifications list...'];
+    }
+
+    public function getNotificationInfo()
+    {
+        return ['title' => 'Fetching notification information...'];
+    }
+
+    public function updateNotification()
+    {
+        return ['title' => 'Updating notifications...'];
+    }
+
+    public function deleteNotification()
+    {
+        return ['title' => 'Deleting notifications...'];
     }
 
 }

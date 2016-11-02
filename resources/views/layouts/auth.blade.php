@@ -1,22 +1,26 @@
 @extends('layouts.app')
 
 @section('header')
-    <nav class="white z-depth-0 z-depth-half">
+    <nav class="blue">
         <div class="container">
             <div class="nav-wrapper">
-                <a href="#" data-activates="nav-mobile" class="button-collapse right">
-                    <i class="material-icons black-text">menu</i>
+                <a data-activates="nav-mobile" class="button-collapse right">
+                    <i class="material-icons">menu</i>
                 </a>
 
-                <a href="{{url()->route('public.home')}}"><img class="logo" src="{{url('/images/logo.png')}}"></a>
+                <a class="logo left" href="{{url()->route('app.home')}}">
+                    <i class="material-icons">trending_down home trending_up</i>
+                </a>
                 <ul class="hide-on-med-and-down right">
-                    <li><a href="{{url()->route('auth.signup')}}">Sign Up</a></li>
-                    <li><a href="{{url()->route('auth.login')}}">Log In</a></li>
+                    <li><a href="{{url()->route('auth.login')}}">LOG IN</a></li>
+                    <li><a href="{{url()->route('auth.signup')}}">SIGN UP</a></li>
                 </ul>
 
                 <ul id="nav-mobile" class="side-nav">
-                    <li><a href="{{url()->route('auth.login')}}"><i class="material-icons">lock_open</i>Log In</a></li>
-                    <li><a href="{{url()->route('auth.signup')}}"><i class="material-icons">person_add</i>Sign Up</a></li>
+                    <li><a href="{{url()->route('app.home')}}"><i class="material-icons small">trending_down home trending_up</i></a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{url()->route('auth.login')}}"><i class="material-icons">lock_open</i>LOG IN</a></li>
+                    <li><a href="{{url()->route('auth.signup')}}"><i class="material-icons">person_add</i>SIGN UP</a></li>
                 </ul>
             </div>
         </div>

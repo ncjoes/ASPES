@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 
 class LoginController extends Controller
 {
@@ -21,13 +23,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login / registration.
-     *
-     * @var string
-     */
-    public $redirectTo = '/';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -39,6 +34,32 @@ class LoginController extends Controller
 
     public function redirectPath()
     {
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : url()->route('app.home');
+        return url()->route('app.home');
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        if ($request->wantsJson()) {
+            $request->session()->regenerate();
+
+            $this->clearLoginAttempts($request);
+
+            return $this->authenticated($request, $this->guard()->user())
+                ?: ['status'=>true, 'message'=>'Login Successful. Redirecting...', 'data'=>['redirect' => $this->redirectPath()]];
+        }
+
+        return parent::callAction('sendLoginResponse', [$request]);
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        if ($request->wantsJson()) {
+            $data['status'] = false;
+            $data['message'] = Lang::get('auth.failed');
+
+            return $data;
+        }
+
+        return parent::callAction('sendFailedLoginResponse', [$request]);
     }
 }
