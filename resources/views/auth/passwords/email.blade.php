@@ -1,47 +1,103 @@
 @extends('layouts.auth')
 
-<!-- Main Content -->
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
+    <div class="section">
+        <div class="valign-wrapper mh-75vh">
+            <div class="container valign">
+                <div class="row">
+
+                    <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
+                        <div class="row center-align">
+                            <h3>No Worries</h3>
+                            <h5 class="font-bold">
+                                We all forget sometimes...
+                            </h5>
                         </div>
-                    @endif
-
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+                        <div class="divider"></div>
+                        <div class="row">
+                            <div class="col s12">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                    <form id="email-form" class="col l5 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
+                          action="{{ url()->route('auth.password.email') }}">
+                        {{ csrf_field() }}
+
+                        <div class="row">
+                            <div class="col s12 center-align">
+                                <h5 class="font-bold">Get a Password Reset Link</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="email" name="email" type="email" class="validate center-align" required>
+                                <label for="email">E-Mail Address</label>
+                            </div>
+                        </div>
+                        <div class="center-align">
+                            <p id="notify" style="display: none;"></p>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12 center-align">
+                                <button type="submit" class="btn z-depth-half center">
                                     Send Password Reset Link
                                 </button>
                             </div>
                         </div>
+                        <div class="row divider"></div>
+                        <div class="row center-align">
+                            <div class="col s6">
+                                <a href="{{ url()->route('auth.signup') }}">
+                                    <span class="hide-on-small-only">Don't have an account?</span> Sign Up
+                                </a>
+                            </div>
+                            <div class="col s6">
+                                <a href="{{ url()->route('auth.login') }}">
+                                    Log-In with email
+                                </a>
+                            </div>
+                        </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endsection
+@section('extra_scripts')
+    <script src="{{ asset('js/app.utils.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#email-form').submit(function (e) {
+                e.preventDefault();
+                $this = $('#email-form');
+
+                $.post($this.prop('action'), $this.serialize(), null, 'json')
+                        .done(function (response) {
+                            if (response.status == true) {
+                                window.location = response.redirect;
+                            }
+                            else {
+                                notify($('#notify'), response);
+                            }
+                        })
+                        .fail(function (xhr) {
+                            if (xhr.status == 422) {
+                                var text = [];
+                                var response = xhr.responseJSON;
+                                if ('email' in response) {
+                                    text.push(response.email.join("<br/>"));
+                                }
+                                var notification = {
+                                    'message': text.join('<br/>'),
+                                    'status': false
+                                };
+                                notify($('#notify'), notification);
+                            }
+                        });
+            });
+        });
+    </script>
 @endsection

@@ -1,11 +1,3 @@
-<?php
-/**
- * Project: academy.zeesaa.com
- * Author:  Chukwuemeka Nwobodo (jcnwobodo@gmail.com)
- * Date:    9/21/2016
- * Time:    8:36 PM
- * */
-?>
 @extends('layouts.app')
 
 @section('header')
@@ -16,7 +8,7 @@
                     <i class="material-icons black-text">menu</i>
                 </a>
 
-                <a href="{{url()->route('app.home')}}"><img class="logo" src="{{url('/images/logo.png')}}"></a>
+                <a href="{{url()->route('public.home')}}"><img class="logo" src="{{url('/images/logo.png')}}"></a>
                 <ul class="hide-on-med-and-down right">
                     <li><a href="{{url()->route('auth.signup')}}">Sign Up</a></li>
                     <li><a href="{{url()->route('auth.login')}}">Log In</a></li>

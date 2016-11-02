@@ -16,7 +16,7 @@
     <meta name="author" content="{{$meta['author'] or config('app.name')}}">
 
     <!-- Styles -->
-    <link rel="icon" href="{{ url('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link href="{{asset('css/material.icons.css')}}" rel="stylesheet">
     <link href="{{asset('css/materialize.css')}}" rel="stylesheet">
     <link href="{{asset('css/app.theme.css')}}" rel="stylesheet">
@@ -24,13 +24,13 @@
 </head>
 <body class="grey lighten-4">
 
-<header>
+<header class="transparent">
     @yield('header')
 </header>
 <main>
     @yield('content')
 </main>
-<footer class="page-footer white black-text border-shadow-top-out outline-top">
+<footer class="page-footer transparent">
     @yield('footer')
 </footer>
 

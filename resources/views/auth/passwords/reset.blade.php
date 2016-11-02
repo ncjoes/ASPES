@@ -1,70 +1,111 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
+    <div class="section">
+        <div class="valign-wrapper mh-75vh">
+            <div class="container valign">
+                <div class="row">
 
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/reset') }}">
+                    <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
+                        <div class="row center-align">
+                            <h4>You're almost done</h4>
+                            <h6>
+                                Tips for setting strong password...
+                            </h6>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="row">
+                            <div class="col s12">
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="reset-form" class="col l5 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
+                          action="{{ url()->route('auth.password.reset') }}">
                         {{ csrf_field() }}
 
                         <input type="hidden" name="token" value="{{ $token }}">
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+                        <div class="row">
+                            <div class="col s12">
+                                <h6 class="font-bold">Reset Password</h6>
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="email" name="email" value="{{ $email }}" type="email" class="validate" required>
+                                <label for="email">Email Address</label>
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="password" name="password" type="password" class="validate" required>
+                                <label for="password">Password</label>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="password_confirmation" name="password_confirmation" type="password" class="validate" required>
+                                <label for="password_confirmation">Password Confirmation</label>
+                            </div>
+                        </div>
+                        <p id="notify" style="display: none;"></p>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                        <div class="row">
+                            <div class="col m6 s12">
+                                <span class="left">
+                                    <input type="checkbox" name="logout" class="filled-in" id="logout" checked="checked"/>
+                                    <label for="logout">Log me out of other devices</label>
+                                </span>
+                            </div>
+                            <div class="col m6 s12">
+                                <button type="submit" class="btn z-depth-half right">
                                     Reset Password
                                 </button>
                             </div>
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endsection
+@section('extra_scripts')
+    <script src="{{ asset('js/app.utils.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#reset-form').submit(function (e) {
+                e.preventDefault();
+                $this = $('#reset-form');
+
+                $.post($this.prop('action'), $this.serialize(), null, 'json')
+                        .done(function (response) {
+                            if (response.status == true && 'redirect' in response) {
+                                window.location = response.redirect;
+                            }
+                            notify($('#notify'), response);
+                        })
+                        .fail(function (xhr) {
+                            if (xhr.status == 422) {
+                                var text = [];
+                                var response = xhr.responseJSON;
+                                if ('email' in response) {
+                                    text.push(response.email.join("<br/>"));
+                                }
+                                if ('password' in response) {
+                                    text.push(response.password.join("<br/>"));
+                                }
+                                var notification = {
+                                    'message': text.join('<br/>'),
+                                    'status': false
+                                };
+                                notify($('#notify'), notification);
+                            }
+                        });
+            });
+        });
+    </script>
 @endsection

@@ -43,7 +43,7 @@
                                 <h6 class="font-bold">Sign Up with email and phone</h6>
                             </div>
                         </div>
-                        <!--
+
                         <div class="row">
                             <div class="input-field col m6 s12">
                                 <input id="first_name" name="first_name" type="text" class="validate">
@@ -54,7 +54,6 @@
                                 <label for="last_name">Last Name</label>
                             </div>
                         </div>
-                        -->
 
                         <div class="row">
                             <div class="input-field col m6 s12">
@@ -62,8 +61,8 @@
                                 <label for="email">Email</label>
                             </div>
                             <div class="input-field col m6 s12">
-                                <input id="phone" name="phone" type="tel" class="validate" required>
-                                <label for="phone">Mobile Number</label>
+                                <input id="phone" name="phone" type="tel" class="validate">
+                                <label for="phone">Phone Number (optional)</label>
                             </div>
                         </div>
 
@@ -77,7 +76,9 @@
                                 <label for="password_confirmation">Confirm Password</label>
                             </div>
                         </div>
-                        <p id="notify" class="center-align red-text" style="display: none;"></p>
+                        <div class="center-align">
+                            <p id="notify" style="display: none;"></p>
+                        </div>
 
                         <div class="row">
                             <div class="col m8 s12">
@@ -87,7 +88,7 @@
                             </div>
                             <div class="input-field col m4 s12 right-align">
                                 <button type="submit" class="btn z-depth-half">
-                                    Sign Up
+                                    Sign Me Up Now !
                                 </button>
                             </div>
                         </div>
@@ -108,7 +109,7 @@
     </div>
 @endsection
 @section('extra_scripts')
-    <script src="{{ asset('js/zeesaa.utils.js') }}"></script>
+    <script src="{{ asset('js/app.utils.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             $('#reg-form').submit(function (e) {

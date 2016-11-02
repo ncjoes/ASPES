@@ -7,12 +7,15 @@
                 <div class="row">
 
                     <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
-                        <div class="row center-align">
-                            <h4>Log In</h4>
-                            <p>
-                                Some text<br/>
-                                a...
-                            </p>
+                        <div class="row">
+                            <div class="col s12">
+                                <h4>Let&apos;s hook you up with good reads!</h4>
+                                <p class="font-lg">
+                                    {{config('app.name')}} makes it easier for you to enjoy what you love the most.
+                                    Join the fastest growing community of authors and readers, sharing get contents
+                                    and get more out of the web.
+                                </p>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -31,7 +34,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row hide-on-large-only">
                             <div class="divider col s5"></div>
                             <div class="col s2 center-align">OR</div>
                             <div class="divider col s5"></div>
@@ -44,7 +47,7 @@
 
                         <div class="row">
                             <div class="col s12">
-                                <h5 class="font-bold">Log In with email and password</h5>
+                                <h5 class="font-bold">Log in with email</h5>
                             </div>
                         </div>
                         <div class="row">
@@ -60,7 +63,9 @@
                                 <label for="password">Password</label>
                             </div>
                         </div>
-                        <p id="notify" class="center-align red-text" style="display: none;"></p>
+                        <div class="center-align">
+                            <p id="notify" style="display: none;"></p>
+                        </div>
 
                         <div class="row">
                             <div class="col m8 s12">
@@ -75,7 +80,7 @@
                             </div>
                             <div class="col m4 s12 right-align">
                                 <button type="submit" class="btn z-depth-half">
-                                    Log In
+                                    Log Me In
                                 </button>
                             </div>
                         </div>
@@ -101,7 +106,7 @@
     </div>
 @endsection
 @section('extra_scripts')
-    <script src="{{ asset('js/zeesaa.utils.js') }}"></script>
+    <script src="{{ asset('js/app.utils.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             $('#login-form').submit(function (e) {
@@ -112,8 +117,7 @@
                         .done(function (response) {
                             if (response.status == true) {
                                 window.location = response.redirect;
-                            }
-                            else {
+                            } else {
                                 notify($('#notify'), response);
                             }
                         })
