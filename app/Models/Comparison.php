@@ -43,9 +43,9 @@ class Comparison extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function fcv()
+    public function FCV()
     {
-        return $this->belongsTo(FCV::class);
+        return $this->belongsTo(FCV::class, 'fcv__id');
     }
 
     /**

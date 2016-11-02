@@ -23,7 +23,7 @@ class Exercise extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'start_at', 'stop_at'];
 
     /**
      *

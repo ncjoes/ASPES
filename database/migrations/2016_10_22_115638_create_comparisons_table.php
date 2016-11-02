@@ -17,7 +17,7 @@ class CreateComparisonsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('f1_id');
             $table->unsignedInteger('f2_id');
-            $table->unsignedInteger('fcv_id');
+            $table->unsignedInteger('fcv__id');
             $table->unsignedInteger('evaluator_id');
             $table->nullableTimestamps();
             $table->softDeletes();
@@ -28,7 +28,7 @@ class CreateComparisonsTable extends Migration
 
             $table->foreign('f1_id', 'c_f1_id')->references('id')->on('factors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('f2_id', 'c_f2_id')->references('id')->on('factors')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('fcv_id', 'c_fcv_id')->references('id')->on('fcvs')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('fcv__id', 'c_fcv__id')->references('id')->on('fcvs')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('evaluator_id', 'c_evaluator_id')->references('id')->on('evaluators')->onDelete('cascade')->onUpdate('cascade');
         });
     }

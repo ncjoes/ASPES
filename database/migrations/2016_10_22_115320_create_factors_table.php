@@ -17,7 +17,7 @@ class CreateFactorsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('exercise_id');
             $table->unsignedInteger('parent_id')->nullable();
-            $table->string('name');
+            $table->string('text');
             $table->string('weight');
             $table->nullableTimestamps();
             $table->softDeletes();

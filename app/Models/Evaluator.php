@@ -20,8 +20,8 @@ class Evaluator extends Model
 {
     use SoftDeletes;
 
-    const SE = 1;
-    const DM = 2;
+    const DM = 1;
+    const SE = 2;
 
     /**
      * @var array

@@ -19,10 +19,9 @@ class FCV extends Model
 {
     use SoftDeletes;
 
-    /**
-     * @var array
-     */
     protected $dates = ['deleted_at'];
+    protected $casts = ['value' => 'array'];
+    protected $table = 'fcvs';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -37,6 +36,6 @@ class FCV extends Model
      */
     public function comparisons()
     {
-        return $this->hasMany(Comparison::class);
+        return $this->hasMany(Comparison::class, 'fcv__id');
     }
 }
