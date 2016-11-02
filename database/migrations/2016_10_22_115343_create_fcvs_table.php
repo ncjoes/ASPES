@@ -17,7 +17,7 @@ class CreateFcvsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('exercise_id');
             $table->string('name');
-            $table->string('value', 20);
+            $table->string('value');
             $table->nullableTimestamps();
             $table->softDeletes();
 

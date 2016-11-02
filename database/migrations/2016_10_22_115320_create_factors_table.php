@@ -15,10 +15,10 @@ class CreateFactorsTable extends Migration
     {
         Schema::create('factors', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('parent_id')->nullable();
             $table->unsignedInteger('exercise_id');
+            $table->unsignedInteger('parent_id')->nullable();
             $table->string('name');
-            $table->string('weight', 20);
+            $table->string('weight');
             $table->nullableTimestamps();
             $table->softDeletes();
 

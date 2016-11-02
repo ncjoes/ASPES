@@ -13,11 +13,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Evaluator
+ *
  * @package App\Models
  */
 class Evaluator extends Model
 {
     use SoftDeletes;
+
+    const SE = 1;
+    const DM = 2;
 
     /**
      * @var array
@@ -27,7 +31,7 @@ class Evaluator extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function profile()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

@@ -31,13 +31,8 @@ class CreateRolesTable extends Migration
                     'system_defined' => 1
                 ],
                 [
-                    'name' => 'staff',
-                    'label' => 'Staff',
-                    'system_defined' => 1
-                ],
-                [
-                    'name' => 'student',
-                    'label' => 'student',
+                    'name' => 'academia',
+                    'label' => 'Academia',
                     'system_defined' => 1
                 ],
             ]

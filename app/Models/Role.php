@@ -1,28 +1,32 @@
 <?php
+
 /**
- * Project: smartdata.zeesaa.com
+ * Project: flexbook.zeesaa.com
  * Author:  J. C. Nwobodo (Fibonacci)
  * Date:    8/8/2016
  * Time:    11:45 AM
- **/
+ * */
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Role
+ *
  * @package App\Models
  */
 class Role extends Model
 {
-    use SoftDeletes;
-
     /**
-     * @var array
+     * @param $name
+     *
+     * @return mixed
      */
-    protected $dates = ['deleted_at'];
+    public static function findByName($name)
+    {
+        return self::where('name', $name)->first();
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -33,11 +37,10 @@ class Role extends Model
     }
 
     /**
-     * @param $name
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public static function _findByName($name)
+    public function abilities()
     {
-        return self::where('name', $name)->first();
+        return $this->belongsToMany(Ability::class, 'role_ability')->withTimestamps();
     }
 }

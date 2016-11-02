@@ -29,8 +29,7 @@ class User extends Authenticatable
     const STATUS_INACTIVE = 0;
 
     const ROLE_ADMIN = 'admin';
-    const ROLE_STAFF = 'staff';
-    const ROLE_STUDENT = 'student';
+    const ROLE_ACADEMIA = 'academia';
 
     const ER_SUBJECT = 'subjects';
     const ER_EVALUATOR = 'evaluators';

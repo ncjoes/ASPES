@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Factor
+ *
  * @package App\Models
  */
 class Factor extends Model
@@ -23,6 +24,7 @@ class Factor extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    protected $casts = ['weight' => 'array'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
