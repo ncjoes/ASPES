@@ -40,7 +40,7 @@ Route::group(['namespace' => 'Web'], function () {
 
         Route::group(['prefix' => 'exercises', 'as' => 'exercises.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listExercises']);
-            Route::get('get', ['as' => 'get', 'uses' => 'AdminController@getExerciseInfo']);
+            Route::get('view', ['as' => 'get', 'uses' => 'AdminController@viewExercise']);
             Route::post('create', ['as' => 'create', 'uses' => 'AdminController@createExercise']);
             Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateExercise']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteExercise']);
@@ -48,7 +48,7 @@ Route::group(['namespace' => 'Web'], function () {
 
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listUsers']);
-            Route::get('get', ['as' => 'get', 'uses' => 'AdminController@getUserInfo']);
+            Route::get('view', ['as' => 'view', 'uses' => 'AdminController@getUserInfo']);
             Route::post('create', ['as' => 'create', 'uses' => 'AdminController@createUser']);
             Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateUser']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteUser']);
@@ -58,7 +58,7 @@ Route::group(['namespace' => 'Web'], function () {
 
         Route::group(['prefix' => 'notifications', 'as' => 'notes.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listNotifications']);
-            Route::get('get', ['as' => 'get', 'uses' => 'AdminController@getNotificationInfo']);
+            Route::get('view', ['as' => 'get', 'uses' => 'AdminController@getNotificationInfo']);
             Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateNotification']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteNotification']);
         });
@@ -68,7 +68,7 @@ Route::group(['namespace' => 'Web'], function () {
     //-------------USER ACCOUNT ROUTES-----------------//
     Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth' => 'auth']], function () {
 
-        Route::get('/', ['as' => 'showOrGet', 'uses' => 'ProfileController@showOrGet']);
+        Route::get('/', ['as' => 'view', 'uses' => 'ProfileController@showOrGet']);
         Route::post('update', ['as' => 'update', 'uses' => 'ProfileController@update']);
         Route::post('photo', ['as' => 'photo', 'uses' => 'ProfileController@photo']);
         Route::post('password', ['as' => 'password', 'uses' => 'ProfileController@password']);

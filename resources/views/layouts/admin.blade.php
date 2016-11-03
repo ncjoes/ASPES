@@ -25,7 +25,7 @@
 
     <ul class="dropdown-content" id="dropdown-1">
         <li>
-            <a href="{{url()->route('profile.showOrGet')}}" class="font-sm">
+            <a href="{{url()->route('profile.view')}}" class="font-sm">
                 <span class="material-icons font-inherit">edit</span> My Profile
             </a>
         </li>
@@ -47,7 +47,7 @@
         <li><a href="{{url()->route('admin.settings')}}">SETTINGS</a></li>
         <li class="divider"></li>
         <li>
-            <a href="{{url()->route('profile.showOrGet')}}">
+            <a href="{{url()->route('profile.view')}}">
                 <i class="material-icons small">account_circle</i>
                 @if(!empty(\Auth::user()->name()))
                     {{\Auth::user()->name()}}

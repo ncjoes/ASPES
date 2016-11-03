@@ -154,7 +154,13 @@
       return n % 2 === 0
     },
     isInArray: function (value, array) {
-      return (array.indexOf(value) > -1)
+      if(typeof value === 'object') {
+        var found = $.grep(array, function (object) {
+          return $.data(value) === $.data(object)
+        });
+        return found.length > 0;
+      }
+      return ($.inArray(value, array) > -1)
     },
     isJsonString: function (str) {
       try {
@@ -174,14 +180,11 @@
       return $object
     },
     jsonDecode: function (jsonObject) {
-      return $.map(jsonObject, function (el) {
-        return el
-      })
+      return jsonDecode(jsonObject);
     },
     isInPageAnchor: function (baseUrl, link) {
       return (new RegExp(baseUrl)).test(link) && (new RegExp('#')).test(link)
     },
-
     getAnchor: function (link) {
       var urlParts = link.toString().split('#')
 
@@ -226,7 +229,8 @@
       } else {
         $this.scroll()
       }
-    },
+    }
+    ,
     range: function (min, max) {
       if (arguments.length === 1) {
         max = min
@@ -238,14 +242,16 @@
         a.push(i)
       }
       return a
-    },
+    }
+    ,
     getKeys: function (obj) {
       var keys = []
       for (var key in obj) {
         keys.push(key)
       }
       return keys
-    },
+    }
+    ,
     uniqueArray: function (a) {
       var seen = {}
       var out = []
@@ -411,7 +417,7 @@ function handle402Error(form, response) {
   form.find(':input').each(function (i, o) {
     var name = $(o).attr('name');
     if (typeof name !== 'undefined') field_names.push(name)
-  });
+  })
   var textArr = [];
   for (var field in response) {
     if (field in response) {
@@ -421,6 +427,12 @@ function handle402Error(form, response) {
   var notification = {
     'message': textArr.join('<br/>'),
     'status': false
-  };
+  }
   notify($('#notify', form), notification);
+}
+
+function jsonDecode(jsonObject) {
+  return $.map(jsonObject, function (el) {
+    return el
+  })
 }

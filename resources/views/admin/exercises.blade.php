@@ -71,10 +71,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col s12 l4" id="preview-box">
-                    <div class="sh-30vh mh-40vh lh-50vh light-blue lighten-5 tiny-padding">
+                <div class="col s12 l4">
+                    <div class="sh-30vh mh-40vh lh-50vh light-blue lighten-5 tiny-padding" id="preview-box">
                         <div class="row">
-                            <div class="col s12">Title</div>
+                            <div class="col s12">
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,39 +91,32 @@
 @endsection
 @section('extra_scripts')
     <script src="{{ asset('js/app.utils.js') }}"></script>
+    <script src="{{ asset('js/admin-panel.js') }}"></script>
     <script type="text/javascript">
-        var View = {
-            listBox: $('#list-box')
-        };
-        var Storage = {
-            total: {{$net_total}},
-            listed: <?= json_encode($list); ?>,
-            infoUrl: '<?= url()->route('admin.exercises.get'); ?>',
-            loaded: []
-        };
-
         $(function () {
-            Storage.listed = $.jsonDecode(Storage.listed);
-            buildDataTable();
-
-
-            function buildDataTable() {
-                var sn = 1;
-                var exercises = Storage.listed;
-                for (var x = 0; x < exercises.length; x++) {
-                    var exercise = exercises[x];
-                    $(
-                            '<tr data-id="' + exercise.id + '">'
-                            + '<td class="data-col-sn">' + sn + '</td>'
-                            + '<td class="data-col-title">' + exercise.title + '</td>'
-                            + '<td class="data-col-start">' + exercise.start_at + '</td>'
-                            + '<td class="data-col-stop">' + exercise.stop_at + '</td>' +
-                            '</tr>'
-                    ).appendTo(View.listBox);
-                    sn++;
+            var View = window.AppView = {
+                listBox: $('#list-box'),
+                previewBox: $('#preview-box'),
+                Storage: function () {
+                    return window.Storage;
                 }
-                View.listBox.find('#tmp').remove();
-            }
+            };
+            var Storage = window.AppStorage = {
+                total: parseInt({{$net_total}}),
+                listed: jsonDecode(<?= json_encode($list); ?>),
+                infoUrl: '<?= url()->route('admin.exercises.get'); ?>',
+                loaded: {},
+                View: function () {
+                    return window.View;
+                }
+            };
+
+            buildDataTable(Storage.listed, View.listBox);
+
+            View.listBox.on('click focus', 'tr', function () {
+                previewDataRow(this, Storage, ExercisePreviewer)
+            });
+
         })
     </script>
 @endsection

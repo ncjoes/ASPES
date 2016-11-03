@@ -7,11 +7,12 @@ body {
     min-height: 100vh;
     flex-direction: column;
 }
-header > nav * {
-    font-size: 14px;
-}
 main {
     flex: 1 0 auto;
+}
+footer .row{
+    margin-bottom: auto !important;
+    padding: 1em 0;
 }
 .font-sm {
     font-size: 11px !important;
