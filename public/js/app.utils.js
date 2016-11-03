@@ -162,6 +162,11 @@
       }
       return ($.inArray(value, array) > -1)
     },
+    arrayAvg: function (array) {
+      return array.reduce(function (total, num) {
+        return total + num;
+      }) / array.length
+    },
     isJsonString: function (str) {
       try {
         $.parseJSON(str)

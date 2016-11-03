@@ -39,6 +39,9 @@ span.badge.font-sm{
 .font-line-through, .ngn {
     text-decoration: line-through;
 }
+.font-underline {
+    text-decoration: underline;
+}
 
 /** Buttons **/
 .btn {
@@ -530,4 +533,8 @@ h1.page-title{
     font-size: 2em;
     line-height: 1em;
     margin: 1em 0 0.2em 0;
+}
+
+table.shrink td, table.shrink th{
+    padding: 8px 5px;
 }

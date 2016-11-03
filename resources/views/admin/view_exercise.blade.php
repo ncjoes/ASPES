@@ -13,7 +13,7 @@ $object = json_encode($object);
     @parent
     <script type="text/javascript">
         $(function () {
-            //previewDataObject(<?= $object ?>, window.AppStorage, ExercisePreviewer);
+            previewDataObject(<?= $object ?>, window.AppStorage, ExercisePreviewer);
         });
     </script>
 @endsection
