@@ -28,10 +28,12 @@ function buildExercisesTable(listArr, listBox, sortDesc) {
 }
 
 function buildFactorsTable(listArr, listBox, sortDesc) {
-  var x = sortDesc === true ? -1 : 1;
-  listArr = listArr.sort(function (a, b) {
-    return $.arrayAvg(b.weight) - (x * $.arrayAvg(a.weight))
-  });
+  if(typeof sortDesc !== 'undefined'){
+    var z = sortDesc === true ? 1 : -1;
+    listArr = listArr.sort(function (a, b) {
+      return $.arrayAvg(b.weight) - (z * $.arrayAvg(a.weight))
+    });
+  }
   var sn = 1;
   for (var x = 0; x < listArr.length; x++) {
     var factor = listArr[x];
@@ -39,7 +41,7 @@ function buildFactorsTable(listArr, listBox, sortDesc) {
       '<tr data-index="' + x + '">'
       + '<td class="data-col-sn">' + sn + '</td>'
       + '<td class="data-col-text"><span class="truncate">' + factor.text + '</span></td>'
-      + '<td nowrap="nowrap" class="data-col-weight">' + factor.weight.toString() + '</td>' +
+      + '<td nowrap="nowrap" class="data-col-weight">[' + factor.weight.toString() + ']</td>' +
       '</tr>'
     ).appendTo(listBox);
     sn++
@@ -106,7 +108,6 @@ function ExercisePreviewer(object) {
 
   $this.build = function () {
     var main = object.main;
-    var factors = object.relations.factors;
     $this.markup = $(
       '<div id="x-' + object.id + '">'
       + '<div>'
@@ -119,32 +120,54 @@ function ExercisePreviewer(object) {
       + '</div>'
       + '<div id="factors" class="clearfix">'
       + '</div>'
+      + '<div id="extras">'
+      + '</div>'
+      + '<div class="clearfix">'
       + '<p class="center-align">'
-      + '<button class="btn z-depth-half"><i class="material-icons right">edit</i> EDIT EXERCISE</button>'
+      + '<button class="btn z-depth-half blue"><i class="material-icons right">edit</i> EDIT EXERCISE</button>'
       + '<button class="btn z-depth-half grey white-text"><i class="material-icons">delete</i></button>'
-      + '</p>' +
+      + '</p>'
+      + '</div>' +
       '</div>');
 
+    var factors = object.relations.factors;
+    var factorsSection = $(
+      '<div class="section lighten-4 light-blue tiny-padding">'
+      + '<h6 class="font-bold">Evaluation Factors</h6>'
+      + '<table class="bordered shrink responsive-table">'
+      + '<thead>'
+      + '<tr>'
+      + '<th width="4%">SN</th>'
+      + '<th>Factor</th>'
+      + '<th>Weight</th>'
+      + '</tr>'
+      + '</thead>'
+      + '<tbody>'
+      + '<tr id="tmp"><td colspan="3" class="center-align">-Not Set-</td></tr>'
+      + '</tbody>'
+      + '</table>' +
+      '</div>');
     if (factors.length) {
-      var section = $(
-            '<div class="section lighten-5 light-blue tiny-padding">'
-            + '<h6 class="font-bold">Evaluation Factors</h6>'
-            + '<table class="bordered shrink">'
-            + '<thead>'
-            + '<tr>'
-            + '<th>SN</th>'
-            + '<th>Factor</th>'
-            + '<th>Weight</th>'
-            + '</tr>'
-            + '</thead>'
-            + '<tbody>'
-            + '</tbody>'
-            + '</table>'
-            + '</div>');
-
-      buildFactorsTable(factors, section.find('tbody'));
-      $this.markup.find('#factors').append(section);
+      buildFactorsTable(factors, factorsSection.find('tbody'));
+      factorsSection.find('#tmp').remove();
     }
+    $this.markup.find('#factors').append(factorsSection);
+
+    var evaluators = object.relations.evaluators;
+    var subjects = object.relations.subjects;
+    var extrasSection = $(
+      '<div class="white-text tiny-padding">'
+      + '<p class="left center-align">'
+      + '<strong class="font-lg"><i class="material-icons tiny left">people</i>Evaluators</strong>'
+      + '<br/><span class="font-bold font-xl"> ' + evaluators.length + '</span>'
+      + '</p>'
+      + '<p class="right center-align">'
+      + '<strong class="font-lg"><i class="material-icons tiny right">person</i>Subjects</strong>'
+      + '<br/><span class="font-bold font-xl"> ' + subjects.length + '</span>'
+      + '</p>' +
+      '</div>'
+    );
+    $this.markup.find('#extras').append(extrasSection);
 
     $this.container.append($this.markup);
     $this.jSelector = $('#x-' + object.id, $this.container);

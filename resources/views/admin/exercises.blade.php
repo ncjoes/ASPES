@@ -24,6 +24,7 @@
 
         h5.preview-title {
             font-size: 1.5em;
+            color: white;
         }
 
         #preview-box h6 {
@@ -101,7 +102,7 @@
                     </table>
                 </div>
                 <div class="col s12 l4">
-                    <div class="sh-30vh mh-40vh lh-50vh light-blue lighten-4 tiny-padding z-depth-half" id="sidebar">
+                    <div class="sh-30vh mh-40vh lh-50vh light-blue lighten-2 tiny-padding z-depth-half" id="sidebar">
                         <div class="row">
                             <div class="col s12" id="preview-box">
 
@@ -146,13 +147,16 @@
                 previewDataRow(this, Storage, ExercisePreviewer)
             });
 
-            var SearchForm = $('#search-form');
-            SearchForm.pushpin({top: SearchForm.offset().top});
-            var Sidebar = $('#sidebar');
-            Sidebar.pushpin({top: Sidebar.offset().top - 100});
-            Sidebar.attr('style', 'top:0; max-width:'+parseInt(Sidebar.parent().width())+'px;')
-            $(window).on('resize', function (e) {
-                Sidebar.attr('style', 'top:0; max-width:'+parseInt(Sidebar.parent().width())+'px;')
+            $(window).on('resize load', function (e) {
+                if($(window).width() > 600) {
+                    var SearchForm = $('#search-form');
+                    SearchForm.pushpin({top: SearchForm.offset().top - 50});
+                }
+                if($(window).width() > 1024) {
+                    var Sidebar = $('#sidebar');
+                    Sidebar.pushpin({top: Sidebar.offset().top - 100});
+                    Sidebar.attr('style', 'max-width:'+parseInt(Sidebar.parent().width())+'px;')
+                }
             })
         })
     </script>
