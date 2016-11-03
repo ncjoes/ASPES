@@ -10,6 +10,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Exercise;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -20,9 +22,16 @@ class AdminController extends Controller
         return iResponse('admin.dashboard', $data);
     }
 
-    public function listExercises()
+    public function listExercises(Request $request)
     {
-        return ['title' => 'Fetching exercise list'];
+        $exercises = Exercise::all()->sortByDesc('id');
+        $total = $exercises->count();
+        parseListRange($request, $exercises->count(), $from, $to, 200);
+        $list = $exercises->take($to - $from + 1); //adding 1 makes the range inclusive
+
+        $data = ['net_total'=>$total, 'list' => $list];
+
+        return iResponse('admin.exercises', $data);
     }
 
     public function getExerciseInfo()

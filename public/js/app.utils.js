@@ -91,8 +91,7 @@
       var visible = []
       if (typeof f !== 'undefined') {
         s.on('scrollSpy:enter', function () {
-          visible = $.grep(visible, function (
-            value) {
+          visible = $.grep(visible, function (value) {
             return value.is(':visible')
           })
           visible = visible.sort(function (a, b) {
@@ -123,8 +122,7 @@
 
           if (visible[0]) {
             var $this = $(this)
-            visible = $.grep(visible, function (
-              value) {
+            visible = $.grep(visible, function (value) {
               return value.attr('id') !== $this.attr('id')
             })
             visible = visible.sort(function (a, b) {
@@ -174,6 +172,11 @@
         return false
       }
       return $object
+    },
+    jsonDecode: function (jsonObject) {
+      return $.map(jsonObject, function (el) {
+        return el
+      })
     },
     isInPageAnchor: function (baseUrl, link) {
       return (new RegExp(baseUrl)).test(link) && (new RegExp('#')).test(link)
@@ -349,7 +352,7 @@
   $.fn.extend(FNEXT)
 }(jQuery))
 
-function notify (pane, response, style) {
+function notify(pane, response, style) {
   var handle = pane.prop('data-timer')
   if ($.isInt(handle)) {
     clearTimeout(handle)
@@ -358,7 +361,7 @@ function notify (pane, response, style) {
   if ('message' in response) {
     pane.html('message' in response ? response.message : toString(response))
     pane.attr('class', 'mode' in response ? response.mode + '-text' : (
-      response.status===true ? 'green-text' : 'red-text'))
+      response.status === true ? 'green-text' : 'red-text'))
   } else {
     pane.html(toString(response))
     pane.attr('class', typeof style === 'undefined' ? 'orange-text' : style)
@@ -369,7 +372,7 @@ function notify (pane, response, style) {
   }, 15000))
 }
 
-function Semaphore () {
+function Semaphore() {
   var $this = this
   $this.locked = false
   $this.lockKey = undefined
@@ -394,10 +397,12 @@ function handleHttpErrors(xhr, form) {
   switch (xhr.status) {
     case 422 : {
       handle402Error(form, response)
-    }break;
+    }
+      break;
     case 500 : {
-      notify($('#notify', form), {'status':false, 'message':'Internal Server Error. Please try again shortly.'})
-    }break;
+      notify($('#notify', form), {'status': false, 'message': 'Internal Server Error. Please try again shortly.'})
+    }
+      break;
   }
 }
 

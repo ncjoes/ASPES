@@ -1,13 +1,15 @@
 /** Fonts **/
 body {
-    font-size: 13px !important;
     font-weight: 400;
+    font-size: 13px !important;
 
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
-
+header > nav * {
+    font-size: 14px;
+}
 main {
     flex: 1 0 auto;
 }
@@ -498,21 +500,14 @@ label.prefixed {
     left: 0;
 }
 
-.file-tracker.row {
-    padding: 0;
-    margin-bottom: 2em;
+#progress-bar .progress{
+    padding: 0 !important;
+    margin: 0 !important;
 }
-
-.file-tracker.row .progress, .file-tracker.row .row, .file-tracker.row .input-field {
-    margin: 0;
-}
-
-.file-tracker.row .progress, .file-tracker.row .determinant {
-    border-radius: 0;
-}
-
-.file-tracker .input-field input {
-    font-size: 12px !important;
+#progress-bar .progress .determinant, #progress-bar .progress .indeterminate{
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 textarea.materialize-textarea {
@@ -528,4 +523,10 @@ textarea.materialize-textarea {
     .logo{
         max-height: 64px;
     }
+}
+
+h1.page-title{
+    font-size: 2em;
+    line-height: 1em;
+    margin: 1em 0 0.2em 0;
 }
