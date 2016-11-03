@@ -11,11 +11,12 @@ body {
 main {
     flex: 1 0 auto;
 }
-
 .font-sm {
     font-size: 11px !important;
 }
-
+span.badge.font-sm{
+    font-size: 10px !important;
+}
 .font-lg {
     font-size: 15px !important;
 }

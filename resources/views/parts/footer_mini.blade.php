@@ -6,7 +6,7 @@
  * Time:    10:51 PM
  **/
 ?>
-<div class="footer-copyright {{$footer_class or 'blue lighten-1'}} outline-top">
+<div class="footer-copyright {{$footer_class or 'light-blue darken-2'}} outline-top">
     <div class="container">
         <span class="font-bold">© 2014 Copyright Text</span>
         <a class="right" href="#!">More Links</a>

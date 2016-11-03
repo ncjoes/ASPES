@@ -16,7 +16,7 @@
     <meta name="author" content="{{$meta['author'] or config('app.name')}}">
 
     <!-- Styles -->
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ asset('icon.png') }}">
     <link href="{{asset('css/material.icons.css')}}" rel="stylesheet">
     <link href="{{asset('css/materialize.css')}}" rel="stylesheet">
     <link href="{{asset('css/app.theme.css')}}" rel="stylesheet">
@@ -24,8 +24,24 @@
 </head>
 <body class="grey lighten-4">
 
-<header class="transparent">
-    @yield('header')
+<header>
+    <nav class="blue">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a class="logo left" href="{{url()->route('app.home')}}">
+                    <img src="{{asset('icon.svg')}}" class="logo">
+                    <i class="material-icons left">trending_up</i>
+                </a>
+                <a data-activates="nav-mobile" class="button-collapse right">
+                    <i class="material-icons">menu</i>
+                </a>
+                @yield('header')
+            </div>
+        </div>
+        <form id="logout-form" action="{{ url()->route('auth.logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
+    </nav>
 </header>
 <main>
     @yield('content')
