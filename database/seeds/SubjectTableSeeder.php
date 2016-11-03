@@ -15,15 +15,13 @@ class SubjectTableSeeder extends Seeder
     public function run()
     {
         $exercises = Exercise::all();
-        $users = User::all()->random(3);
+        $users = User::all();
 
         foreach ($exercises as $exercise) {
-            foreach ($users as $user) {
-                factory(Subject::class)->create([
-                    'exercise_id' => $exercise->id,
-                    'user_id'     => $users->random()->id,
-                ]);
-            }
+            factory(Subject::class)->create([
+                'exercise_id' => $exercise->id,
+                'user_id'     => $users->random()->id,
+            ]);
         }
     }
 }
