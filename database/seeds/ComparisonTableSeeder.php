@@ -37,29 +37,30 @@ class ComparisonTableSeeder extends Seeder
             $eEvaluators = $exercise->evaluators()->where('type', Evaluator::DM)->get();
 
             /**
-             * @var Collection $eFactors
+             * @var Collection $xFactors
              */
-            $eFactors = $exercise->factors;
+            $xFactors = $exercise->factors;
 
             /**
              * @var Evaluator $evaluator
              */
             foreach ($eEvaluators as $evaluator) {
 
+                $x = 1;
                 /**
                  * @var Factor $f1
                  */
-                foreach ($eFactors as $f1) {
-                    foreach ($eFactors as $f2) {
-                        if ($f1->id != $f2->id) {
-                            factory(Comparison::class)->create([
-                                'f1_id'        => $f1->id,
-                                'f2_id'        => $f2->id,
-                                'fcv__id'       => $fcvs->random()->id,
-                                'evaluator_id' => $evaluator->id,
-                            ]);
-                        }
+                foreach ($xFactors as $f1) {
+                    $yFactors = (clone $xFactors)->splice($x);
+                    foreach ($yFactors as $f2) {
+                        factory(Comparison::class)->create([
+                            'f1_id'        => $f1->id,
+                            'f2_id'        => $f2->id,
+                            'fcv__id'      => $fcvs->random()->id,
+                            'evaluator_id' => $evaluator->id,
+                        ]);
                     }
+                    $x++;
                 }
             }
         }
