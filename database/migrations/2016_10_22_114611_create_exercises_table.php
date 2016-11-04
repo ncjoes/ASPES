@@ -19,7 +19,8 @@ class CreateExercisesTable extends Migration
             $table->text('description');
             $table->timestamp('start_at')->nullable();
             $table->timestamp('stop_at')->nullable();
-            $table->unsignedTinyInteger('status')->default(1);
+            $table->boolean('published')->default(false);
+            $table->boolean('concluded')->default(false);
             $table->nullableTimestamps();
             $table->softDeletes();
 

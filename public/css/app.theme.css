@@ -459,9 +459,9 @@ nav ul a {
     transition-duration: 0.3s;
     transition-timing-function: initial;
     transition-delay: initial;
-    font-size: 1rem;
+    font-size: 1.05rem;
     display: block;
-    padding: 0 5px;
+    padding: 0 10px;
     cursor: pointer;
 }
 
