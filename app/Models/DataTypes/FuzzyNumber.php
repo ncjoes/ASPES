@@ -9,11 +9,13 @@
 
 namespace App\Models\DataTypes;
 
-class FuzzyNumber
+use Illuminate\Support\Collection;
+
+class FuzzyNumber implements \Serializable, \JsonSerializable
 {
-    protected $l;
-    protected $m;
-    protected $u;
+    private   $l;
+    private   $m;
+    private   $u;
     protected $triple;
 
     public function __construct(array $array)
@@ -26,7 +28,36 @@ class FuzzyNumber
 
             return $this;
         }
-        throw new \InvalidArgumentException("Not a triple");
+
+        return self::E("Not a triple");
+    }
+
+    public function __set($name, $value)
+    {
+        self::E("Can not mutate a FuzzyNumber, create a new object instead");
+    }
+
+    public function __toString()
+    {
+        return json_encode($this->triple);
+    }
+
+    public function serialize()
+    {
+        return $this->__toString();
+    }
+
+    public function unserialize($serialized)
+    {
+        $phpJsonObject = json_decode($serialized);
+        $this->l = $phpJsonObject->l;
+        $this->m = $phpJsonObject->m;
+        $this->u = $phpJsonObject->u;
+    }
+
+    function jsonSerialize()
+    {
+        return $this->triple;
     }
 
     public function L() { return $this->l; }
@@ -40,27 +71,32 @@ class FuzzyNumber
         return self::checkIfTFN($this->triple);
     }
 
-    public function addTo(self $fuzzyNumber)
+    public function add(self $fuzzyNumber)
     {
-        return self::add($this, $fuzzyNumber);
+        return self::sum($this, $fuzzyNumber);
     }
 
-    public function multiplyWith(self $fuzzyNumber)
+    public function subtract(self $fuzzyNumber)
     {
-        return self::multiply($this, $fuzzyNumber);
+        return self::diff($this, $fuzzyNumber);
     }
 
-    public function divideBy(self $fuzzyNumber)
+    public function multiply(self $fuzzyNumber)
     {
-        return self::divide($this, $fuzzyNumber);
+        return self::product($this, $fuzzyNumber);
     }
 
-    public function inverse()
+    public function divide(self $fuzzyNumber)
     {
-        return self::invert($this);
+        return self::divider($this, $fuzzyNumber);
     }
 
-    public static function add(self $fzn1, self $fzn2)
+    public function reciprocal($dp = 3)
+    {
+        return self::invert($this, $dp);
+    }
+
+    public static function sum(self $fzn1, self $fzn2)
     {
         return new self([
             $fzn1->L() + $fzn2->L(),
@@ -69,7 +105,16 @@ class FuzzyNumber
         ]);
     }
 
-    public static function multiply(self $fzn1, self $fzn2)
+    public static function diff(self $fzn1, self $fzn2)
+    {
+        return new self([
+            $fzn1->L() - $fzn2->L(),
+            $fzn1->M() - $fzn2->M(),
+            $fzn1->U() - $fzn2->U()
+        ]);
+    }
+
+    public static function product(self $fzn1, self $fzn2)
     {
         return new self([
             $fzn1->L() * $fzn2->L(),
@@ -78,7 +123,7 @@ class FuzzyNumber
         ]);
     }
 
-    public static function divide(self $fzn1, self $fzn2)
+    public static function divider(self $fzn1, self $fzn2)
     {
         return new self([
             $fzn1->L() / $fzn2->L(),
@@ -87,13 +132,52 @@ class FuzzyNumber
         ]);
     }
 
-    public static function invert(self $fuzzyNumber)
+    public static function invert(self $fuzzyNumber, $dp)
     {
         return new self([
-            1 / $fuzzyNumber->L(),
-            1 / $fuzzyNumber->M(),
-            1 / $fuzzyNumber->U()
+            round(1 / $fuzzyNumber->U(), $dp),
+            round(1 / $fuzzyNumber->M(), $dp),
+            round(1 / $fuzzyNumber->L(), $dp)
         ]);
+    }
+
+    public static function geometricMean(array $fuzzyNumbers, $dp=3)
+    {
+        $test = new Collection($fuzzyNumbers);
+        if (self::checkIfMassActionable($test)) {
+            return new self([
+                min(self::getL($fuzzyNumbers)),
+                self::GM(self::getM($fuzzyNumbers), $dp),
+                max(self::getU($fuzzyNumbers))
+            ]);
+        }
+
+        return self::E("Array -{fuzzyNumbers}- must contain 2 or more FuzzyNumbers");
+    }
+
+    public static function addMany(array $fuzzyNumbers)
+    {
+        return self::massAction($fuzzyNumbers, 'sum');
+    }
+
+    public static function multiplyMany(array $fuzzyNumbers)
+    {
+        return self::massAction($fuzzyNumbers, 'product');
+    }
+
+    public static function getL(array $fuzzyNumbers)
+    {
+        return self::getKey($fuzzyNumbers, 'L');
+    }
+
+    public static function getM(array $fuzzyNumbers)
+    {
+        return self::getKey($fuzzyNumbers, 'M');
+    }
+
+    public static function getU(array $fuzzyNumbers)
+    {
+        return self::getKey($fuzzyNumbers, 'U');
     }
 
     public static function checkIsTriple(array $array)
@@ -104,5 +188,62 @@ class FuzzyNumber
     public static function checkIfTFN(array $arr)
     {
         return self::checkIsTriple($arr) and ($arr[0] !== $arr[1] and $arr[0] !== $arr[2] and $arr[1] !== $arr[2]);
+    }
+
+    protected static function checkIfMassActionable(Collection $fuzzyNumbers, $min = 2)
+    {
+        if ($fuzzyNumbers->count() > ($min - 1)) {
+            $test = clone $fuzzyNumbers;
+            for($i=0; $i < $min; $i++) {
+                if(get_class($test->pop()) !== self::class)
+                    return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    protected static function getKey(array $fuzzyNumbers, $K)
+    {
+        $R = [];
+        $fuzzyNumbers = new Collection($fuzzyNumbers);
+        if (self::checkIfMassActionable($fuzzyNumbers, 2)) {
+            foreach ($fuzzyNumbers as $fuzzyNumber) {
+                array_push($R, ($fuzzyNumber)->$K());
+            }
+        }
+
+        return $R;
+    }
+
+    protected static function GM(array $array, $dp)
+    {
+        $mul = $array[0];
+        foreach ($array as $i => $n) {
+            $mul = $i === 0 ? $n : $mul * $n;
+        }
+
+        return round(pow($mul, 1 / count($array)), $dp);
+    }
+
+    protected static function massAction(array $fuzzyNumbers, $method)
+    {
+        $fuzzyNumbers = new Collection($fuzzyNumbers);
+        if (self::checkIfMassActionable($fuzzyNumbers)) {
+            $result = $fuzzyNumbers->first();
+            foreach ($fuzzyNumbers as $fuzzyNumber) {
+                $result = self::$method($result, $fuzzyNumber);
+            }
+
+            return $result;
+        }
+
+        return self::E("Array -{fuzzyNumbers}- must contain 2 or more FuzzyNumbers");
+    }
+
+    protected static function E($message)
+    {
+        throw new \InvalidArgumentException($message);
     }
 }
