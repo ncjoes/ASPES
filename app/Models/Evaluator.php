@@ -8,6 +8,8 @@
 
 namespace App\Models;
 
+use App\Models\DataTypes\FuzzyNumber;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -58,5 +60,25 @@ class Evaluator extends Model
     public function comparisons()
     {
         return $this->hasMany(Comparison::class);
+    }
+
+    public function getComparisonMatrix()
+    {
+        $matrix = [];
+        /**
+         * @var Collection $comparisons
+         */
+        $comparisons = $this->comparisons;
+
+        /**
+         * @var Comparison $comparison
+         */
+        foreach ($comparisons as $comparison) {
+            $FN = new FuzzyNumber($comparison->FCV->value);
+            $matrix[ $comparison->factor1->id ][ $comparison->factor2->id ] = $FN;
+            $matrix[ $comparison->factor2->id ][ $comparison->factor1->id ] = $FN->reciprocal();
+        }
+
+        return $matrix;
     }
 }

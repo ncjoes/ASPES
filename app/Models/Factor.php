@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -51,18 +52,43 @@ class Factor extends Model
     }
 
     /**
-     * @return mixed
+     * @return Factor || null
      */
     public function parent()
     {
         return self::find($this->parent_id);
     }
 
-    /**
-     * @return mixed
-     */
-    public function sub_factors()
+    public function siblings()
     {
-        return self::where('parent_id', $this->id);
+        if(is_object($this->parent())) {
+            return $this->parent()->children();
+        }
+        else{
+            return $this->exercise->factors;
+        }
+    }
+
+    /**
+     * @return Collection || null
+     */
+    public function children()
+    {
+        return self::where('parent_id', $this->id)->get();
+    }
+
+    public function calculateWeight()
+    {
+        if($this->hasSubFactors()) {
+
+        }
+        else {
+
+        }
+    }
+
+    public function hasSubFactors()
+    {
+        return $this->children()->count() > 0;
     }
 }

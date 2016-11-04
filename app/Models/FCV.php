@@ -8,11 +8,13 @@
 
 namespace App\Models;
 
+use App\Models\DataTypes\FuzzyNumber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class FCV
+ *
  * @package App\Models
  */
 class FCV extends Model
@@ -37,5 +39,13 @@ class FCV extends Model
     public function comparisons()
     {
         return $this->hasMany(Comparison::class, 'fcv__id');
+    }
+
+    public function getValue()
+    {
+        if (FuzzyNumber::checkIsTriple($this->value))
+            return new FuzzyNumber($this->value);
+
+        return null;
     }
 }

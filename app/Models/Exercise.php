@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use App\Models\DataTypes\FuzzyNumber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -101,24 +102,56 @@ class Exercise extends Model
         return $this->hasManyThrough(Evaluation::class, Subject::class);
     }
 
-    /**
-     * @return array
-     */
-    public function getComparisonMatrices()
+    public function factor_evaluators()
     {
-        $data = [];
+        return $this->evaluators()->where('type', Evaluator::DM);
+    }
 
-        return $data;
+    public function subject_evaluators()
+    {
+        return $this->evaluators()->where('type', Evaluator::SE);
     }
 
     /**
      * @return array
      */
-    public function getRepresentativeCM()
+    public function getComparisonMatrices()
     {
-        $data = [];
+        $matrices = [];
+        /**
+         * @var Evaluator $evaluator
+         */
+        foreach ($this->factor_evaluators()->get() as $evaluator) {
+            $matrices[ $evaluator->id ] = $evaluator->getComparisonMatrix();
+        }
 
-        return $data;
+        return $matrices;
+    }
+
+    /**
+     * @return array
+     */
+    public function buildDecisionMatrix()
+    {
+        $decisionMatrix = [];
+        $comparisonMatrices = $this->getComparisonMatrices();
+
+        $factorsMatrix = [];
+        foreach ($comparisonMatrices as $evaluator_id => $comparisonMatrix) {
+            foreach ($comparisonMatrix as $factor1_id => $comparisons) {
+                foreach ($comparisons as $factor2_id=>$fuzzyNumber) {
+                    $factorsMatrix[$factor1_id][$factor2_id][$evaluator_id] = $fuzzyNumber;
+                }
+            }
+        }
+
+        foreach ($factorsMatrix as $factor1_id => $crossComparisons) {
+            foreach ($crossComparisons as $factor2_id=>$fuzzyNumbers) {
+                $decisionMatrix[$factor1_id][$factor2_id] = FuzzyNumber::geometricMean($fuzzyNumbers);
+            }
+        }
+
+        return $decisionMatrix;
     }
 
     /**
@@ -126,8 +159,8 @@ class Exercise extends Model
      */
     public function getFactorWeights()
     {
-        $data = [];
+        $matrix = [];
 
-        return $data;
+        return $matrix;
     }
 }
