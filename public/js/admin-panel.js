@@ -118,9 +118,9 @@ function ExercisePreviewer(object) {
       + '<p class="left">From: <span class="font-bold">' + main.start_at + '</span></p>'
       + '<p class="right">To: <span class="font-bold">' + main.stop_at + '</span></p>'
       + '</div>'
-      + '<div id="factors" class="clearfix">'
+      + '<div class="clearfix" id="factors">'
       + '</div>'
-      + '<div id="extras">'
+      + '<div class="clearfix" id="extras">'
       + '</div>'
       + '<div class="clearfix">'
       + '<p class="center-align">'
@@ -145,7 +145,8 @@ function ExercisePreviewer(object) {
       + '<tbody>'
       + '<tr id="tmp"><td colspan="3" class="center-align">-Not Set-</td></tr>'
       + '</tbody>'
-      + '</table>' +
+      + '</table>'
+      + '<p class="clearfix"></p>' +
       '</div>');
     if (factors.length) {
       buildFactorsTable(factors, factorsSection.find('tbody'));

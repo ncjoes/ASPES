@@ -538,3 +538,34 @@ h1.page-title{
 table.shrink td, table.shrink th{
     padding: 8px 5px;
 }
+
+.modal .modal-footer {
+    height: auto;
+}
+
+.modal.modal-fixed-footer .modal-content, .modal .modal-content {
+    max-height: calc(100% - 56px);
+    height: auto;
+    padding: 0;
+}
+
+.modal .modal-footer .btn, .modal .modal-footer .btn-large, .modal .modal-footer .btn-flat {
+    float: none;
+}
+
+@media only screen and (max-width: 1024px) {
+    .modal {
+        width: 94% !important;
+        min-height: 95vh !important;
+    }
+}
+
+@media only screen and (min-width: 1025px) {
+    .modal {
+        min-height: 90vh !important;
+    }
+}
+
+div.picker__wrap{
+    margin-bottom: 50px !important;
+}

@@ -40,7 +40,8 @@ Route::group(['namespace' => 'Web'], function () {
 
         Route::group(['prefix' => 'exercises', 'as' => 'exercises.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listExercises']);
-            Route::get('view', ['as' => 'get', 'uses' => 'AdminController@viewExercise']);
+            Route::get('view', ['as' => 'view', 'uses' => 'AdminController@viewExercise']);
+            Route::get('edit', ['as' => 'edit', 'uses' => 'AdminController@editExercise']);
             Route::post('create', ['as' => 'create', 'uses' => 'AdminController@createExercise']);
             Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateExercise']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteExercise']);
@@ -58,7 +59,7 @@ Route::group(['namespace' => 'Web'], function () {
 
         Route::group(['prefix' => 'notifications', 'as' => 'notes.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listNotifications']);
-            Route::get('view', ['as' => 'get', 'uses' => 'AdminController@getNotificationInfo']);
+            Route::get('view', ['as' => 'view', 'uses' => 'AdminController@getNotificationInfo']);
             Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateNotification']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteNotification']);
         });

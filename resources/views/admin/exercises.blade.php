@@ -41,6 +41,7 @@
             box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.4);
             padding: 0.5em;
         }
+
         #sidebar.pinned {
             position: fixed !important;
             padding-top: 100px !important;
@@ -113,11 +114,181 @@
             </div>
         </div>
     </div>
-    <section class="hide" id="building-blocks">
-        <div id="progress-bar" class="progress blue">
-            <div class="indeterminate blue lighten-2"></div>
-        </div>
-    </section>
+
+    <div id="exercise-editor" class="modal modal-fixed-footer">
+        <form>
+            {{csrf_field()}}
+            <input type="hidden" name="id">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="col s12 no-padding">
+                        <ul class="tabs">
+                            <li class="tab col s2"><a href="#tab-description" class="active">Description</a></li>
+                            <li class="tab col s2"><a href="#tab-factors">Factors</a></li>
+                            <li class="tab col s2"><a href="#tab-comments">Comments</a></li>
+                            <li class="tab col s2"><a href="#tab-evaluators">Evaluators</a></li>
+                            <li class="tab col s2"><a href="#tab-subjects">Subjects</a></li>
+                            <li class="tab col s2 blue"><a href="#tab-publish" class="white-text">Publish</a></li>
+                        </ul>
+                    </div>
+                    <div class="divider"></div>
+                    <div id="tab-description" class="col s12 section">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="title" name="title" type="text" class="validate">
+                                <label for="title">Title</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="description" name="outline" class="materialize-textarea lh-20vh sh-30vh"></textarea>
+                                <label for="description">Description</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input id="start_date" type="date" class="datepicker">
+                                <label for="start_date">Start Date/Time</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input id="stop_date" type="date" class="datepicker">
+                                <label for="stop_date">Stop Date/Time</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-factors" class="col s12">
+                        <div id="factors" class="tiny-padding">
+                            <p>
+                                <strong>Evaluation Factors</strong>
+                            </p>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="factor-1" name="factors[]" type="text" class="validate">
+                                    <label for="factor-1">Factor...</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 right-align">
+                                    <button type="button" class="btn-floating grey"><i class="material-icons small">add</i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div id="comparison-scales" class="grey lighten-3 tiny-padding">
+                            <p>
+                                <strong>Factors Comparison Scale</strong>
+                            </p>
+                            <div class="row">
+                                <div class="input-field col s9">
+                                    <input id="fcv-ls-1" name="fcv-ls[1]" type="text" class="validate">
+                                    <label for="fcv-ls-1">Linguistic Variable...</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    <input id="fcv-tfs-1" name="fcs-tfs[1]" type="text" class="validate">
+                                    <label for="fcv-tfs-1">TFS</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 right-align">
+                                    <button type="button" class="btn-floating grey"><i class="material-icons small">add</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-comments" class="col s12">
+                        <div class="row">
+                            <div class="input-field col s10">
+                                <input id="comment-1" name="comments[1]" type="text" class="validate">
+                                <label for="comment-1">Comment...</label>
+                            </div>
+                            <div class="input-field col s2">
+                                <input id="comment-grade-1" name="grades[1]" type="number" min="0" max="100" class="validate">
+                                <label for="comment-grade-1">Grade</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 right-align">
+                                <button type="button" class="btn-floating grey"><i class="material-icons small">add</i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-evaluators" class="col s12">
+                        <div class="row no-margin">
+                            <div class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix small left">search</i>
+                                        <input type="text" id="search-user" class="autocomplete">
+                                        <label for="search-user">Search</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <table id="data-table" class="bordered highlight responsive-table shrink margin-btm-1em">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="sn" width="4%">SN</th>
+                                        <th data-field="name">User</th>
+                                        <th data-field="role" width="15%">Role</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="list-box">
+                                    <tr id="tmp">
+                                        <td colspan="3" class="center-align">
+                                            -- Selecting users by searching with name --
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-subjects" class="col s12">
+                        <div class="row no-margin">
+                            <div class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix small left">search</i>
+                                        <input type="text" id="search-user" class="autocomplete">
+                                        <label for="search-user">Search</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <table id="data-table" class="bordered highlight responsive-table shrink margin-btm-1em">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="sn" width="4%">SN</th>
+                                        <th data-field="name">User</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="list-box">
+                                    <tr id="tmp">
+                                        <td colspan="2" class="center-align">
+                                            -- Selecting users by searching with name --
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-publish" class="col s12">--</div>
+                </div>
+            </div>
+            <div class="modal-footer center-align">
+                <p class="center-align">
+                    <button class="btn z-depth-half green darken-5" id="save"><i class="material-icons right">save</i> SAVE</button>
+                    <a class="btn z-depth-half grey darken-5" id="x"><i class="material-icons">close</i></a>
+                </p>
+            </div>
+        </form>
+    </div>
+
 @endsection
 @section('extra_scripts')
     <script src="{{ asset('js/app.utils.js') }}"></script>
@@ -134,30 +305,48 @@
             var Storage = window.AppStorage = {
                 total: parseInt({{$net_total}}),
                 listed: jsonDecode(<?= json_encode($list); ?>),
-                infoUrl: '<?= url()->route('admin.exercises.get'); ?>',
+                infoUrl: '<?= url()->route('admin.exercises.view'); ?>',
                 loaded: {},
                 View: function () {
                     return window.View;
                 }
             };
 
-            buildExercisesTable(Storage.listed, View.listBox, true);
-
             View.listBox.on('click focus', 'tr', function () {
                 previewDataRow(this, Storage, ExercisePreviewer)
             });
 
-            $(window).on('resize load', function (e) {
-                if($(window).width() > 600) {
+            $('ul.tabs').tabs();
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 15
+            });
+
+            /*
+            $('#exercise-editor').openModal({
+                dismissible: false,
+                starting_top: '3%',
+                ending_top: '3%'
+            });
+            */
+            $(window).on('resize', function (e) {
+                bindListeners();
+            });
+
+            bindListeners();
+            buildExercisesTable(Storage.listed, View.listBox, true);
+
+            function bindListeners() {
+                if ($(window).width() > 600 && Storage.listed.length > 20) {
                     var SearchForm = $('#search-form');
                     SearchForm.pushpin({top: SearchForm.offset().top - 50});
                 }
-                if($(window).width() > 1024) {
-                    var Sidebar = $('#sidebar');
+                var Sidebar = $('#sidebar');
+                Sidebar.attr('style', 'max-width:' + parseInt(Sidebar.parent().width()) + 'px;')
+                if ($(window).width() > 1024) {
                     Sidebar.pushpin({top: Sidebar.offset().top - 100});
-                    Sidebar.attr('style', 'max-width:'+parseInt(Sidebar.parent().width())+'px;')
                 }
-            })
-        })
+            }
+        });
     </script>
 @endsection
