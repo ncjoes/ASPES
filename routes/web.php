@@ -32,7 +32,13 @@ Route::group(['as' => 'auth.', 'namespace' => 'Auth'], function () {
 Route::group(['namespace' => 'Web'], function () {
 
     Route::group(['as'=>'app.'], function (){
-        Route::get('/', ['as' => 'home', 'uses' => 'PublicController@showHomePage']);
+        Route::get('/', ['as' => 'home', 'uses' => 'PublicController@home']);
+
+        Route::get('/live', ['as' => 'live', 'uses' => 'PublicController@listLiveExercises']);
+        Route::group(['prefix'=>'results', 'as'=>'results.'], function (){
+            Route::get('/', ['as' => 'list', 'uses' => 'PublicController@listResults']);
+            Route::get('{slug?}', ['as' => 'view', 'uses' => 'PublicController@viewResult']);
+        });
     });
 
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth' => 'auth']], function () {
@@ -42,16 +48,13 @@ Route::group(['namespace' => 'Web'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listExercises']);
             Route::get('view', ['as' => 'view', 'uses' => 'AdminController@viewExercise']);
             Route::get('edit', ['as' => 'edit', 'uses' => 'AdminController@editExercise']);
-            Route::post('create', ['as' => 'create', 'uses' => 'AdminController@createExercise']);
-            Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateExercise']);
+            Route::post('save', ['as' => 'update', 'uses' => 'AdminController@saveExercise']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteExercise']);
         });
 
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'AdminController@listUsers']);
             Route::get('view', ['as' => 'view', 'uses' => 'AdminController@getUserInfo']);
-            Route::post('create', ['as' => 'create', 'uses' => 'AdminController@createUser']);
-            Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateUser']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteUser']);
         });
 

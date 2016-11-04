@@ -14,8 +14,8 @@ $user = \Auth::user();
         @if(request()->route()->getName()!=='app.home')
             @include('parts.nav-desktop_home')
         @endif
-            <li><a href="{{url()->route('app.home')}}" style="background-color: white; color: #2196F3;">LIVE POLLS</a></li>
-            <li><a href="{{url()->route('app.home')}}">RESULTS</a></li>
+            <li><a href="{{url()->route('app.live')}}" style="background-color: white; color: #2196F3;">LIVE POLLS</a></li>
+            <li><a href="{{url()->route('app.results.list')}}">RESULTS</a></li>
         @if($user)
             @if($user->isAdmin())
                 <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons">dashboard</i></a></li>
