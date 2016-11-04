@@ -5,67 +5,45 @@
  * Date:    9/21/2016
  * Time:    8:33 PM
  **/
+$user = \Auth::user();
 ?>
 @extends('layouts.app')
 
 @section('header')
     <ul class="hide-on-med-and-down right">
-        <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons">dashboard</i></a></li>
-        <li><a href="{{url()->route('admin.exercises.list')}}">EXERCISES</a></li>
-        <li><a href="{{url()->route('admin.users.list')}}">USERS</a></li>
-        <li><a href="{{url()->route('admin.notes.list')}}">NOTIFICATIONS</a></li>
-        <li><a href="{{url()->route('admin.settings')}}">SETTINGS</a></li>
-        <li>
-            <a class="dropdown-button" data-activates="dropdown-1">
-                <i class="material-icons small">person</i>
-            </a>
-        </li>
-    </ul>
-
-    <ul class="dropdown-content" id="dropdown-1">
-        <li>
-            <a href="{{url()->route('profile.showOrGet')}}" class="font-sm">
-                <span class="material-icons font-inherit">edit</span> My Profile
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a onclick="event.preventDefault(); $('#logout-form').submit();" class="font-sm">
-                <span class="material-icons font-inherit">lock</span> Sign Me Out
-            </a>
-        </li>
+        @if(request()->route()->getName()!=='app.home')
+            @include('parts.nav-desktop_home')
+        @endif
+            <li><a href="{{url()->route('app.home')}}" style="background-color: white; color: #2196F3;">LIVE POLLS</a></li>
+            <li><a href="{{url()->route('app.home')}}">RESULTS</a></li>
+        @if($user)
+            @if($user->isAdmin())
+                <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons">dashboard</i></a></li>
+            @endif
+            @include('parts.nav-desktop_user')
+        @else
+            @include('parts.nav-desktop_auth')
+        @endif
     </ul>
 
     <ul id="nav-mobile" class="side-nav">
-        <li><a href="{{url()->route('app.home')}}"><i class="material-icons small">home</i>HOME</a></li>
-        <li class="divider"></li>
-        <li><a href="{{url()->route('admin.dashboard')}}">DASHBOARD</a></li>
-        <li><a href="{{url()->route('admin.exercises.list')}}">EXERCISES</a></li>
-        <li><a href="{{url()->route('admin.users.list')}}">USERS</a></li>
-        <li><a href="{{url()->route('admin.notes.list')}}">NOTIFICATIONS</a></li>
-        <li><a href="{{url()->route('admin.settings')}}">SETTINGS</a></li>
-        <li class="divider"></li>
-        <li>
-            <a href="{{url()->route('profile.showOrGet')}}">
-                <i class="material-icons small">account_circle</i>
-                @if(!empty(\Auth::user()->name()))
-                    {{\Auth::user()->name()}}
-                @else
-                    MY PROFILE
-                @endif
-                <span class="badge font-sm">PROFILE</span>
-            </a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a onclick="event.preventDefault(); $('#logout-form').submit();">
-                <i class="material-icons">lock</i> LOG OUT
-            </a>
-        </li>
+        @if(request()->route()->getName()!=='app.home')
+            @include('parts.nav-mobile_home')
+            <li class="divider"></li>
+        @endif
+        @if($user)
+            @if($user->isAdmin())
+                <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons">dashboard</i>ADMIN. DASHBOARD</a></li>
+            @endif
+            <li class="divider"></li>
+            @include('parts.nav-mobile_user')
+        @else
+            @include('parts.nav-mobile_auth')
+        @endif
         <li class="divider"></li>
     </ul>
 @endsection
 
 @section('footer')
-    @include('parts.footer_mega')
+    @include('parts.footer-mega')
 @endsection

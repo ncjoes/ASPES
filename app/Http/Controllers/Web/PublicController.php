@@ -13,6 +13,6 @@ class PublicController
 {
     public function showHomepage()
     {
-        return ['title'=>'Homepage'];
+        return view('public.home');
     }
 }
