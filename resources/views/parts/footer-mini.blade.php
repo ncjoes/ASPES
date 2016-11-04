@@ -8,8 +8,8 @@
 ?>
 <div class="footer-copyright {{$footer_class or 'light-blue darken-2'}} outline-top">
     <div class="container">
-        <span class="font-bold">© 2014 Copyright Text</span>
-        <a class="right" href="#!">More Links</a>
+        <span class="font-bold">© {{app_info('copyright')}}</span>
+        <a class="right white-text" href="#!">More Links</a>
     </div>
 </div>
 

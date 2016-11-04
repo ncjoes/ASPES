@@ -1,3 +1,6 @@
+<?php
+$user = \Auth::user();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,9 +14,9 @@
         window.Laravel = <?= json_encode(['csrfToken' => csrf_token()]) ?>;
     </script>
 
-    <title>{{$meta['title'] or config('app.name')}}</title>
-    <meta name="description" content="{{$meta['description'] or config('app.name')}}">
-    <meta name="author" content="{{$meta['author'] or config('app.name')}}">
+    <title>{{$meta['title'] or app_info('name.full')}}</title>
+    <meta name="description" content="{{$meta['description'] or app_info('name.full')}}">
+    <meta name="author" content="{{$meta['author'] or app_info('name.full')}}">
 
     <!-- Styles -->
     <link rel="icon" href="{{ asset('icon.png') }}">

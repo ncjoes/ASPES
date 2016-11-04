@@ -6,10 +6,11 @@
             <div class="container valign">
                 <div class="row">
                     <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
-                        <div class="row center-align">
-                            <h4>Sign Up</h4>
-                            <p>
-                                Some text<br/>a...
+                        <div class="row">
+                            <h4>Lets get your opinions heard!</h4>
+                            <p class="font-lg">
+                                {{app_info('description.short')}}
+                                Sign up now to start contributing to better education for all.
                             </p>
                         </div>
                         <div class="row">
@@ -40,7 +41,7 @@
 
                         <div class="row">
                             <div class="col s12">
-                                <h5 class="font-bold">Sign Up with Email</h5>
+                                <h5 class="font-bold">Sign Up with E-mail</h5>
                             </div>
                         </div>
 
@@ -58,7 +59,7 @@
                         <div class="row">
                             <div class="input-field col m6 s12">
                                 <input id="email" name="email" type="email" class="validate" required>
-                                <label for="email">Email</label>
+                                <label for="email">E-mail</label>
                             </div>
                             <div class="input-field col m6 s12">
                                 <input id="phone" name="phone" type="tel" class="validate">

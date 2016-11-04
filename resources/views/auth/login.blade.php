@@ -9,11 +9,10 @@
                     <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
                         <div class="row">
                             <div class="col s12">
-                                <h4>Let&apos;s hook you up with good reads!</h4>
+                                <h4>One click away!</h4>
                                 <p class="font-lg">
-                                    {{config('app.name')}} makes it easier for you to enjoy what you love the most.
-                                    Join the fastest growing community of authors and readers, sharing get contents
-                                    and get more out of the web.
+                                    {{app_info('description.short')}}
+                                    Log in now to start contributing to better education for all.
                                 </p>
                             </div>
                         </div>
@@ -34,7 +33,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="row hide-on-large-only">
+                        <div class="row">
                             <div class="divider col s5"></div>
                             <div class="col s2 center-align">OR</div>
                             <div class="divider col s5"></div>
@@ -47,13 +46,13 @@
 
                         <div class="row">
                             <div class="col s12">
-                                <h5 class="font-bold">Log in with email</h5>
+                                <h5 class="font-bold">Log in with E-mail</h5>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
                                 <input id="email" name="email" type="email" class="validate" required>
-                                <label for="email">Email Address</label>
+                                <label for="email">E-mail Address</label>
                             </div>
                         </div>
 

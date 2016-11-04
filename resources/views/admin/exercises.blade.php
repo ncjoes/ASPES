@@ -48,6 +48,9 @@
             width: inherit !important;
             right: auto !important;
         }
+        #sidebar.pin-top, #sidebar.pin-bottom{
+            position: relative;
+        }
     </style>
 @endsection
 @section('content')
@@ -316,14 +319,14 @@
                 previewDataRow(this, Storage, ExercisePreviewer)
             });
 
-            $('ul.tabs').tabs();
-            $('.datepicker').pickadate({
-                selectMonths: true,
-                selectYears: 15
-            });
-
             /*
-            $('#exercise-editor').openModal({
+             $('ul.tabs').tabs();
+             $('.datepicker').pickadate({
+             selectMonths: true,
+             selectYears: 15
+             });
+
+             $('#exercise-editor').openModal({
                 dismissible: false,
                 starting_top: '3%',
                 ending_top: '3%'
@@ -333,18 +336,23 @@
                 bindListeners();
             });
 
-            bindListeners();
             buildExercisesTable(Storage.listed, View.listBox, true);
+            bindListeners();
 
             function bindListeners() {
-                if ($(window).width() > 600 && Storage.listed.length > 20) {
-                    var SearchForm = $('#search-form');
-                    SearchForm.pushpin({top: SearchForm.offset().top - 50});
-                }
                 var Sidebar = $('#sidebar');
-                Sidebar.attr('style', 'max-width:' + parseInt(Sidebar.parent().width()) + 'px;')
                 if ($(window).width() > 1024) {
-                    Sidebar.pushpin({top: Sidebar.offset().top - 100});
+                    Sidebar.pushpin({top: Sidebar.offset().top});
+                }else {
+                    Sidebar.unbind();
+                }
+                Sidebar.attr('style', 'max-width:' + parseInt(Sidebar.parent().width()) + 'px;');
+
+                var SearchForm = $('#search-form');
+                if ($(window).width() > 600 && Storage.listed.length > 20) {
+                    SearchForm.pushpin({top: SearchForm.offset().top - 50});
+                }else{
+                    SearchForm.unbind();
                 }
             }
         });
