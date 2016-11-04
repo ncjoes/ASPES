@@ -10,11 +10,23 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Core\ExerciseController;
 use App\Models\Exercise;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    protected $ExerciseController;
+
+    protected function EC()
+    {
+        if (!is_object($this->ExerciseController)) {
+            $this->ExerciseController = new ExerciseController;
+        }
+
+        return $this->ExerciseController;
+    }
+
     public function dashboard()
     {
         $data = ['title' => 'Admin Dashboard'];
@@ -24,7 +36,7 @@ class AdminController extends Controller
 
     public function listExercises(Request $request)
     {
-        $data = $this->getExerciseList($request);
+        $data = $this->EC()->getExerciseList($request);
 
         return iResponse('admin.exercises', $data);
     }
@@ -36,8 +48,8 @@ class AdminController extends Controller
              * @var Exercise $exercise
              */
             if (is_object($exercise = Exercise::find($request->input('id')))) {
-                $data = $this->getExerciseList($request);
-                $data = array_merge($data, $this->getExerciseRelations($exercise));
+                $data = $this->EC()->getExerciseList($request);
+                $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
 
                 return iResponse('admin.view_exercise', $data);
             }
@@ -53,42 +65,14 @@ class AdminController extends Controller
              * @var Exercise $exercise
              */
             if (is_object($exercise = Exercise::find($request->input('id')))) {
-                $data = $this->getExerciseList($request);
-                $data = array_merge($data, $this->getExerciseRelations($exercise));
+                $data = $this->EC()->getExerciseList($request);
+                $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
 
                 return iResponse('admin.edit_exercise', $data);
             }
         }
 
         return abort(404);
-    }
-
-    protected function getExerciseList(Request $request)
-    {
-        $exercises = Exercise::all();
-        $total = $exercises->count();
-        parseListRange($request, $exercises->count(), $from, $to, 200);
-        $list = $exercises->take($to - $from + 1); //adding 1 makes the range inclusive
-
-        return ['net_total' => $total, 'list' => $list];
-    }
-
-    protected function getExerciseRelations(Exercise $exercise)
-    {
-        return [
-            'status' => true,
-            'object' => [
-                'id'        => $exercise->id,
-                'main'      => $exercise,
-                'relations' => [
-                    'fcvs'       => $exercise->fcvs()->getResults(),
-                    'comments'   => $exercise->comments()->getResults(),
-                    'factors'    => $exercise->factors()->getResults(),
-                    'subjects'   => $exercise->concerned_users(Exercise::ER_SUBJECT)->get(),
-                    'evaluators' => $exercise->concerned_users(Exercise::ER_EVALUATOR)->get(),
-                ],
-            ],
-        ];
     }
 
     public function createExercise()

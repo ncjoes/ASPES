@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Core;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Exercise;
 
 /**
  * Class ExerciseController
@@ -17,13 +18,32 @@ use App\Http\Controllers\Controller;
  */
 class ExerciseController extends Controller
 {
-    /**
-     * @return array
-     */
-    public function index()
+    public function getExerciseList(Request $request)
     {
-        $data = ['test'=>'yes, am working. what were you thinking?'];
-        return $data;
+        $exercises = Exercise::all();
+        $total = $exercises->count();
+        parseListRange($request, $exercises->count(), $from, $to, 200);
+        $list = $exercises->take($to - $from + 1); //adding 1 makes the range inclusive
+
+        return ['net_total' => $total, 'list' => $list];
+    }
+
+    public function getExerciseRelations(Exercise $exercise)
+    {
+        return [
+            'status' => true,
+            'object' => [
+                'id'        => $exercise->id,
+                'main'      => $exercise,
+                'relations' => [
+                    'fcvs'       => $exercise->fcvs()->getResults(),
+                    'comments'   => $exercise->comments()->getResults(),
+                    'factors'    => $exercise->factors()->getResults(),
+                    'subjects'   => $exercise->concerned_users(Exercise::ER_SUBJECT)->get(),
+                    'evaluators' => $exercise->concerned_users(Exercise::ER_EVALUATOR)->get(),
+                ],
+            ],
+        ];
     }
 
     /**
