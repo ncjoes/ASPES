@@ -70,6 +70,10 @@ class Subject extends Model
     protected function buildEvaluationMatrix()
     {
         $counter = [];
+        $factors = $this->exercise->factors;
+        $comments = $this->exercise->comments;
+        $CN = $comments->count();
+
         /**
          * @var Evaluation $evaluation
          */
@@ -82,6 +86,12 @@ class Subject extends Model
 
         $MATRIX = [];
         foreach ($counter as $factorId => $factorCommentsCounts) {
+            if (sizeof($factorCommentsCounts) < $CN) {
+                foreach ($comments as $id => $comment) {
+                    if (!isset($factorCommentsCounts[ $factorId ][ $id ]))
+                        $factorCommentsCounts[ $factorId ][ $id ] = 0;
+                }
+            }
             $sum = array_sum($factorCommentsCounts);
             foreach ($factorCommentsCounts as $commentId => $commentsCount) {
                 $MATRIX[ $factorId ][ $commentId ] = $commentsCount > 0 ? ($commentsCount / $sum) : $commentsCount;

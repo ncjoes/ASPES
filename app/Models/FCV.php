@@ -43,7 +43,7 @@ class FCV extends Model
 
     public function getValue()
     {
-        if (FuzzyNumber::checkIsTriple($this->value))
+        if (FuzzyNumber::checkIfTriple($this->value))
             return new FuzzyNumber($this->value);
 
         return null;

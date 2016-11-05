@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Nubs\Vectorix\Vector;
+use NumPHP\Core\NumArray;
 
 /**
  * Class Exercise
@@ -180,6 +181,30 @@ class Exercise extends Model
         return $matrices;
     }
 
+    /**
+     * @param Subject|null $subject
+     *
+     * @return array
+     */
+    public function getResult(Subject $subject = null)
+    {
+        $results = [];
+        $FactorWeights = $this->getFactorWeights();
+        if (is_object($subject)) {
+            $results[ $subject->id ] = $this->vectorDotMatrix($FactorWeights, $subject->getEvaluationMatrix());
+        }
+        else {
+            /**
+             * @var Subject $subject
+             */
+            foreach ($this->subjects as $subject) {
+                $results[ $subject->id ] = $this->vectorDotMatrix($FactorWeights, $subject->getEvaluationMatrix());
+            }
+        }
+
+        return $results;
+    }
+
 
     //-----------CALCULATIONS-----------------------------------------------//
     /**
@@ -230,5 +255,40 @@ class Exercise extends Model
         }
 
         return $normalized;
+    }
+
+    /**
+     * @param array $vector
+     * @param array $matrix
+     *
+     * @return array
+     */
+    protected function vectorDotMatrix(array $vector, array $matrix)
+    {
+        $V = array_values($vector);
+        $matrixCols = [];
+        $M = [];
+
+        $i = $j = 0;
+        foreach ($matrix as $column) {
+            $j = 0;
+            foreach ($column as $columnId=>$cell) {
+                $matrixCols[$j] = $columnId;
+                $M[$j][$i] = $cell;
+                $j++;
+            }
+            $i++;
+        }
+
+        $VECTOR = (new NumArray($V));
+        $MATRIX = (new NumArray($M));
+        $vDotM = $MATRIX->dot($VECTOR)->getData();
+
+        $RESULT = [];
+        foreach ($vDotM as $j=>$value) {
+            $RESULT[$matrixCols[$j]] = $value;
+        }
+
+        return $RESULT;
     }
 }
