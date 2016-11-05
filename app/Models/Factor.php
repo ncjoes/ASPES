@@ -107,27 +107,16 @@ class Factor extends Model
     protected function calculateRawWeight()
     {
         $rb = [];
-
         if ($this->hasSubFactors()) {
             // ToDo
         }
 
+        $DM = $this->exercise->getDecisionMatrix();
         foreach ($this->siblings() as $factor) {
-            $rb[ $this->id ] = $this->getCvGM_with_Siblings();
+            $rb[ $factor->id ] = FuzzyNumber::geometricMean($DM[ $factor->id ]);
         }
+        $FN = FuzzyNumber::product($rb[ $this->id ], FuzzyNumber::addMany($rb)->reciprocal());
 
-        return FuzzyNumber::product($rb[ $this->id ], FuzzyNumber::addMany($rb)->reciprocal())->defuzzify(3);
-    }
-
-    /**
-     * @return \NcJoes\FuzzyNumber\FuzzyNumber|void
-     */
-    protected function getCvGM_with_Siblings()
-    {
-        if (is_object($this->parent())) {
-            // ToDo
-        }
-
-        return FuzzyNumber::geometricMean($this->exercise->getDecisionMatrix()[ $this->id ]);
+        return $FN->defuzzify(3);
     }
 }
