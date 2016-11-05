@@ -79,11 +79,11 @@ class Factor extends Model
 
     public function getWeight()
     {
-        if($this->exercise->concluded) {
+        if($this->exercise->concluded === true) {
             return $this->weight;
         }
 
-        return $this->getWeight();
+        return $this->calculateWeight();
     }
 
     public function calculateWeight()

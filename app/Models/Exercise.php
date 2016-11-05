@@ -25,7 +25,7 @@ class Exercise extends Model
      * @var array
      */
     protected $dates = ['deleted_at', 'start_at', 'stop_at'];
-    protected $casts = ['published', 'concluded'];
+    protected $casts = ['published'=>'boolean', 'concluded'=>'boolean'];
 
     /**
      *

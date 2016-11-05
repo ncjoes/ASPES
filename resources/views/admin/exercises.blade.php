@@ -48,7 +48,8 @@
             width: inherit !important;
             right: auto !important;
         }
-        #sidebar.pin-top, #sidebar.pin-bottom{
+
+        #sidebar.pin-top, #sidebar.pin-bottom {
             position: relative;
         }
     </style>
@@ -57,15 +58,20 @@
     <div class="container section">
         <div class="white tiny-padding z-depth-0 margin-btm-1em">
             <div class="row">
-                <div class="col s12">
+                <div class="col s10 m11">
                     <h1 class="page-title"><i class="material-icons left">list</i>Manage Exercises</h1>
+                </div>
+                <div class="col s2 m1">
+                    <p class="center-align">
+                        <button class="btn"><i class="material-icons small">add</i></button>
+                    </p>
                 </div>
             </div>
             <div class="row" id="r2">
                 <div class="col s12">
                     <form onsubmit="return false;" id="search-form">
                         <div class="row">
-                            <div class="col s10 m11">
+                            <div class="col s12">
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix small left">search</i>
@@ -73,9 +79,6 @@
                                         <label for="search">Search</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col s2 m1 center-align">
-                                <button class="btn-floating"><i class="material-icons small">add</i></button>
                             </div>
                         </div>
                     </form>
@@ -327,23 +330,23 @@
              });
 
              $('#exercise-editor').openModal({
-                dismissible: false,
-                starting_top: '3%',
-                ending_top: '3%'
-            });
-            */
+             dismissible: false,
+             starting_top: '3%',
+             ending_top: '3%'
+             });
+             */
             $(window).on('resize', function (e) {
-                bindListeners();
+                adaptContent();
             });
 
             buildExercisesTable(Storage.listed, View.listBox, true);
-            bindListeners();
+            adaptContent();
 
-            function bindListeners() {
+            function adaptContent() {
                 var Sidebar = $('#sidebar');
                 if ($(window).width() > 1024) {
                     Sidebar.pushpin({top: Sidebar.offset().top});
-                }else {
+                } else {
                     Sidebar.unbind();
                 }
                 Sidebar.attr('style', 'max-width:' + parseInt(Sidebar.parent().width()) + 'px;');
@@ -351,8 +354,9 @@
                 var SearchForm = $('#search-form');
                 if ($(window).width() > 600 && Storage.listed.length > 20) {
                     SearchForm.pushpin({top: SearchForm.offset().top - 50});
-                }else{
+                } else {
                     SearchForm.unbind();
+                    SearchForm.hide();
                 }
             }
         });

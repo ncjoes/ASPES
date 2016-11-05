@@ -31,7 +31,7 @@ function buildFactorsTable(listArr, listBox, sortDesc) {
   if(typeof sortDesc !== 'undefined'){
     var z = sortDesc === true ? 1 : -1;
     listArr = listArr.sort(function (a, b) {
-      return $.arrayAvg(b.weight) - (z * $.arrayAvg(a.weight))
+      return parseFloat(b.weight) - (z * parseFloat(a.weight))
     });
   }
   var sn = 1;
@@ -41,7 +41,7 @@ function buildFactorsTable(listArr, listBox, sortDesc) {
       '<tr data-index="' + x + '">'
       + '<td class="data-col-sn">' + sn + '</td>'
       + '<td class="data-col-text"><span class="truncate">' + factor.text + '</span></td>'
-      + '<td nowrap="nowrap" class="data-col-weight">[' + factor.weight.toString() + ']</td>' +
+      + '<td nowrap="nowrap" class="data-col-weight">[' + parseFloat(factor.weight) + ']</td>' +
       '</tr>'
     ).appendTo(listBox);
     sn++
