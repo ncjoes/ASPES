@@ -28,7 +28,9 @@ class Evaluator extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates  = ['deleted_at'];
+    protected $casts  = ['comparison_matrix' => 'array'];
+    protected $hidden = ['comparison_matrix'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -62,7 +64,23 @@ class Evaluator extends Model
         return $this->hasMany(Comparison::class);
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getComparisonMatrix()
+    {
+        if ($this->exercise->concluded === false) {
+            $this->comparison_matrix = $this->buildComparisonMatrix();
+            $this->save();
+        }
+
+        return $this->comparison_matrix;
+    }
+
+    /**
+     * @return array
+     */
+    protected function buildComparisonMatrix()
     {
         $matrix = [];
         /**

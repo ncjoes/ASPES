@@ -26,6 +26,7 @@ class Factor extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    protected $casts = ['weight' => 'float'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -59,6 +60,9 @@ class Factor extends Model
         return self::find($this->parent_id);
     }
 
+    /**
+     * @return Collection
+     */
     public function siblings()
     {
         if (is_object($this->parent())) {
@@ -77,15 +81,30 @@ class Factor extends Model
         return self::where('parent_id', $this->id)->get();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasSubFactors()
+    {
+        return $this->children()->count() > 0;
+    }
+
+    /**
+     * @return float|mixed|number
+     */
     public function getRawWeight()
     {
-        if($this->exercise->concluded !== true) {
-            $this->weight = $this->calculateRawWeight();
+        if ($this->exercise->concluded === false) {
+            return $this->calculateRawWeight();
         }
+
         return $this->weight;
     }
 
-    public function calculateRawWeight()
+    /**
+     * @return float|number
+     */
+    protected function calculateRawWeight()
     {
         $rb = [];
 
@@ -100,14 +119,12 @@ class Factor extends Model
         return FuzzyNumber::product($rb[ $this->id ], FuzzyNumber::addMany($rb)->reciprocal())->defuzzify(3);
     }
 
-    public function hasSubFactors()
-    {
-        return $this->children()->count() > 0;
-    }
-
+    /**
+     * @return \NcJoes\FuzzyNumber\FuzzyNumber|void
+     */
     protected function getCvGM_with_Siblings()
     {
-        if(is_object($this->parent())) {
+        if (is_object($this->parent())) {
             // ToDo
         }
 

@@ -21,6 +21,8 @@ class CreateExercisesTable extends Migration
             $table->timestamp('stop_at')->nullable();
             $table->boolean('published')->default(false);
             $table->boolean('concluded')->default(false);
+            $table->text('decision_matrix')->nullable();
+            $table->text('factor_weights')->nullable();
             $table->nullableTimestamps();
             $table->softDeletes();
 

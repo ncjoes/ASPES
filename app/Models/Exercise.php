@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use App\Models\DataTypes\FuzzyNumber;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Nubs\Vectorix\Vector;
@@ -25,16 +26,11 @@ class Exercise extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at', 'start_at', 'stop_at'];
-    protected $casts = ['published'=>'boolean', 'concluded'=>'boolean'];
+    protected $dates  = ['deleted_at', 'start_at', 'stop_at'];
+    protected $casts  = ['published' => 'boolean', 'concluded' => 'boolean', 'decision_matrix' => 'array', 'factor_weights' => 'array'];
+    protected $hidden = ['decision_matrix', 'factor_weights'];
 
-    /**
-     *
-     */
-    const ER_SUBJECT = 'subjects';
-    /**
-     *
-     */
+    const ER_SUBJECT   = 'subjects';
     const ER_EVALUATOR = 'evaluators';
 
     /**
@@ -103,11 +99,17 @@ class Exercise extends Model
         return $this->hasManyThrough(Evaluation::class, Subject::class);
     }
 
+    /**
+     * @return Builder
+     */
     public function factor_evaluators()
     {
         return $this->evaluators()->where('type', Evaluator::DM);
     }
 
+    /**
+     * @return Builder
+     */
     public function subject_evaluators()
     {
         return $this->evaluators()->where('type', Evaluator::SE);
@@ -129,15 +131,61 @@ class Exercise extends Model
         return $matrices;
     }
 
+    /**
+     * @return array
+     */
     public function getDecisionMatrix()
     {
-        return $this->buildDecisionMatrix();
+        if (!$this->concluded) {
+            $this->decision_matrix = $this->buildDecisionMatrix();
+            $this->save();
+        }
+
+        return $this->decision_matrix;
     }
 
     /**
      * @return array
      */
-    public function buildDecisionMatrix()
+    public function getFactorWeights()
+    {
+        if (!$this->concluded) {
+            $this->factor_weights = $this->calculateFactorWeights();
+            $this->save();
+        }
+
+        return $this->factor_weights;
+    }
+
+    /**
+     * @param Subject|null $subject
+     *
+     * @return array
+     */
+    public function getEvaluationMatrix(Subject $subject = null)
+    {
+        $matrices = [];
+        if (is_object($subject)) {
+            $matrices[ $subject->id ] = $subject->getEvaluationMatrix();
+        }
+        else {
+            /**
+             * @var Subject $subject
+             */
+            foreach ($this->subjects as $subject) {
+                $matrices[ $subject->id ] = $subject->getEvaluationMatrix();
+            }
+        }
+
+        return $matrices;
+    }
+
+
+    //-----------CALCULATIONS-----------------------------------------------//
+    /**
+     * @return array
+     */
+    protected function buildDecisionMatrix()
     {
         $decisionMatrix = [];
         $comparisonMatrices = $this->getComparisonMatrices();
@@ -145,15 +193,15 @@ class Exercise extends Model
         $factorsMatrix = [];
         foreach ($comparisonMatrices as $evaluator_id => $comparisonMatrix) {
             foreach ($comparisonMatrix as $factor1_id => $comparisons) {
-                foreach ($comparisons as $factor2_id=>$fuzzyNumber) {
-                    $factorsMatrix[$factor1_id][$factor2_id][$evaluator_id] = $fuzzyNumber;
+                foreach ($comparisons as $factor2_id => $fuzzyNumber) {
+                    $factorsMatrix[ $factor1_id ][ $factor2_id ][ $evaluator_id ] = $fuzzyNumber;
                 }
             }
         }
 
         foreach ($factorsMatrix as $factor1_id => $crossComparisons) {
-            foreach ($crossComparisons as $factor2_id=>$fuzzyNumbers) {
-                $decisionMatrix[$factor1_id][$factor2_id] = FuzzyNumber::AIJ($fuzzyNumbers);
+            foreach ($crossComparisons as $factor2_id => $fuzzyNumbers) {
+                $decisionMatrix[ $factor1_id ][ $factor2_id ] = FuzzyNumber::AIJ($fuzzyNumbers);
             }
         }
 
@@ -163,19 +211,24 @@ class Exercise extends Model
     /**
      * @return array
      */
-    public function getFactorWeights()
+    protected function calculateFactorWeights()
     {
         $matrix = [];
         /**
          * @var Factor $factor
          */
         foreach ($this->factors as $factor) {
-            $matrix[$factor->id] = $factor->getRawWeight();
+            $matrix[ $factor->id ] = $factor->getRawWeight();
         }
         $normalized = (new Vector($matrix))->normalize()->components();
-        foreach ($normalized as $key=>$value) {
-            $normalized[$key] = round($value, 3);
+        foreach ($normalized as $key => $value) {
+            $normalized[ $key ] = round($value, 3);
         }
+        foreach ($this->factors as $factor) {
+            $factor->weight = $normalized[ $factor->id ];
+            $factor->save();
+        }
+
         return $normalized;
     }
 }

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Subject
+ *
  * @package App\Models
  */
 class Subject extends Model
@@ -22,7 +23,9 @@ class Subject extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates  = ['deleted_at'];
+    protected $casts  = ['evaluation_matrix' => 'array'];
+    protected $hidden = ['evaluation_matrix'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -46,5 +49,45 @@ class Subject extends Model
     public function evaluations()
     {
         return $this->hasMany(Evaluation::class);
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getEvaluationMatrix()
+    {
+        if ($this->exercise->concluded === false) {
+            $this->evaluation_matrix = $this->buildEvaluationMatrix();
+            $this->save();
+        }
+
+        return $this->evaluation_matrix;
+    }
+
+    /**
+     * @return array
+     */
+    protected function buildEvaluationMatrix()
+    {
+        $counter = [];
+        /**
+         * @var Evaluation $evaluation
+         */
+        foreach ($this->evaluations as $evaluation) {
+            if (isset($counter[ $evaluation->factor->id ][ $evaluation->comment->id ]))
+                $counter[ $evaluation->factor->id ][ $evaluation->comment->id ] += 1;
+            else
+                $counter[ $evaluation->factor->id ][ $evaluation->comment->id ] = 1;
+        }
+
+        $MATRIX = [];
+        foreach ($counter as $factorId => $factorCommentsCounts) {
+            $sum = array_sum($factorCommentsCounts);
+            foreach ($factorCommentsCounts as $commentId => $commentsCount) {
+                $MATRIX[ $factorId ][ $commentId ] = $commentsCount > 0 ? ($commentsCount / $sum) : $commentsCount;
+            }
+        }
+
+        return $MATRIX;
     }
 }

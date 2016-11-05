@@ -18,6 +18,7 @@ class CreateEvaluatorsTable extends Migration
             $table->unsignedInteger('exercise_id');
             $table->unsignedInteger('user_id');
             $table->tinyInteger('type');
+            $table->text('comparison_matrix')->nullable();
             $table->nullableTimestamps();
             $table->softDeletes();
 

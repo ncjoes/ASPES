@@ -126,14 +126,9 @@ $factory->define(Models\Evaluator::class, function (Faker\Generator $faker) {
  * Factor
  */
 $factory->define(Models\Factor::class, function (Faker\Generator $faker) {
-    $l = $faker->randomFloat(3, 0, 1);
-    $m = $faker->randomFloat(3, $l, $l * 1.5);
-    $u = $faker->randomFloat(3, $m, $l * 2);
-
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
-        'text'        => $faker->text(30),
-        'weight'      => [$l, $m, $u],
+        'text'        => $faker->text(30)
     ];
 });
 
