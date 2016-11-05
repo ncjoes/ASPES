@@ -11,6 +11,7 @@ namespace App\Models;
 use App\Models\DataTypes\FuzzyNumber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nubs\Vectorix\Vector;
 
 /**
  * Class Exercise
@@ -165,14 +166,16 @@ class Exercise extends Model
     public function getFactorWeights()
     {
         $matrix = [];
-
         /**
          * @var Factor $factor
          */
         foreach ($this->factors as $factor) {
-            $matrix[$factor->id] = $factor->getWeight();
+            $matrix[$factor->id] = $factor->getRawWeight();
         }
-
-        return $matrix;
+        $normalized = (new Vector($matrix))->normalize()->components();
+        foreach ($normalized as $key=>$value) {
+            $normalized[$key] = round($value, 3);
+        }
+        return $normalized;
     }
 }

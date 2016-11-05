@@ -77,16 +77,15 @@ class Factor extends Model
         return self::where('parent_id', $this->id)->get();
     }
 
-    public function getWeight()
+    public function getRawWeight()
     {
-        if($this->exercise->concluded === true) {
-            return $this->weight;
+        if($this->exercise->concluded !== true) {
+            $this->weight = $this->calculateRawWeight();
         }
-
-        return $this->calculateWeight();
+        return $this->weight;
     }
 
-    public function calculateWeight()
+    public function calculateRawWeight()
     {
         $rb = [];
 
