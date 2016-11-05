@@ -128,6 +128,11 @@ class Exercise extends Model
         return $matrices;
     }
 
+    public function getDecisionMatrix()
+    {
+        return $this->buildDecisionMatrix();
+    }
+
     /**
      * @return array
      */
@@ -147,7 +152,7 @@ class Exercise extends Model
 
         foreach ($factorsMatrix as $factor1_id => $crossComparisons) {
             foreach ($crossComparisons as $factor2_id=>$fuzzyNumbers) {
-                $decisionMatrix[$factor1_id][$factor2_id] = FuzzyNumber::geometricMean($fuzzyNumbers);
+                $decisionMatrix[$factor1_id][$factor2_id] = FuzzyNumber::AIJ($fuzzyNumbers);
             }
         }
 
@@ -160,6 +165,13 @@ class Exercise extends Model
     public function getFactorWeights()
     {
         $matrix = [];
+
+        /**
+         * @var Factor $factor
+         */
+        foreach ($this->factors as $factor) {
+            $matrix[$factor->id] = $factor->getWeight();
+        }
 
         return $matrix;
     }

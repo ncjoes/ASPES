@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use App\Models\DataTypes\FuzzyNumber;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,7 +26,6 @@ class Factor extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    protected $casts = ['weight' => 'array'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -61,10 +61,10 @@ class Factor extends Model
 
     public function siblings()
     {
-        if(is_object($this->parent())) {
+        if (is_object($this->parent())) {
             return $this->parent()->children();
         }
-        else{
+        else {
             return $this->exercise->factors;
         }
     }
@@ -77,18 +77,41 @@ class Factor extends Model
         return self::where('parent_id', $this->id)->get();
     }
 
+    public function getWeight()
+    {
+        if($this->exercise->concluded) {
+            return $this->weight;
+        }
+
+        return $this->getWeight();
+    }
+
     public function calculateWeight()
     {
-        if($this->hasSubFactors()) {
+        $rb = [];
 
+        if ($this->hasSubFactors()) {
+            // ToDo
         }
-        else {
 
+        foreach ($this->siblings() as $factor) {
+            $rb[ $this->id ] = $this->getCvGM_with_Siblings();
         }
+
+        return FuzzyNumber::product($rb[ $this->id ], FuzzyNumber::addMany($rb)->reciprocal())->defuzzify(3);
     }
 
     public function hasSubFactors()
     {
         return $this->children()->count() > 0;
+    }
+
+    protected function getCvGM_with_Siblings()
+    {
+        if(is_object($this->parent())) {
+            // ToDo
+        }
+
+        return FuzzyNumber::geometricMean($this->exercise->getDecisionMatrix()[ $this->id ]);
     }
 }
