@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c3808b41205a7f3600923bc56fa3eead",
-    "content-hash": "76036da3b5b55b91dbe1e1affa01bf9e",
+    "hash": "87f6bd56ad1f4c4b3a98765a87900def",
+    "content-hash": "6cae7e99fcb4b95b3eac556b68f83fe1",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -638,6 +638,53 @@
                 "schedule"
             ],
             "time": "2016-01-26 21:23:30"
+        },
+        {
+            "name": "ncjoes/fuzzy-number",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ncjoes/fuzzy-number.git",
+                "reference": "91c67d44f187e78045f29366a7b7bb7d36ad462a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ncjoes/fuzzy-number/zipball/91c67d44f187e78045f29366a7b7bb7d36ad462a",
+                "reference": "91c67d44f187e78045f29366a7b7bb7d36ad462a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.3.*",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NcJoes\\FuzzyNumber\\": "src/FuzzyNumber",
+                    "NcJoes\\FuzzyNumber\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chukwuemeka Nwobodo",
+                    "email": "jc.nwobodo@gmail.com"
+                }
+            ],
+            "description": "A PHP implementation of Fuzzy number as data-type",
+            "homepage": "https://github.com/ncjeos/fuzzy-number",
+            "keywords": [
+                "Fuzzy Arithmetic",
+                "Fuzzy Logic",
+                "Fuzzy numbers"
+            ],
+            "time": "2016-11-04 23:37:55"
         },
         {
             "name": "nesbot/carbon",
