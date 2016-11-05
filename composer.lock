@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "71d3dea924c572e506e42f73aa110f3b",
-    "content-hash": "4d66575358df6f5540f811b20f016826",
+    "hash": "ab0e411b776218bc81e7eb964f916df5",
+    "content-hash": "5ad0323900fc4372a086b1beb4a7ed73",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -827,6 +827,58 @@
                 "vector"
             ],
             "time": "2014-05-05 11:13:57"
+        },
+        {
+            "name": "numphp/numphp",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NumPHP/NumPHP.git",
+                "reference": "f329edfb3c50b5f12d889cad0e9257d7a9d15447"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NumPHP/NumPHP/zipball/f329edfb3c50b5f12d889cad0e9257d7a9d15447",
+                "reference": "f329edfb3c50b5f12d889cad0e9257d7a9d15447",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "*",
+                "phpunit/phpunit": "*",
+                "satooshi/php-coveralls": "v1.0.1",
+                "sebastian/phpcpd": "*",
+                "squizlabs/php_codesniffer": "*",
+                "symfony/console": "~2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "NumPHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gordon Lesti",
+                    "email": "info@gordonlesti.com",
+                    "homepage": "http://gordonlesti.com/",
+                    "role": "developer"
+                }
+            ],
+            "description": "Mathematical PHP library for scientific computing",
+            "homepage": "http://numphp.org/",
+            "keywords": [
+                "linalg",
+                "matrix",
+                "numeric"
+            ],
+            "time": "2016-02-18 08:04:29"
         },
         {
             "name": "paragonie/random_compat",
