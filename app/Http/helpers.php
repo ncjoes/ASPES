@@ -62,7 +62,7 @@ function parseListRange(Request $request, $max, &$from, &$to, $limit=null)
 function app_info($key, $default=null)
 {
     static $data;
-    if(!is_array($data)) $data = require ('Data/app_info.php');
+    if(!is_array($data)) $data = require(app_path('Data/app_info.php'));
 
     if(array_key_exists($key, $data)) {
         return $data[$key];
