@@ -8,16 +8,25 @@
 
 namespace App\Http\Controllers\Core;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\DataTypes\FuzzyNumber;
 use App\Models\Exercise;
+use App\Models\FCV;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 /**
  * Class ExerciseController
+ *
  * @package App\Http\Controllers
  */
 class ExerciseController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return array
+     */
     public function getExerciseList(Request $request)
     {
         $exercises = Exercise::all();
@@ -28,19 +37,44 @@ class ExerciseController extends Controller
         return ['net_total' => $total, 'list' => $list];
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function getResultsList(Request $request)
+    {
+        /**
+         * @var Collection $exercises
+         */
+        $exercises = Exercise::where('concluded', 1)->get();
+        $total = $exercises->count();
+        parseListRange($request, $exercises->count(), $from, $to, 200);
+        $list = $exercises->take($to - $from + 1); //adding 1 makes the range inclusive
+
+        return ['net_total' => $total, 'list' => $list];
+    }
+
+    /**
+     * @param Exercise $exercise
+     *
+     * @return array
+     */
     public function getExerciseRelations(Exercise $exercise)
     {
         return [
             'status' => true,
             'object' => [
-                'id'        => $exercise->id,
-                'main'      => $exercise,
+                'id' => $exercise->id,
+                'main' => $exercise,
                 'relations' => [
-                    'fcvs'       => $exercise->fcvs()->getResults(),
-                    'comments'   => $exercise->comments()->getResults(),
-                    'factors'    => $exercise->factors()->getResults(),
-                    'subjects'   => $exercise->concerned_users(Exercise::ER_SUBJECT)->get(),
-                    'evaluators' => $exercise->concerned_users(Exercise::ER_EVALUATOR)->get(),
+                    'fcvs' => $exercise->fcvs()->getResults()->sortBy(function (FCV $FCV){
+                        return (new FuzzyNumber($FCV->value))->defuzzify();
+                    }),
+                    'comments' => $exercise->comments()->getResults()->sortByDesc('grade'),
+                    'factors' => $exercise->factors()->getResults()->sortByDesc('weight'),
+                    'subjects' => $exercise->subjects()->getResults(),
+                    'evaluators' => $exercise->evaluators()->getResults(),
                 ],
             ],
         ];
@@ -50,11 +84,13 @@ class ExerciseController extends Controller
      * Initialize a new evaluation Exercise
      *
      * @param Request $request
+     *
      * @return string
      */
     public function create(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
@@ -62,11 +98,13 @@ class ExerciseController extends Controller
      * Set Factor Hierarchy for a given exercise
      *
      * @param Request $request
+     *
      * @return string
      */
     public function setFactors(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
@@ -75,22 +113,27 @@ class ExerciseController extends Controller
      * The FCV ids are passed through a post request
      *
      * @param Request $request
+     *
      * @return string
      */
     public function setFuzzyCVs(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
     /**
      * Set evaluation comment set for an Exercise
+     *
      * @param Request $request
+     *
      * @return string
      */
     public function setComments(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
@@ -101,11 +144,13 @@ class ExerciseController extends Controller
      *      2. Subject Evaluation
      *
      * @param Request $request
+     *
      * @return string
      */
     public function setEvaluators(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
@@ -113,31 +158,37 @@ class ExerciseController extends Controller
      * Set exercise subjects by passing an array of user ids through a post request
      *
      * @param Request $request
+     *
      * @return string
      */
     public function setSubjects(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
     /**
      * @param Request $request
+     *
      * @return string
      */
     public function compareFactors(Request $request)
     {
         $data = [];
+
         return $data;
     }
 
     /**
      * @param Request $request
+     *
      * @return string
      */
     public function evaluateSubject(Request $request)
     {
         $data = [];
+
         return $data;
     }
 }

@@ -75,12 +75,7 @@ class AdminController extends Controller
         return abort(404);
     }
 
-    public function createExercise()
-    {
-        return ['title' => 'Creating exercise...'];
-    }
-
-    public function updateExercise()
+    public function saveExercise()
     {
         return ['title' => 'Updating Exercises...'];
     }
@@ -98,16 +93,6 @@ class AdminController extends Controller
     public function getUserInfo()
     {
         return ['title' => 'Fetching user information...'];
-    }
-
-    public function createUser()
-    {
-        return ['title' => 'Creating User...'];
-    }
-
-    public function updateUser()
-    {
-        return ['title' => 'Updating users...'];
     }
 
     public function deleteUser()

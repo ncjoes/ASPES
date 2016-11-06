@@ -25,7 +25,7 @@ $user = \Auth::user();
     <link href="{{asset('css/app.theme.css')}}" rel="stylesheet">
     @yield('extra_heads')
 </head>
-<body class="grey lighten-4">
+<body class="grey lighten-4" id="top">
 
 <header>
     <nav class="blue">

@@ -8,6 +8,13 @@ if (config('app.env') == 'local' or config('app.debug')) {
     Route::group(['as' => '_tools.'], function () {
         Route::get('routes', ['as' => 'routes', 'uses' => 'Tools@showAppRoutes']);
         Route::get('console', ['as' => 'console', 'uses' => 'Tools@showWebConsole']);
+        Route::get('tester', [
+            'as' => 'tester', 'uses' => function () {
+                //return (\App\Models\Evaluator::find(5))->getComparisonMatrix();
+                //return (\App\Models\Factor::find(1))->getRawWeight();
+                //return (\App\Models\Exercise::find(1))->getResult();
+            }
+        ]);
     });
 }
 
@@ -31,13 +38,13 @@ Route::group(['as' => 'auth.', 'namespace' => 'Auth'], function () {
 
 Route::group(['namespace' => 'Web'], function () {
 
-    Route::group(['as'=>'app.'], function (){
+    Route::group(['as' => 'app.'], function () {
         Route::get('/', ['as' => 'home', 'uses' => 'PublicController@home']);
 
         Route::get('/live', ['as' => 'live', 'uses' => 'PublicController@listLiveExercises']);
-        Route::group(['prefix'=>'results', 'as'=>'results.'], function (){
+        Route::group(['prefix' => 'results', 'as' => 'results.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'PublicController@listResults']);
-            Route::get('{slug?}', ['as' => 'view', 'uses' => 'PublicController@viewResult']);
+            Route::get('{id}', ['as' => 'view', 'uses' => 'PublicController@viewResult']);
         });
     });
 
@@ -66,7 +73,6 @@ Route::group(['namespace' => 'Web'], function () {
             Route::post('update', ['as' => 'update', 'uses' => 'AdminController@updateNotification']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'AdminController@deleteNotification']);
         });
-
     });
 
     //-------------USER ACCOUNT ROUTES-----------------//
@@ -77,5 +83,4 @@ Route::group(['namespace' => 'Web'], function () {
         Route::post('photo', ['as' => 'photo', 'uses' => 'ProfileController@photo']);
         Route::post('password', ['as' => 'password', 'uses' => 'ProfileController@password']);
     });
-
 });

@@ -14,7 +14,11 @@ $user = \Auth::user();
         @if(request()->route()->getName()!=='app.home')
             @include('parts.nav-desktop_home')
         @endif
-        <li><a href="{{url()->route('app.live')}}" style="background-color: white; color: #2196F3;">LIVE POLLS</a></li>
+        <li>
+            <a href="{{url()->route('app.live')}}" style="background-color: white; color: #2196F3; min-width: 8em;">
+                <i class="material-icons left">timelapse</i> LIVE
+            </a>
+        </li>
         <li><a href="{{url()->route('app.results.list')}}">RESULTS</a></li>
         @if($user)
             @if($user->isAdmin())
@@ -32,7 +36,7 @@ $user = \Auth::user();
         <li><a href="{{url()->route('app.results.list')}}">RESULTS</a></li>
         @if($user)
             @if($user->isAdmin())
-                <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons">dashboard</i>ADMIN. DASHBOARD</a></li>
+                <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons right">dashboard</i>ADMIN. DASHBOARD</a></li>
             @endif
             <li class="divider"></li>
             @include('parts.nav-mobile_user')

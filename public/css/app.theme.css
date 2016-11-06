@@ -7,19 +7,24 @@ body {
     min-height: 100vh;
     flex-direction: column;
 }
+
 main {
     flex: 1 0 auto;
 }
-footer .row{
+
+footer .row {
     margin-bottom: auto !important;
     padding: 1em 0;
 }
+
 .font-sm {
     font-size: 11px !important;
 }
-span.badge.font-sm{
+
+span.badge.font-sm {
     font-size: 10px !important;
 }
+
 .font-lg {
     font-size: 15px !important;
 }
@@ -39,6 +44,7 @@ span.badge.font-sm{
 .font-line-through, .ngn {
     text-decoration: line-through;
 }
+
 .font-underline {
     text-decoration: underline;
 }
@@ -81,6 +87,34 @@ span.badge.font-sm{
 .border-shadow-top-out {
     box-shadow: inset 0 -7px 40px -20px rgba(0, 0, 0, 0.4);
 }
+
+/** Profile Photos **/
+.user-photo{
+    align-content: center !important;
+    text-align: center !important;
+}
+.user-photo img{
+    margin: 0 !important;
+    padding: 4px !important;
+    background-color: white;
+}
+@media all and (max-width: 1024px) {
+    .user-photo{
+        min-height: 4em !important;
+        margin-bottom: 1.5em;
+    }
+    .user-photo img{
+        min-width: 100%;
+        min-height: 100%;
+    }
+}
+@media all and (min-width: 1025px) {
+    .user-photo img{
+        min-width: 200px;
+        min-height: 200px;
+    }
+}
+
 
 /** Display **/
 .inline-item, .inline-box {
@@ -150,22 +184,22 @@ span.badge.font-sm{
     }
 
     .sh-25vh {
-        min-height: 25vh!important;
+        min-height: 25vh !important;
         height: auto;
     }
 
     .sh-30vh {
-        min-height: 30vh!important;
+        min-height: 30vh !important;
         height: auto;
     }
 
     .sh-40vh {
-        min-height: 40vh!important;
+        min-height: 40vh !important;
         height: auto;
     }
 
     .sh-50vh {
-        min-height: 50vh!important;
+        min-height: 50vh !important;
         height: auto;
     }
 
@@ -320,25 +354,25 @@ span.badge.font-sm{
     }
 }
 
-@media (min-width: 993px) {
+@media (min-width: 1025px) {
     /** Heights **/
     .lh-10vh {
-        min-height: 10vh!important;
+        min-height: 10vh !important;
         height: auto;
     }
 
     .lh-15vh {
-        min-height: 15vh!important;
+        min-height: 15vh !important;
         height: auto;
     }
 
     .lh-20vh {
-        min-height: 20vh!important;
+        min-height: 20vh !important;
         height: auto;
     }
 
     .lh-25vh {
-        min-height: 25vh!important;
+        min-height: 25vh !important;
         height: auto;
     }
 
@@ -353,22 +387,22 @@ span.badge.font-sm{
     }
 
     .lh-50vh {
-        min-height: 50vh!important;
+        min-height: 50vh !important;
         height: auto;
     }
 
     .lh-60vh {
-        min-height: 60vh!important;
+        min-height: 60vh !important;
         height: auto;
     }
 
     .lh-70vh {
-        min-height: 70vh!important;
+        min-height: 70vh !important;
         height: auto;
     }
 
     .lh-75vh {
-        min-height: 75vh!important;
+        min-height: 75vh !important;
         height: auto;
     }
 
@@ -383,7 +417,7 @@ span.badge.font-sm{
     }
 
     .lh-100vh {
-        min-height: 100vh!important;
+        min-height: 100vh !important;
         height: auto;
     }
 
@@ -493,11 +527,25 @@ nav .dropdown-content .divider {
 nav .dropdown-content a {
     padding: 6px 6px 6px 10px;
 }
-li.nav-mobile-home{
-    height: 56px !important;
-    line-height: 56px !important;
+
+li.nav-mobile-home {
     margin-bottom: 10%;
 }
+li.nav-mobile-home a{
+    height: 56px !important;
+    line-height: 56px !important;
+}
+
+@media only screen and (min-width: 601px) {
+    li.nav-mobile-home {
+        margin-bottom: 20%;
+    }
+    li.nav-mobile-home a{
+        height: 64px !important;
+        line-height: 64px !important;
+    }
+}
+
 li.nav-mobile-home .material-icons {
     color: white !important;
 }
@@ -512,11 +560,12 @@ label.prefixed {
     left: 0;
 }
 
-#progress-bar .progress{
+#progress-bar .progress {
     padding: 0 !important;
     margin: 0 !important;
 }
-#progress-bar .progress .determinant, #progress-bar .progress .indeterminate{
+
+#progress-bar .progress .determinant, #progress-bar .progress .indeterminate {
     border-radius: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -526,24 +575,23 @@ textarea.materialize-textarea {
     resize: vertical;
 }
 
-
-.logo{
+.logo {
     max-height: 56px;
 }
 
-@media only screen and (min-width: 601px){
-    .logo{
+@media only screen and (min-width: 601px) {
+    .logo {
         max-height: 64px;
     }
 }
 
-h1.page-title{
+h1.page-title {
     font-size: 2em;
     line-height: 1em;
     margin: 1em 0 0.2em 0;
 }
 
-table.shrink td, table.shrink th{
+table.shrink td, table.shrink th {
     padding: 8px 5px;
 }
 
@@ -574,6 +622,36 @@ table.shrink td, table.shrink th{
     }
 }
 
-div.picker__wrap{
+div.picker__wrap {
     margin-bottom: 50px !important;
+}
+
+.card-panel {
+    position: relative;
+}
+
+.card-panel.small{
+    height: 220px;
+    padding: 3%;
+}
+.card-panel.small .card-content{
+    position: absolute;
+    width: 94%;
+    height: 120px;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+}
+.card-panel.small .card-title {
+    font-size: 150%;
+}
+
+.card-panel .card-action {
+    position: absolute;
+    bottom: 0;
+    right: 4%;
+}
+
+.bordered:not(table), .user-photo img{
+    border: 1px solid #eee;
 }

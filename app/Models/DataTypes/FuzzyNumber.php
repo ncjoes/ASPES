@@ -11,8 +11,19 @@ namespace App\Models\DataTypes;
 
 use NcJoes\FuzzyNumber\FuzzyNumber as Base;
 
+/**
+ * Class FuzzyNumber
+ *
+ * @package App\Models\DataTypes
+ */
 class FuzzyNumber extends Base
 {
+    /**
+     * @param array $fuzzyNumbers
+     * @param int $dp
+     *
+     * @return FuzzyNumber
+     */
     public static function AIJ(array $fuzzyNumbers, $dp = 3)
     {
         if (self::checkIfMassActionable($fuzzyNumbers)) {

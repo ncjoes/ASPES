@@ -9,10 +9,23 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Core\ExerciseController;
+use App\Models\Exercise;
 use Illuminate\Http\Request;
 
 class PublicController
 {
+    protected $ExerciseController;
+
+    protected function EC()
+    {
+        if (!is_object($this->ExerciseController)) {
+            $this->ExerciseController = new ExerciseController;
+        }
+
+        return $this->ExerciseController;
+    }
+
     public function home()
     {
         return view('public.home');
@@ -25,11 +38,28 @@ class PublicController
 
     public function listResults(Request $request)
     {
-        return view('public.results');
+        if ($request->has('id')) {
+            return redirect()->route('app.results.view', ['id' => $request->input('id')]);
+        }
+
+        $data = $this->EC()->getResultsList($request);
+
+        return iResponse('public.results', $data);
     }
 
-    public function viewResult(Request $request)
+    public function viewResult($id)
     {
-        return view('public.result');
+        /**
+         * @var Exercise $exercise
+         */
+        if (is_object($exercise = Exercise::find($id))) {
+            $data = $this->EC()->getResultsList(request());
+            $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
+
+            //return $data;
+            return iResponse('public.result', $data);
+        }
+
+        return abort(404);
     }
 }
