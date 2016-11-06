@@ -101,20 +101,20 @@ $nComments = $comments->count();
                                                     class="material-icons">pie_chart</i>Results per Factor
                                         </div>
                                         <div class="collapsible-body tiny-padding">
+                                            <div class="row" id="factors-tmp-{{$subject->id}}">
+                                                <br/>
+                                                @foreach($factors as $factor)
+                                                    <div class="col s12 l6">
+                                                        <div id="result-factor-{{$subject->id}}-{{$factor->id}}">
+                                                        </div>
+                                                        <br/>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="row" id="factors-tmp-{{$subject->id}}">
-                            <br/>
-                            @foreach($factors as $factor)
-                                <div class="col s12 l6">
-                                    <div id="result-factor-{{$subject->id}}-{{$factor->id}}">
-                                    </div>
-                                    <br/>
-                                </div>
-                            @endforeach
                         </div>
                     </div>
                 @endforeach
@@ -160,10 +160,10 @@ foreach ($subjects as $subject) {
     <script src="{{ asset('js/fusioncharts/fusioncharts.js') }}"></script>
     <script src="{{ asset('js/fusioncharts/fusioncharts.charts.js') }}"></script>
     <script type="text/javascript">
+        var tabStates = {};
         $(function () {
             var payLoad = <?= json_encode($payload); ?>;
             var collapsibleStates = {};
-            var tabStates = {};
             var barChart = {
                 "paletteColors": "#2196F3",
                 "bgColor": "#ffffff",
@@ -249,7 +249,6 @@ foreach ($subjects as $subject) {
                         });
                         render(chart);
                     }
-                    $('#factors-tmp-' + subjectId).removeAttr('id').appendTo($('#factors-real-' + subjectId + ' .collapsible-body'))
                     collapsibleStates['fc-toggle-' + subjectId] = false;
                     tabStates['subject-' + subjectId] = false;
                 }
@@ -258,30 +257,24 @@ foreach ($subjects as $subject) {
                     updateCharts('data-area')
                 });
 
-                $('li.tab a').on('click', function (e) {
-                    var target = $(e.target).attr('href').replace('#','');
-                    console.log('Clicked...' + target);
+                $('li.tab').on('click', 'a', function (e) {
+                    var target = $(e.target).attr('href').replace('#', '');
                     if (tabStates[target] === false) {
+                        for(var id in tabStates){
+                            tabStates[id] = false;
+                        }
                         tabStates[target] = true;
-                        console.log('Setting timeout for...' + target);
                         setTimeout(function () {
-                            console.log('Executing timeout for...' + target);
                             updateCharts(target);
-                        }, 10);
-                    }
-                    else {
-                        collapsibleStates[target] = false;
+                        }, 5);
                     }
                 });
 
                 $('.fc-toggle').on('click', function (e) {
                     var target = $(e.target).attr('id');
-                    console.log('Clicked...' + target);
                     if (collapsibleStates[target] === false) {
                         collapsibleStates[target] = true;
-                        console.log('Setting timeout for...' + target);
                         setTimeout(function () {
-                            console.log('Executing timeout for...' + target);
                             updateCharts(target.replace('toggle', 'container'));
                             $.scrollTo(target);
                         }, 10);

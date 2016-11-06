@@ -16,7 +16,6 @@ function updateCharts(parentContainer) {
         resizeChart(chart);
       }
       else {
-        console.log(chartId);
         render(chart);
       }
     }
@@ -29,9 +28,9 @@ function resizeChart(Chart) {
     var W, H;
     H = getOptimumHeight(Chart);
     W = getOptimumWidth(Chart);
-    if(Math.abs(W-Chart.width)>10 || Math.abs(H-Chart.height)>10)
-      console.log('Resizing...' + Chart.id);
-    Chart.resizeTo(W, H);
+    if (Math.abs(W - Chart.width) > 10 || Math.abs(H - Chart.height) > 10) {
+      Chart.resizeTo(W, H);
+    }
   }
 }
 
@@ -40,7 +39,6 @@ function render(Chart) {
   if (CTN.is(':visible')) {
     Chart.height = getOptimumHeight(Chart);
     Chart.width = getOptimumWidth(Chart);
-    console.log('Rendering...' + Chart.id);
     Chart.render();
   }
 }
