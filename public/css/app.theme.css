@@ -493,6 +493,14 @@ nav .dropdown-content .divider {
 nav .dropdown-content a {
     padding: 6px 6px 6px 10px;
 }
+li.nav-mobile-home{
+    height: 56px !important;
+    line-height: 56px !important;
+    margin-bottom: 10%;
+}
+li.nav-mobile-home .material-icons {
+    color: white !important;
+}
 
 input.prefixed {
     padding-left: 30px;

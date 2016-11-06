@@ -8,7 +8,6 @@
 
     <ul id="nav-mobile" class="side-nav">
         @include('parts.nav-mobile_home')
-        <li class="divider"></li>
         @include('parts.nav-mobile_auth')
         <li class="divider"></li>
     </ul>
