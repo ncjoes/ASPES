@@ -124,7 +124,6 @@ $nComments = $comments->count();
 @endsection
 <?php
 $results = $exercise->getResult();
-
 $payload = [];
 foreach ($subjects as $subject) {
     $subjectId = $subject->id;
@@ -163,9 +162,8 @@ foreach ($subjects as $subject) {
     <script type="text/javascript">
         $(function () {
             var payLoad = <?= json_encode($payload); ?>;
-
-            var collapsibleOpen = {};
-
+            var collapsibleStates = {};
+            var tabStates = {};
             var barChart = {
                 "paletteColors": "#2196F3",
                 "bgColor": "#ffffff",
@@ -204,7 +202,6 @@ foreach ($subjects as $subject) {
                 "bgColor": "#ffffff",
                 "useDataPlotColorForLabels": "1"
             };
-
             var currentFactor;
             var factorsData;
             FusionCharts.ready(function () {
@@ -253,18 +250,35 @@ foreach ($subjects as $subject) {
                         render(chart);
                     }
                     $('#factors-tmp-' + subjectId).removeAttr('id').appendTo($('#factors-real-' + subjectId + ' .collapsible-body'))
-                    collapsibleOpen['fc-toggle-' + subjectId] = false;
+                    collapsibleStates['fc-toggle-' + subjectId] = false;
+                    tabStates['subject-' + subjectId] = false;
                 }
 
                 $(window).on('resize orientationchange', function () {
                     updateCharts('data-area')
                 });
 
+                $('li.tab a').on('click', function (e) {
+                    var target = $(e.target).attr('href').replace('#','');
+                    console.log('Clicked...' + target);
+                    if (tabStates[target] === false) {
+                        tabStates[target] = true;
+                        console.log('Setting timeout for...' + target);
+                        setTimeout(function () {
+                            console.log('Executing timeout for...' + target);
+                            updateCharts(target);
+                        }, 10);
+                    }
+                    else {
+                        collapsibleStates[target] = false;
+                    }
+                });
+
                 $('.fc-toggle').on('click', function (e) {
                     var target = $(e.target).attr('id');
                     console.log('Clicked...' + target);
-                    if (collapsibleOpen[target] === false) {
-                        collapsibleOpen[target] = true;
+                    if (collapsibleStates[target] === false) {
+                        collapsibleStates[target] = true;
                         console.log('Setting timeout for...' + target);
                         setTimeout(function () {
                             console.log('Executing timeout for...' + target);
@@ -274,7 +288,7 @@ foreach ($subjects as $subject) {
                     }
                     else {
                         $.scrollTo('top');
-                        collapsibleOpen[target] = false;
+                        collapsibleStates[target] = false;
                     }
                 });
             });
