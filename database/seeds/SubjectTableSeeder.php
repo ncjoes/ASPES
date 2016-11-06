@@ -20,8 +20,10 @@ class SubjectTableSeeder extends Seeder
         foreach ($exercises as $exercise) {
             factory(Subject::class, 5)->create([
                 'exercise_id' => $exercise->id,
-                'user_id'     => $users->random()->id,
-            ]);
+            ])->each(function (Subject $subject) use ($users) {
+                $subject->user_id = $users->random()->id;
+                $subject->save();
+            });
         }
     }
 }
