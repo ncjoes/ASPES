@@ -81,7 +81,9 @@ class Exercise extends Model
      */
     public function concerned_users($role = self::ER_EVALUATOR)
     {
-        return $this->belongsToMany(User::class, $role);
+        $builder = $this->belongsToMany(User::class, $role);
+
+        return $role == self::ER_EVALUATOR ? $builder : $builder->withPivot(['id', 'evaluation_matrix']);
     }
 
     /**
@@ -272,9 +274,9 @@ class Exercise extends Model
         $i = $j = 0;
         foreach ($matrix as $column) {
             $j = 0;
-            foreach ($column as $columnId=>$cell) {
-                $matrixCols[$j] = $columnId;
-                $M[$j][$i] = $cell;
+            foreach ($column as $columnId => $cell) {
+                $matrixCols[ $j ] = $columnId;
+                $M[ $j ][ $i ] = $cell;
                 $j++;
             }
             $i++;
@@ -285,8 +287,8 @@ class Exercise extends Model
         $vDotM = $MATRIX->dot($VECTOR)->getData();
 
         $RESULT = [];
-        foreach ($vDotM as $j=>$value) {
-            $RESULT[$matrixCols[$j]] = $value;
+        foreach ($vDotM as $j => $value) {
+            $RESULT[ $matrixCols[ $j ] ] = $value;
         }
 
         return $RESULT;
