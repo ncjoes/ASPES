@@ -40,6 +40,7 @@ class EvaluationTableSeeder extends Seeder
              * @var Collection $subjects
              */
             $subjects = $exercise->subjects;
+            $sN = $subjects->count();
 
             /**
              * @var Collection $comments
@@ -54,7 +55,7 @@ class EvaluationTableSeeder extends Seeder
                 /**
                  * @var Subject $subject
                  */
-                foreach ($subjects as $subject) {
+                foreach ($subjects->random($sN > 2 ? $sN - 1 : $sN) as $subject) {
 
                     /**
                      * @var Factor $factor

@@ -18,7 +18,7 @@ class SubjectTableSeeder extends Seeder
         $users = User::all();
 
         foreach ($exercises as $exercise) {
-            factory(Subject::class)->create([
+            factory(Subject::class, 5)->create([
                 'exercise_id' => $exercise->id,
                 'user_id'     => $users->random()->id,
             ]);
