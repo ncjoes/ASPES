@@ -69,12 +69,17 @@ class Evaluator extends Model
      */
     public function getComparisonMatrix()
     {
-        if ($this->exercise->concluded === false) {
-            $this->comparison_matrix = $this->buildComparisonMatrix();
-            $this->save();
+        if ($this->exercise->concluded) {
+            $arr = $this->comparison_matrix;
+            if (!is_array($this->comparison_matrix)) {
+                $this->comparison_matrix = $arr =$this->buildComparisonMatrix();
+                $this->save();
+            }
+
+            return $arr;
         }
 
-        return $this->comparison_matrix;
+        return $this->buildComparisonMatrix();
     }
 
     /**

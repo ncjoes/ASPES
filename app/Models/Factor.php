@@ -94,11 +94,7 @@ class Factor extends Model
      */
     public function getRawWeight()
     {
-        if ($this->exercise->concluded === false) {
-            return $this->calculateRawWeight();
-        }
-
-        return $this->weight;
+        return $this->calculateRawWeight();
     }
 
     /**
