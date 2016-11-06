@@ -33,7 +33,7 @@ class PublicController
 
     public function listLiveExercises(Request $request)
     {
-        return view('public.live_exercises');
+        return view('public.live');
     }
 
     public function listResults(Request $request)
@@ -52,12 +52,11 @@ class PublicController
         /**
          * @var Exercise $exercise
          */
-        if (is_object($exercise = Exercise::find($id))) {
-            $data = $this->EC()->getResultsList(request());
-            $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
+        if (is_object($exercise = Exercise::find($id)) and $exercise->concluded) {
+                $data = $this->EC()->getResultsList(request());
+                $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
 
-            //return $data;
-            return iResponse('public.result', $data);
+                return iResponse('public.result', $data);
         }
 
         return abort(404);

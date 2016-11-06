@@ -41,6 +41,9 @@
                             <div class="col s12 center-align">
                                 <p><i class="material-icons blue-text" style="font-size: 800%">timeline</i></p>
                                 <h6>NO EVALUATION EXERCISES HAVE BEEN CONCLUDED AT THE MOMENT</h6>
+                                <p>
+                                    <a href="{{url()->route('app.live')}}" class="btn btn-large blue">Live Polls</a>
+                                </p>
                             </div>
                         </div>
                     </div>
