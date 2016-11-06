@@ -52,7 +52,7 @@ class PublicController
         /**
          * @var Exercise $exercise
          */
-        if (is_object($exercise = Exercise::find($id)) and $exercise->concluded) {
+        if (is_object($exercise = Exercise::find($id)) and $exercise->published) {
                 $data = $this->EC()->getResultsList(request());
                 $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
 

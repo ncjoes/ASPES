@@ -11,7 +11,7 @@ function ExercisePreviewer(object) {
   $this.container = window.AppView.previewBox;
 
   $this.build = function () {
-    var main = object.main;
+    var main = object['main'];
     $this.markup = $(
       '<div id="x-' + object.id + '">'
       + '<div>'
@@ -34,7 +34,7 @@ function ExercisePreviewer(object) {
       + '</div>' +
       '</div>');
 
-    var factors = object.relations.factors;
+    var factors = object['relations']['factors'];
     var factorsSection = $(
       '<div class="section lighten-4 light-blue tiny-padding">'
       + '<h6 class="font-bold">Evaluation Factors</h6>'
@@ -52,8 +52,9 @@ function ExercisePreviewer(object) {
       + '</table>'
       + '<p class="clearfix"></p>' +
       '</div>');
-    if (factors.length) {
-      buildFactorsTable(factors, factorsSection.find('tbody'));
+
+    if (factors) {
+      buildFactorsTable(factors, factorsSection.find('tbody'), true);
       factorsSection.find('#tmp').remove();
     }
     $this.markup.find('#factors').append(factorsSection);
@@ -106,6 +107,9 @@ function buildExercisesTable(listArr, listBox, sortDesc) {
 }
 
 function buildFactorsTable(listArr, listBox, sortDesc) {
+  if(typeof listArr === 'object') {
+    listArr = jsonDecode(listArr);
+  }
   if(typeof sortDesc !== 'undefined'){
     var z = sortDesc === true ? 1 : -1;
     listArr = listArr.sort(function (a, b) {
