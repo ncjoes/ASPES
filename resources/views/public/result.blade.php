@@ -46,7 +46,7 @@ $nComments = $comments->count();
                                 <i class="material-icons left small">people</i> {{count($subjects)}} Subjects
                             </button>
                         @endif
-                        <button class="btn-flat font-bold">
+                        <button class="btn-flat font-bold truncate">
                             <i class="material-icons left small">people</i> {{$exercise->evaluators->count()}} Evaluators
                         </button>
                     </p>
@@ -59,14 +59,14 @@ $nComments = $comments->count();
                     <ul class="tabs">
                         @foreach($subjects as $subject)
                             <li class="tab col l3 m6 12">
-                                <a href="#subject-{{$subject->id}}">{{$subject->profile->name()}}</a>
+                                <a href="#subject-{{$subject->id}}" style="padding: 0 1em;">{{$subject->profile->name()}}</a>
                             </li>
                         @endforeach
                     </ul>
                 </div>
                 @foreach($subjects as $subject)
                     <div id="subject-{{$subject->id}}" class="col s12">
-                        <div class="row section">
+                        <div class="row padding-top-1em no-margin">
                             <div class="col m3 s8 offset-s2">
                                 <div class="user-photo">
                                     <img src="{{$subject->profile->getPhotoUrl()}}" class="responsive-img">
@@ -74,7 +74,7 @@ $nComments = $comments->count();
                                 <h6 class="font-bold center-align">{{$subject->profile->name()}}</h6>
                             </div>
                             <div class="col m9 s12">
-                                <div id="result-main-{{$subject->id}}" style="min-height: {{$nFactors * 2.8}}em;">
+                                <div id="result-main-{{$subject->id}}">
                                     <div class="align-s-centre">
                                         <div class="preloader-wrapper big active">
                                             <div class="spinner-layer spinner-blue-only">
@@ -96,8 +96,10 @@ $nComments = $comments->count();
                         <div class="row" id="factors-real-{{$subject->id}}">
                             <div class="col s12">
                                 <ul data-collapsible="accordion" class="bordered collapsible z-depth-half">
-                                    <li class="blue lighten-5">
-                                        <div class="collapsible-header fc-toggle" id="fc-toggle-{{$subject->id}}"><i class="material-icons">pie_chart</i>Results per Factor</div>
+                                    <li class="blue lighten-5" id="fc-container-{{$subject->id}}">
+                                        <div class="collapsible-header fc-toggle" id="fc-toggle-{{$subject->id}}"><i
+                                                    class="material-icons">pie_chart</i>Results per Factor
+                                        </div>
                                         <div class="collapsible-body tiny-padding">
                                         </div>
                                     </li>
@@ -108,7 +110,7 @@ $nComments = $comments->count();
                             <br/>
                             @foreach($factors as $factor)
                                 <div class="col s12 l6">
-                                    <div id="result-factor-{{$factor->id}}" style="min-height: {{$nComments * 2.8}}em;">
+                                    <div id="result-factor-{{$subject->id}}-{{$factor->id}}">
                                     </div>
                                     <br/>
                                 </div>
@@ -155,13 +157,14 @@ foreach ($subjects as $subject) {
 ?>
 @section('extra_scripts')
     <script src="{{ asset('js/app.utils.js') }}"></script>
+    <script src="{{ asset('js/charts.utils.js') }}"></script>
     <script src="{{ asset('js/fusioncharts/fusioncharts.js') }}"></script>
     <script src="{{ asset('js/fusioncharts/fusioncharts.charts.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             var payLoad = <?= json_encode($payload); ?>;
 
-            var collapsibleOpen = false;
+            var collapsibleOpen = {};
 
             var barChart = {
                 "paletteColors": "#2196F3",
@@ -226,15 +229,15 @@ foreach ($subjects as $subject) {
                             "data": chartData
                         }
                     });
-                    chart.render();
+                    render(chart);
 
                     for (var factorId in factorsData) {
                         currentFactor = factorsData[factorId];
-                        container = $('#result-factor-' + factorId);
+                        container = $('#result-factor-' + subjectId + '-' + factorId);
 
                         chartData = currentFactor['data'];
                         chart = new FusionCharts({
-                            type: 'doughnut2d',
+                            type: 'pie2d',
                             renderAt: container.attr('id'),
                             width: container.width(),
                             height: (getLineHeight() * chartData.length),
@@ -247,62 +250,34 @@ foreach ($subjects as $subject) {
                                 "data": currentFactor['data']
                             }
                         });
-                        chart.render();
+                        render(chart);
                     }
-                    $('#factors-tmp-'+subjectId).removeAttr('id').appendTo($('#factors-real-'+subjectId+' .collapsible-body'))
+                    $('#factors-tmp-' + subjectId).removeAttr('id').appendTo($('#factors-real-' + subjectId + ' .collapsible-body'))
+                    collapsibleOpen['fc-toggle-' + subjectId] = false;
                 }
 
                 $(window).on('resize orientationchange', function () {
-                    resizeCharts()
+                    updateCharts('data-area')
                 });
 
                 $('.fc-toggle').on('click', function (e) {
-                    if (collapsibleOpen === false) {
-                        collapsibleOpen = true;
+                    var target = $(e.target).attr('id');
+                    console.log('Clicked...' + target);
+                    if (collapsibleOpen[target] === false) {
+                        collapsibleOpen[target] = true;
+                        console.log('Setting timeout for...' + target);
                         setTimeout(function () {
-                            resizeCharts();
-                            $.scrollTo($(e.target).attr('id'));
-                        }, 5);
+                            console.log('Executing timeout for...' + target);
+                            updateCharts(target.replace('toggle', 'container'));
+                            $.scrollTo(target);
+                        }, 10);
                     }
                     else {
                         $.scrollTo('top');
-                        collapsibleOpen = false;
+                        collapsibleOpen[target] = false;
                     }
                 });
             });
-
-            function resizeCharts() {
-                var chart;
-                var LH = getLineHeight();
-
-                var i = 0;
-                for (var chartId in FusionCharts.items) {
-                    chart = FusionCharts.items[chartId];
-                    resizeChart(chart, LH);
-                    i++;
-                }
-            }
-
-            var W, H;
-
-            function resizeChart(Chart) {
-                H = getOptimumHeight(Chart);
-                W = $('#' + Chart.args.renderAt).width();
-                if(W && H){
-                    Chart.resizeTo(W, H);
-                }
-            }
-
-            function getLineHeight() {
-                var lineHeight = $(window).height() / 15;
-                lineHeight = (lineHeight > 50 || lineHeight < 45) ? 50 : lineHeight;
-
-                return lineHeight;
-            }
-
-            function getOptimumHeight(Chart) {
-                return (Chart.options.dataSource.data.length * getLineHeight());
-            }
         });
     </script>
 @endsection
