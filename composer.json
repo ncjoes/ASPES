@@ -9,8 +9,7 @@
         "laravel/framework": "5.3.*",
         "ncjoes/fuzzy-number": "^1.0",
         "nubs/vectorix": "^1.1",
-        "numphp/numphp": "^1.1",
-        "consoletvs/charts": "^2.0"
+        "numphp/numphp": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
