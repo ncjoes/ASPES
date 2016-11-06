@@ -5,102 +5,6 @@
  * Time:    9:38 AM
  **/
 
-function buildExercisesTable(listArr, listBox, sortDesc) {
-  if (sortDesc === true) {
-    listArr = listArr.sort(function (a, b) {
-      return b.id - a.id
-    })
-  }
-  var sn = 1;
-  for (var x = 0; x < listArr.length; x++) {
-    var exercise = listArr[x];
-    $(
-      '<tr data-index="' + x + '">'
-      + '<td class="data-col-sn">' + sn + '</td>'
-      + '<td class="data-col-title"><span class="truncate">' + exercise.title + '</span></td>'
-      + '<td class="data-col-start"><span class="truncate">' + exercise.start_at + '</span></td>'
-      + '<td class="data-col-stop"><span class="truncate">' + exercise.stop_at + '</span></td>' +
-      '</tr>'
-    ).appendTo(listBox);
-    sn++
-  }
-  listBox.find('#tmp').remove();
-}
-
-function buildFactorsTable(listArr, listBox, sortDesc) {
-  if(typeof sortDesc !== 'undefined'){
-    var z = sortDesc === true ? 1 : -1;
-    listArr = listArr.sort(function (a, b) {
-      return parseFloat(b.weight) - (z * parseFloat(a.weight))
-    });
-  }
-  var sn = 1;
-  for (var x = 0; x < listArr.length; x++) {
-    var factor = listArr[x];
-    $(
-      '<tr data-index="' + x + '">'
-      + '<td class="data-col-sn">' + sn + '</td>'
-      + '<td class="data-col-text"><span class="truncate">' + factor.text + '</span></td>'
-      + '<td nowrap="nowrap" class="data-col-weight">[' + parseFloat(factor.weight) + ']</td>' +
-      '</tr>'
-    ).appendTo(listBox);
-    sn++
-  }
-}
-
-function previewDataRow(row, Storage, Previewer) {
-  var object = Storage.listed[parseInt($(row).attr('data-index'))];
-  if (object.id in Storage.loaded) {
-    previewDataObject(Storage.loaded[object.id], Storage, Previewer);
-  }
-  else {
-    fetchObjectInfo(object.id, Storage.infoUrl).done(function (response) {
-      if (response.status === true && 'object' in response) {
-        previewDataObject(response.object, Storage, Previewer);
-      }
-    }).fail(function (xhr) {
-
-    })
-  }
-}
-
-function previewDataObject(object, Storage, Previewer) {
-  var previewer = new Previewer(object);
-  if (object.id in Storage.loaded === false) {
-    Storage.loaded[object.id] = object
-  }
-  previewer.show();
-}
-
-function fetchObjectInfo(id, url) {
-  return $.getJSON(url, {id: id});
-}
-
-var AbstractPreviewer = {
-  Container: function () {
-    return this.container;
-  },
-  JSelector: function () {
-    if (!this.isBuilt) {
-      this.build();
-    }
-    return this.jSelector;
-  },
-  show: function () {
-    if (!this.isBuilt) {
-      this.build();
-    }
-    this.Container().children().hide();
-    this.JSelector().show();
-  },
-  hide: function () {
-    if (!this.isBuilt) {
-      this.build();
-    }
-    this.JSelector().hide();
-  }
-};
-
 function ExercisePreviewer(object) {
   var $this = this;
   $this.isBuilt = false;
@@ -177,4 +81,47 @@ function ExercisePreviewer(object) {
 
   $this = $.extend(true, AbstractPreviewer, $this);
   return $this;
+}
+
+function buildExercisesTable(listArr, listBox, sortDesc) {
+  if (sortDesc === true) {
+    listArr = listArr.sort(function (a, b) {
+      return b.id - a.id
+    })
+  }
+  var sn = 1;
+  for (var x = 0; x < listArr.length; x++) {
+    var exercise = listArr[x];
+    $(
+      '<tr data-index="' + x + '">'
+      + '<td class="data-col-sn">' + sn + '</td>'
+      + '<td class="data-col-title"><span class="truncate">' + exercise.title + '</span></td>'
+      + '<td class="data-col-start"><span class="truncate">' + exercise.start_at + '</span></td>'
+      + '<td class="data-col-stop"><span class="truncate">' + exercise.stop_at + '</span></td>' +
+      '</tr>'
+    ).appendTo(listBox);
+    sn++
+  }
+  listBox.find('#tmp').remove();
+}
+
+function buildFactorsTable(listArr, listBox, sortDesc) {
+  if(typeof sortDesc !== 'undefined'){
+    var z = sortDesc === true ? 1 : -1;
+    listArr = listArr.sort(function (a, b) {
+      return parseFloat(b.weight) - (z * parseFloat(a.weight))
+    });
+  }
+  var sn = 1;
+  for (var x = 0; x < listArr.length; x++) {
+    var factor = listArr[x];
+    $(
+      '<tr data-index="' + x + '">'
+      + '<td class="data-col-sn">' + sn + '</td>'
+      + '<td class="data-col-text"><span class="truncate">' + factor.text + '</span></td>'
+      + '<td nowrap="nowrap" class="data-col-weight font-bold">' + parseFloat(factor.weight) + '</td>' +
+      '</tr>'
+    ).appendTo(listBox);
+    sn++
+  }
 }

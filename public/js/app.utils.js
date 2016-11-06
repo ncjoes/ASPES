@@ -233,6 +233,7 @@
         })
       } else {
         $this.scroll()
+        window.location.href = '#' + name
       }
     }
     ,
@@ -441,3 +442,60 @@ function jsonDecode(jsonObject) {
     return el
   })
 }
+
+/**
+ * jQuery UI Enhancements
+ */
+
+function previewDataRow(row, Storage, Previewer) {
+  var object = Storage.listed[parseInt($(row).attr('data-index'))];
+  if (object.id in Storage.loaded) {
+    previewDataObject(Storage.loaded[object.id], Storage, Previewer);
+  }
+  else {
+    fetchObjectInfo(object.id, Storage.infoUrl).done(function (response) {
+      if (response.status === true && 'object' in response) {
+        previewDataObject(response.object, Storage, Previewer);
+      }
+    }).fail(function (xhr) {
+
+    })
+  }
+}
+
+function previewDataObject(object, Storage, Previewer) {
+  var previewer = new Previewer(object);
+  if (object.id in Storage.loaded === false) {
+    Storage.loaded[object.id] = object
+  }
+  previewer.show();
+}
+
+function fetchObjectInfo(id, url) {
+  return $.getJSON(url, {id: id});
+}
+
+var AbstractPreviewer = {
+  Container: function () {
+    return this.container;
+  },
+  JSelector: function () {
+    if (!this.isBuilt) {
+      this.build();
+    }
+    return this.jSelector;
+  },
+  show: function () {
+    if (!this.isBuilt) {
+      this.build();
+    }
+    this.Container().children().hide();
+    this.JSelector().show();
+  },
+  hide: function () {
+    if (!this.isBuilt) {
+      this.build();
+    }
+    this.JSelector().hide();
+  }
+};
