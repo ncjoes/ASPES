@@ -20,14 +20,14 @@
                         <div class="row">
                             <div class="col m6 s12 align-m-right align-s-centre">
                                 <p>
-                                    <button class="btn btn-large z-depth-half full-width">
+                                    <button class="btn btn-large blue darken-3 white-text z-depth-half full-width">
                                         Log In with Facebook
                                     </button>
                                 </p>
                             </div>
                             <div class="col m6 s12 align-m-left align-s-centre">
                                 <p>
-                                    <button class="btn btn-large z-depth-half full-width">
+                                    <button class="btn btn-large red darken-1 white-text z-depth-half full-width">
                                         Log In with Google
                                     </button>
                                 </p>
@@ -78,7 +78,8 @@
                                 </p>
                             </div>
                             <div class="col m4 s12 right-align">
-                                <button type="submit" class="btn z-depth-half">
+                                <button type="submit" class="btn blue white-text z-depth-half">
+                                    <i class="material-icons right">lock_open</i>
                                     Log Me In
                                 </button>
                             </div>

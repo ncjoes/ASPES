@@ -63,7 +63,7 @@
                 </div>
                 <div class="col s2 m1">
                     <p class="center-align">
-                        <button class="btn"><i class="material-icons small">add</i></button>
+                        <button class="btn white blue-text"><i class="material-icons small">add</i></button>
                     </p>
                 </div>
             </div>

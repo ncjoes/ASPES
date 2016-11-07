@@ -28,7 +28,7 @@ $user = \Auth::user();
 <body class="grey lighten-4" id="top">
 
 <header>
-    <nav class="blue">
+    <nav class="blue darken-1">
         <div class="container">
             <div class="nav-wrapper">
                 <a class="logo left" href="{{url()->route('app.home')}}">

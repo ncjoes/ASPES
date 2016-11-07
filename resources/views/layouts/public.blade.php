@@ -15,7 +15,7 @@ $user = \Auth::user();
             @include('parts.nav-desktop_home')
         @endif
         <li>
-            <a href="{{url()->route('app.live')}}" style="background-color: white; color: #2196F3; min-width: 8em;">
+            <a href="{{url()->route('app.live.list')}}" style="background-color: white; color: #2196F3; min-width: 8em;">
                 <i class="material-icons left">timelapse</i> LIVE
             </a>
         </li>
@@ -32,7 +32,7 @@ $user = \Auth::user();
 
     <ul id="nav-mobile" class="side-nav">
         @include('parts.nav-mobile_home')
-        <li><a href="{{url()->route('app.live')}}" class="font-bold"><i class="material-icons right">timelapse</i>LIVE</a></li>
+        <li><a href="{{url()->route('app.live.list')}}" class="font-bold"><i class="material-icons right">timelapse</i>LIVE</a></li>
         <li><a href="{{url()->route('app.results.list')}}"><i class="material-icons right">trending_up</i>RESULTS</a></li>
         @if($user)
             @if($user->isAdmin())

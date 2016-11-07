@@ -41,7 +41,8 @@
 
                         <div class="row">
                             <div class="input-field col s12 right-align">
-                                <button type="submit" class="btn z-depth-half">
+                                <button type="submit" class="btn blue white-text z-depth-half">
+                                    <i class="material-icons right">send</i>
                                     Send Password Reset Link
                                 </button>
                             </div>

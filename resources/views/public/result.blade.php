@@ -34,7 +34,18 @@ $nComments = $comments->count();
         <div class="white tiny-padding z-depth-0 margin-btm-1em">
             <div class="row">
                 <div class="col s12">
-                    <h6 class="page-title"><i class="material-icons left tiny">list</i>Results</h6>
+                    <a href="{{url()->route('app.results.list')}}" class="btn btn-flat left blue-text">
+                        <i class="material-icons left tiny">keyboard_arrow_left</i>RESULTS
+                    </a>
+                    @if(!$exercise->isPublished())
+                        <span class="right red-text tiny-padding">
+                            <i class="material-icons left tiny">warning</i> Intermediate Result!
+                        </span>
+                    @else
+                        <a class="btn btn-flat right green-text">
+                            <i class="material-icons left tiny">done_all</i>PUBLISHED
+                        </a>
+                    @endif
                 </div>
                 <div class="col l9 m8 s12 align-s-centre align-m-left">
                     <h1 class="page-title">{{$exercise->title}}</h1>
@@ -97,10 +108,18 @@ $nComments = $comments->count();
                             <div class="col s12">
                                 <ul data-collapsible="accordion" class="bordered collapsible z-depth-half">
                                     <li class="blue lighten-5" id="fc-container-{{$subject->id}}">
-                                        <div class="collapsible-header fc-toggle" id="fc-toggle-{{$subject->id}}"><i
-                                                    class="material-icons">pie_chart</i>Results per Factor
+                                        <div class="collapsible-header fc-toggle" id="fc-toggle-{{$subject->id}}">
+                                            <i class="material-icons">pie_chart</i>Results per Factor
+                                            <i class="material-icons right">arrow_drop_down</i>
                                         </div>
                                         <div class="collapsible-body tiny-padding">
+                                                @if(!$exercise->isPublished())
+                                                <div class="row">
+                                                <div class="col s12 white font-lg center-align red-text tiny-padding">
+                                                    <span><i class="material-icons tiny">warning</i>Intermediate Result!</span>
+                                                </div>
+                                                </div>
+                                                @endif
                                             <div class="row" id="factors-tmp-{{$subject->id}}">
                                                 <br/>
                                                 @foreach($factors as $factor)
@@ -260,7 +279,7 @@ foreach ($subjects as $subject) {
                 $('li.tab').on('click', 'a', function (e) {
                     var target = $(e.target).attr('href').replace('#', '');
                     if (tabStates[target] === false) {
-                        for(var id in tabStates){
+                        for (var id in tabStates) {
                             tabStates[id] = false;
                         }
                         tabStates[target] = true;
