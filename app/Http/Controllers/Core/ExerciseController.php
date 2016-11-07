@@ -56,6 +56,24 @@ class ExerciseController extends Controller
     }
 
     /**
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function getLiveList(Request $request)
+    {
+        /**
+         * @var Collection $exercises
+         */
+        $exercises = Exercise::allLive()->get();
+        $total = $exercises->count();
+        parseListRange($request, $exercises->count(), $from, $to, 200);
+        $list = $exercises->take($to - $from + 1); //adding 1 makes the range inclusive
+
+        return ['net_total' => $total, 'list' => $list];
+    }
+
+    /**
      * @param Exercise $exercise
      *
      * @return array

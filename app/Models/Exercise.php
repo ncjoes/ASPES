@@ -78,6 +78,11 @@ class Exercise extends Model
         return $this->state === self::IS_PUBLISHED;
     }
 
+    public static function allLive()
+    {
+        return self::where('state', self::IS_LIVE);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
