@@ -69,3 +69,17 @@ function app_info($key, $default=null)
     }
     return $default;
 }
+
+function initials($string, $separator='', $asArray=false)
+{
+    $arr = explode(' ', $string);
+    $arr = array_map(function ($word){
+        return substr(trim($word), 0, 1);
+    },$arr);
+
+    if($asArray) {
+        return $arr;
+    }
+
+    return implode($separator, $arr);
+}

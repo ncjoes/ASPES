@@ -352,6 +352,12 @@ span.badge.font-sm {
         text-align: right !important;
         align-content: flex-end !important;
     }
+
+    /** widths **/
+    .m-auto-20{
+        width: 20% !important;
+        max-width: 20%;
+    }
 }
 
 @media (min-width: 1025px) {
@@ -446,6 +452,12 @@ span.badge.font-sm {
     .container {
         width: 90%;
         max-width: 1264px;
+    }
+
+    /** widths **/
+    .l-auto-20{
+        width: 20% !important;
+        max-width: 20%;
     }
 
     /** Hang Ups **/

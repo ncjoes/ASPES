@@ -114,12 +114,12 @@ class PublicController
      *
      * @return mixed|void
      */
-    public function showEvaluator($id)
+    public function showEvaluationForm($id)
     {
         /**
          * @var Exercise $exercise
          */
-        if (is_object($exercise = Exercise::find($id)) and $exercise->isLive()) {
+        if (is_object($exercise = Exercise::find($id))){//} and $exercise->isLive()) {
             $data = $this->EC()->getExerciseRelations($exercise);
 
             return iResponse('public.evaluator', $data);
