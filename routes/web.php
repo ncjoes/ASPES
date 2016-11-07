@@ -12,7 +12,8 @@ if (config('app.env') == 'local' or config('app.debug')) {
             'as' => 'tester', 'uses' => function () {
                 //return (\App\Models\Evaluator::find(5))->getComparisonMatrix();
                 //return (\App\Models\Factor::find(1))->getRawWeight();
-                //return (\App\Models\Exercise::find(1))->getResult();
+                return (\App\Models\Exercise::find(2))->getResult();
+                //return (\App\Models\Subject::find(3))->getEvaluationMatrix();
             }
         ]);
     });
@@ -41,10 +42,13 @@ Route::group(['namespace' => 'Web'], function () {
     Route::group(['as' => 'app.'], function () {
         Route::get('/', ['as' => 'home', 'uses' => 'PublicController@home']);
 
-        Route::get('/live', ['as' => 'live', 'uses' => 'PublicController@listLiveExercises']);
         Route::group(['prefix' => 'results', 'as' => 'results.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'PublicController@listResults']);
             Route::get('{id}', ['as' => 'view', 'uses' => 'PublicController@viewResult']);
+        });
+        Route::group(['prefix' => 'live', 'as' => 'live.'], function () {
+            Route::get('/', ['as' => 'list', 'uses' => 'PublicController@listLiveExercises']);
+            Route::get('eval/{id}', ['as' => 'evaluator', 'uses' => 'PublicController@showEvaluator'])->middleware('auth');
         });
     });
 
