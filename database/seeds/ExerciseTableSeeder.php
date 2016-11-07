@@ -15,21 +15,21 @@ class ExerciseTableSeeder extends Seeder
     {
         factory(Exercise::class)->create([
             'title'=>'Best Database Lecturer of the Decade',
-            'published'=>true,
+            'state'=>Exercise::IS_DRAFT,
             'start_at'=>Carbon::now(),
             'stop_at'=>Carbon::tomorrow()
         ]);
 
         factory(Exercise::class)->create([
             'title'=>'Best HOD of the Year',
-            'published'=>true,
+            'state'=>Exercise::IS_LIVE,
             'start_at'=>Carbon::now(),
             'stop_at'=>Carbon::tomorrow()
         ]);
 
         factory(Exercise::class)->create([
             'title'=>'Female Lecturer of the Year',
-            'published'=>true,
+            'state'=>Exercise::IS_PUBLISHED,
             'start_at'=>Carbon::now(),
             'stop_at'=>Carbon::tomorrow()
         ]);

@@ -56,17 +56,20 @@ class Subject extends Model
      */
     public function getEvaluationMatrix()
     {
-        if ($this->exercise->concluded) {
+        if ($this->exercise->isPublished()) {
             $arr = $this->evaluation_matrix;
-            if(!is_array($this->evaluation_matrix)) {
-                $this->evaluation_matrix = $arr = $this->buildEvaluationMatrix();
+            if (!is_array($arr)) {
+                $arr = $this->evaluation_matrix = $this->buildEvaluationMatrix();
                 $this->save();
             }
 
             return $arr;
         }
 
-        return $this->buildEvaluationMatrix();
+        $arr = $this->evaluation_matrix = $this->buildEvaluationMatrix();
+        $this->save();
+
+        return $arr;
     }
 
     /**
@@ -93,14 +96,14 @@ class Subject extends Model
         foreach ($counter as $factorId => $factorCommentsCounts) {
             if (sizeof($factorCommentsCounts) < $CN) {
                 foreach ($comments as $comment) {
-                    if (!isset($factorCommentsCounts[$comment->id])) {
-                        $factorCommentsCounts[$comment->id] = 0;
+                    if (!isset($factorCommentsCounts[ $comment->id ])) {
+                        $factorCommentsCounts[ $comment->id ] = 0;
                     }
                 }
             }
             $sum = array_sum($factorCommentsCounts);
             foreach ($factorCommentsCounts as $commentId => $commentsCount) {
-                $MATRIX[ $factorId ][ $commentId ] = $sum > 0 ? ($commentsCount / $sum) : $sum;
+                $MATRIX[ $factorId ][ $commentId ] = $sum > 0 ? round($commentsCount / $sum, 3) : $sum;
             }
         }
 

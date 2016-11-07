@@ -123,7 +123,7 @@ $nComments = $comments->count();
     </div>
 @endsection
 <?php
-$results = $exercise->getResult();
+$results = $exercise->getResults();
 $payload = [];
 foreach ($subjects as $subject) {
     $subjectId = $subject->id;

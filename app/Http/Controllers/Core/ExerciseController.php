@@ -47,7 +47,7 @@ class ExerciseController extends Controller
         /**
          * @var Collection $exercises
          */
-        $exercises = Exercise::where('concluded', 1)->where('published', 1)->get();
+        $exercises = Exercise::where('state', Exercise::IS_PUBLISHED)->get();
         $total = $exercises->count();
         parseListRange($request, $exercises->count(), $from, $to, 200);
         $list = $exercises->take($to - $from + 1); //adding 1 makes the range inclusive

@@ -29,8 +29,6 @@ class Exercise extends Model
      */
     protected $dates  = ['deleted_at', 'start_at', 'stop_at'];
     protected $casts  = [
-        'published' => 'boolean',
-        'concluded' => 'boolean',
         'decision_matrix' => 'array',
         'factor_weights' => 'array',
         'results' => 'array'
@@ -39,6 +37,46 @@ class Exercise extends Model
 
     const ER_SUBJECT   = 'subjects';
     const ER_EVALUATOR = 'evaluators';
+
+    const IS_LIVE      = 1;
+    const IS_DRAFT     = 2;
+    const IS_PUBLISHED = 3;
+
+    /**
+     * @return array
+     */
+    public static function states()
+    {
+        return [
+            self::IS_LIVE => 'Live',
+            self::IS_DRAFT => 'Draft',
+            self::IS_PUBLISHED => 'Published'
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLive()
+    {
+        return $this->state === self::IS_LIVE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->state === self::IS_DRAFT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->state === self::IS_PUBLISHED;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -145,12 +183,20 @@ class Exercise extends Model
      */
     public function getDecisionMatrix()
     {
-        if (!$this->concluded or !is_array($this->decision_matrix)) {
-            $this->decision_matrix = $this->buildDecisionMatrix();
-            $this->save();
+        if ($this->isPublished()) {
+            $arr = $this->decision_matrix;
+            if (!is_array($arr)) {
+                $arr = $this->decision_matrix = $this->buildDecisionMatrix();
+                $this->save();
+            }
+
+            return $arr;
         }
 
-        return $this->decision_matrix;
+        $arr = $this->decision_matrix = $this->buildDecisionMatrix();
+        $this->save();
+
+        return $arr;
     }
 
     /**
@@ -158,17 +204,20 @@ class Exercise extends Model
      */
     public function getFactorWeights()
     {
-        if ($this->concluded) {
-            $arr = $this->factors_weights;
-            if(!is_array($this->factor_weights)){
-                $this->factor_weights = $arr = $this->calculateFactorWeights();
+        if ($this->isPublished()) {
+            $arr = $this->factor_weights;
+            if (!is_array($this->factor_weights)) {
+                $arr = $this->factor_weights = $this->calculateFactorWeights();
                 $this->save();
             }
 
             return $arr;
         }
 
-        return $this->factor_weights;
+        $arr = $this->factor_weights = $this->calculateFactorWeights();
+        $this->save();
+
+        return $arr;
     }
 
     /**
@@ -195,26 +244,22 @@ class Exercise extends Model
     }
 
     /**
-     * @param Subject|null $subject
-     *
      * @return array
      */
-    public function getResult(Subject $subject = null)
+    public function getResults()
     {
-        if ($this->concluded) {
-            if(!is_array($this->results)) {
-                $this->results = $this->calculateResults();
+        if ($this->isPublished()) {
+            $results = $this->results;
+            if (!is_array($results)) {
+                $results = $this->results = $this->calculateResults();
                 $this->save();
             }
+
+            return $results;
         }
 
-        $results = [];
-        if (is_object($subject)) {
-            $results[ $subject->id ] = $this->results[$subject];
-        }
-        else {
-            $results = $this->results;
-        }
+        $results = $this->results = $this->calculateResults();
+        $this->save();
 
         return $results;
     }
@@ -273,6 +318,7 @@ class Exercise extends Model
 
     /**
      * @return array
+     * @throws \Exception
      */
     protected function calculateResults()
     {
@@ -282,13 +328,14 @@ class Exercise extends Model
          * @var Subject $subject
          */
         foreach ($this->subjects as $subject) {
-            try{
+            try {
                 $results[ $subject->id ] = $this->vectorDotMatrix($FactorWeights, $subject->getEvaluationMatrix());
             }
             catch (\Exception $e) {
-                abort(500);
+                throw new \Exception("Calculations failed. This happens due to corrupt data. Please contact Joe @ (jcnwobodo@gmail.com)");
             }
         }
+
         return $results;
     }
 
@@ -321,7 +368,7 @@ class Exercise extends Model
 
         $RESULT = [];
         foreach ($vDotM as $j => $value) {
-            $RESULT[ $matrixCols[ $j ] ] = $value;
+            $RESULT[ $matrixCols[ $j ] ] = round($value, 3);
         }
 
         return $RESULT;

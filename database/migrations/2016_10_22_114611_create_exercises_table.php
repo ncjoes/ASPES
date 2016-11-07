@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Exercise;
 
 class CreateExercisesTable extends Migration
 {
@@ -19,10 +20,10 @@ class CreateExercisesTable extends Migration
             $table->text('description');
             $table->timestamp('start_at')->nullable();
             $table->timestamp('stop_at')->nullable();
-            $table->boolean('published')->default(false);
-            $table->boolean('concluded')->default(false);
+            $table->unsignedTinyInteger('state')->default(Exercise::IS_DRAFT);
             $table->text('decision_matrix')->nullable();
             $table->text('factor_weights')->nullable();
+            $table->text('results')->nullable();
             $table->nullableTimestamps();
             $table->softDeletes();
 
