@@ -641,16 +641,16 @@
         },
         {
             "name": "ncjoes/fuzzy-number",
-            "version": "v1.0.1",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ncjoes/fuzzy-number.git",
-                "reference": "4b24c92016f68dd6360e716ccf17a0ee6c48e440"
+                "reference": "3384bed5369be9f84582b205ca7ee5f57a006c28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ncjoes/fuzzy-number/zipball/4b24c92016f68dd6360e716ccf17a0ee6c48e440",
-                "reference": "4b24c92016f68dd6360e716ccf17a0ee6c48e440",
+                "url": "https://api.github.com/repos/ncjoes/fuzzy-number/zipball/3384bed5369be9f84582b205ca7ee5f57a006c28",
+                "reference": "3384bed5369be9f84582b205ca7ee5f57a006c28",
                 "shasum": ""
             },
             "require": {
@@ -684,7 +684,7 @@
                 "Fuzzy Logic",
                 "Fuzzy numbers"
             ],
-            "time": "2016-11-05 02:36:35"
+            "time": "2016-11-07 13:51:48"
         },
         {
             "name": "nesbot/carbon",
