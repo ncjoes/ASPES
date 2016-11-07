@@ -21,7 +21,7 @@ class CreateSubjectsTable extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('exercise_id');
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('user_id');
             $table->text('evaluation_matrix')->nullable();
             $table->nullableTimestamps();
             $table->softDeletes();
