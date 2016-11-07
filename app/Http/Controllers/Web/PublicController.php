@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Core\ExerciseController;
 use App\Models\Exercise;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 /**
@@ -37,12 +38,23 @@ class PublicController
         return $this->ExerciseController;
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function home()
+    public function home(Request $request)
     {
-        return view('public.home');
+        $data['live_exercises'] = Exercise::allLive()->get();
+        $data['listed_as_evaluator'] = [];
+        $data['listed_as_subject'] = [];
+        if(!\Auth::guest()){
+            /**
+             * @var User $user
+             */
+            $user = $request->user();
+            $data['listed_as_evaluator'] = $user->exercises(User::ER_EVALUATOR)->wherePivot('done', 0)->getResults()->unique();
+            $data['listed_as_subject'] = $user->exercises(User::ER_SUBJECT)->getResults()->reject(function ($exercise){
+                return !$exercise->isLive();
+            })->unique();
+        }
+
+        return view('public.home', $data);
     }
 
     /**
@@ -52,7 +64,13 @@ class PublicController
      */
     public function listLiveExercises(Request $request)
     {
-        return view('public.live');
+        if ($request->has('id')) {
+            return redirect()->route('app.results.view', ['id' => $request->input('id')]);
+        }
+
+        $data = $this->EC()->getLiveList($request);
+
+        return iResponse('public.live', $data);
     }
 
     /**
@@ -86,6 +104,25 @@ class PublicController
             $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
 
             return iResponse('public.result', $data);
+        }
+
+        return abort(404);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return mixed|void
+     */
+    public function showEvaluator($id)
+    {
+        /**
+         * @var Exercise $exercise
+         */
+        if (is_object($exercise = Exercise::find($id)) and $exercise->isLive()) {
+            $data = $this->EC()->getExerciseRelations($exercise);
+
+            return iResponse('public.evaluator', $data);
         }
 
         return abort(404);
