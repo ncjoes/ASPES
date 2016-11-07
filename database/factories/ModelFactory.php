@@ -18,10 +18,10 @@ use App\Models;
  */
 $factory->define(Models\Ability::class, function (Faker\Generator $faker) {
     return [
-        'key'         => 'test-ability',
+        'key' => 'test-ability',
         'description' => $faker->sentence,
-        'created_at'  => $faker->dateTime,
-        'updated_at'  => $faker->dateTime,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
     ];
 });
 
@@ -42,8 +42,8 @@ $factory->define(Models\Role::class, function (Faker\Generator $faker) {
     $role = $faker->word;
 
     return [
-        'name'       => $role,
-        'label'      => ucfirst($role),
+        'name' => $role,
+        'label' => ucfirst($role),
         'created_at' => $faker->dateTime,
         'updated_at' => $faker->dateTime,
     ];
@@ -68,14 +68,14 @@ $factory->define(Models\User::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
-        'slug'           => $faker->unique()->slug(2, false),
-        'first_name'     => $faker->firstName,
-        'last_name'      => $faker->lastName,
-        'middle_name'    => $faker->firstName,
-        'photo'          => $faker->imageUrl(),
-        'email'          => $faker->safeEmail,
-        'phone'          => $faker->numerify('070########'),
-        'password'       => $password ?: $password = bcrypt('secret'),
+        'slug' => $faker->unique()->slug(2, false),
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
+        'middle_name' => $faker->firstName,
+        'photo' => $faker->imageUrl(),
+        'email' => $faker->safeEmail,
+        'phone' => $faker->numerify('070########'),
+        'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
     ];
 });
@@ -93,10 +93,11 @@ $factory->defineAs(Models\User::class, 'system', function (Faker\Generator $fake
  */
 $factory->define(Models\Exercise::class, function (Faker\Generator $faker) {
     return [
-        'title'       => $faker->sentence,
+        'title' => $faker->sentence,
         'description' => $faker->realText(),
-        'start_at'    => $faker->dateTimeBetween('-1 month', 'now'),
-        'stop_at'     => $faker->dateTimeBetween('+1 week', '+1 month'),
+        'state' => Models\Exercise::IS_DRAFT,
+        'start_at' => $faker->dateTimeBetween('-1 month', 'now'),
+        'stop_at' => $faker->dateTimeBetween('+1 week', '+1 month'),
     ];
 });
 
@@ -106,8 +107,8 @@ $factory->define(Models\Exercise::class, function (Faker\Generator $faker) {
 $factory->define(Models\Comment::class, function (Faker\Generator $faker) {
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
-        'value'       => $faker->text(20),
-        'grade'       => $faker->randomNumber(2, true),
+        'value' => $faker->text(20),
+        'grade' => $faker->randomNumber(2, true),
     ];
 });
 
@@ -117,8 +118,8 @@ $factory->define(Models\Comment::class, function (Faker\Generator $faker) {
 $factory->define(Models\Evaluator::class, function (Faker\Generator $faker) {
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
-        'user_id'     => Models\User::all()->random()->id,
-        'type'        => $faker->randomElement([Models\Evaluator::DM, Models\Evaluator::SE]),
+        'user_id' => Models\User::all()->random()->id,
+        'type' => $faker->randomElement([Models\Evaluator::DM, Models\Evaluator::SE]),
     ];
 });
 
@@ -128,7 +129,7 @@ $factory->define(Models\Evaluator::class, function (Faker\Generator $faker) {
 $factory->define(Models\Factor::class, function (Faker\Generator $faker) {
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
-        'text'        => $faker->text(30)
+        'text' => $faker->text(30)
     ];
 });
 
@@ -142,8 +143,8 @@ $factory->define(Models\FCV::class, function (Faker\Generator $faker) {
 
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
-        'name'        => $faker->word,
-        'value'       => [$l, $m, $u],
+        'name' => $faker->word,
+        'value' => [$l, $m, $u],
     ];
 });
 
@@ -153,7 +154,7 @@ $factory->define(Models\FCV::class, function (Faker\Generator $faker) {
 $factory->define(Models\Subject::class, function (Faker\Generator $faker) {
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
-        'user_id'     => Models\User::all()->random()->id,
+        'user_id' => Models\User::all()->random()->id,
     ];
 });
 
@@ -162,9 +163,9 @@ $factory->define(Models\Subject::class, function (Faker\Generator $faker) {
  */
 $factory->define(Models\Comparison::class, function (Faker\Generator $faker) {
     return [
-        'f1_id'        => Models\Factor::all()->random()->id,
-        'f2_id'        => Models\Factor::all()->random()->id,
-        'fcv__id'      => Models\FCV::all()->random()->id,
+        'f1_id' => Models\Factor::all()->random()->id,
+        'f2_id' => Models\Factor::all()->random()->id,
+        'fcv__id' => Models\FCV::all()->random()->id,
         'evaluator_id' => Models\Evaluator::all()->random()->id,
     ];
 });
@@ -175,9 +176,9 @@ $factory->define(Models\Comparison::class, function (Faker\Generator $faker) {
 $factory->define(Models\Evaluation::class, function (Faker\Generator $faker) {
     return [
         'evaluator_id' => Models\Evaluator::all()->random()->id,
-        'factor_id'    => Models\Factor::all()->random()->id,
-        'subject_id'   => Models\Subject::all()->random()->id,
-        'comment_id'   => Models\Comment::all()->random()->id,
+        'factor_id' => Models\Factor::all()->random()->id,
+        'subject_id' => Models\Subject::all()->random()->id,
+        'comment_id' => Models\Comment::all()->random()->id,
     ];
 });
 
