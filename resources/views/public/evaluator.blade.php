@@ -84,13 +84,13 @@ $nComments = $comments->count();
                                                 <div class="col l3 s12">
                                                     <h6 class="font-bold truncate">{{$factor->text}}</h6>
                                                 </div>
-                                                <div class="col l9 s12 comments" data-id="comment-{{$subject->id}}-{{$factor->id}}">
-                                                    <div class="row">
+                                                <div class="col l9 s12 comments">
+                                                    <div class="row" data-SID="{{$subject->id}}" data-FID="{{$factor->id}}">
                                                         @foreach($comments as $comment)
                                                             <div class="col s6 m-auto-20">
                                                                 <input name="c-[{{$factor->id}}]" type="radio" value="{{$comment->id}}"
-                                                                       id="c-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}" />
-                                                                <label for="c-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}">
+                                                                       id="c-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}"/>
+                                                                <label for="c-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}" class="font-sm">
                                                                     {{$comment->value}}
                                                                 </label>
                                                             </div>
@@ -112,7 +112,7 @@ $nComments = $comments->count();
                     <p class="center-align">
                         <button class="btn blue white-text"><i class="material-icons left">done</i>NEXT</button>
                         <button class="btn green white-text"><i class="material-icons left">done_all</i>SUBMIT</button>
-                            <button class="btn grey white-text"><i class="material-icons left">done</i>SKIP</button>
+                        <button class="btn grey white-text"><i class="material-icons left">done</i>SKIP</button>
                     </p>
                 </div>
             </div>
@@ -128,7 +128,9 @@ $nComments = $comments->count();
                     </p>
                     <p class="font-lg font-bold">Don't quite agree with the current weights?</p>
                     <p class="align-m-right">
-                        <button class="btn z-depth-half blue">Compare Factors<i class="material-icons right">compare_arrows</i></button>
+                        <button class="btn z-depth-half blue waves-effect waves-light" id="comparator-trigger"
+                                href="#comparator">Compare Factors<i class="material-icons right">shuffle</i>
+                        </button>
                     </p>
                 </div>
                 <div class="col s12 m8 l9">
@@ -137,6 +139,62 @@ $nComments = $comments->count();
             </div>
             <div class="divider"></div>
         </div>
+    </div>
+    <div id="comparator" class="modal modal-fixed-footer">
+        <form onsubmit="return false;">
+            <div class="modal-content">
+                <div class="blue darken-1 white-text tiny-padding">
+                    <h5 class="center-align">Compare Evaluation Factors</h5>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="section">
+                            <div class="row">
+                                <div class="col s5"><span class="font-bold">Factor 1</span></div>
+                                <div class="col s2 center-align"><i class="material-icons">trending_flat</i></div>
+                                <div class="col s5 right-align"><span class="font-bold">Factor 2</span></div>
+                            </div>
+                            <?php
+                            $x = 1;
+                            /**
+                             * @var \App\Models\Factor $f1
+                             */
+                            ?>
+                            @foreach ($factors as $f1)
+                                <?php $yFactors = (clone $factors)->splice($x); ?>
+                                @foreach ($yFactors as $f2)
+                                    <div class="row">
+                                        <div class="col m4 s12 align-m-right">
+                                            <label for="c-{{$f1->id}}-{{$f2->id}}" class="font-bold black-text">{{$f1->text}}</label>
+                                        </div>
+                                        <div class="col m4 s12 center-align">
+                                            <select name="comparisons[{{$f1->id}}][{{$f2->id}}]" id="c-{{$f1->id}}-{{$f2->id}}"
+                                                    class="browser-default no-margin no-padding" required="required">
+                                                <option></option>
+                                                @foreach($comments as $comment)
+                                                    <option value="{{$comment->id}}">{{$comment->value}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col m4 s12 align-s-right align-m-left">
+                                            <label for="c-{{$f1->id}}-{{$f2->id}}" class="font-bold black-text">{{$f2->text}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="divider hide-on-med-and-up"></div>
+                                @endforeach
+                                <?php $x++;?>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer right-align">
+                <button class="btn z-depth-half blue waves-effect waves-light" id="comparator-trigger"
+                >SUBMIT<i class="material-icons right">send</i>
+                </button>
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CLOSE</a>
+            </div>
+        </form>
     </div>
 @endsection
 @section('extra_scripts')
@@ -212,7 +270,23 @@ $nComments = $comments->count();
             //Attach listeners
             $("#count-down").countdowntimer({
                 dateAndTime: '<?= $exercise->stop_at ?>'
-            })
+            });
+
+            $('#comparator-trigger').on('click', function () {
+                $('#comparator').openModal({
+                            dismissible: false, // Modal can be dismissed by clicking outside of the modal
+                            opacity: .5, // Opacity of modal background
+                            in_duration: 300, // Transition in duration
+                            out_duration: 200, // Transition out duration
+                            starting_top: '4%', // Starting top style attribute
+                            ending_top: '3%', // Ending top style attribute
+                            ready: function (modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                                //alert("Ready");
+                                console.log(modal, trigger);
+                            }
+                        }
+                );
+            });
         });
     </script>
 @endsection
