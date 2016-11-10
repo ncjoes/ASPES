@@ -44,7 +44,7 @@ $user = \Auth::user();
                                             <i class="material-icons left">record_voice_over</i> Vote
                                         </a>
                                     @endif
-                                    <a href="{{url()->route('app.results.view', ['id'=>$exercise->id])}}" class="btn btn-flat orange lighten-4">
+                                    <a href="{{url()->route('app.results.view', ['id'=>$exercise->id])}}" class="btn btn-flat grey lighten-4">
                                         <i class="material-icons left">description</i> View
                                     </a>
                                 </p>

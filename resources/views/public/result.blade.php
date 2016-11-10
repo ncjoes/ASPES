@@ -69,7 +69,7 @@ $nComments = $comments->count();
                 <div class="col s12">
                     <ul class="tabs">
                         @foreach($subjects as $subject)
-                            <li class="tab col l3 m6 12">
+                            <li class="tab col l3 m6 s12">
                                 <a href="#subject-{{$subject->id}}" style="padding: 0 1em;">{{$subject->profile->name()}}</a>
                             </li>
                         @endforeach
@@ -113,13 +113,13 @@ $nComments = $comments->count();
                                             <i class="material-icons right">arrow_drop_down</i>
                                         </div>
                                         <div class="collapsible-body tiny-padding">
-                                                @if(!$exercise->isPublished())
+                                            @if(!$exercise->isPublished())
                                                 <div class="row">
-                                                <div class="col s12 white font-lg center-align red-text tiny-padding">
-                                                    <span><i class="material-icons tiny">warning</i>Intermediate Result!</span>
+                                                    <div class="col s12 white font-lg center-align red-text tiny-padding">
+                                                        <span><i class="material-icons tiny">warning</i>Intermediate Result!</span>
+                                                    </div>
                                                 </div>
-                                                </div>
-                                                @endif
+                                            @endif
                                             <div class="row" id="factors-tmp-{{$subject->id}}">
                                                 <br/>
                                                 @foreach($factors as $factor)
@@ -141,48 +141,48 @@ $nComments = $comments->count();
         </div>
     </div>
 @endsection
-<?php
-$results = $exercise->getResults();
-$payload = [];
-foreach ($subjects as $subject) {
-    $subjectId = $subject->id;
-    $mainChart = [];
-    foreach ($comments as $comment) {
-        $commentId = $comment->id;
-        array_push($mainChart, ['label' => ($comment->value.' (Grade: '.$comment->grade.')'), 'value' => ($results[ $subjectId ][ $commentId ])]);
-    }
-
-    $factorCharts = [];
-    $matrix = $subject->evaluation_matrix;
-    foreach ($factors as $factor) {
-        $factorID = $factor->id;
-        $data = [];
+@section('extra_scripts')
+    <?php
+    $results = $exercise->getResults();
+    $payload = [];
+    foreach ($subjects as $subject) {
+        $subjectId = $subject->id;
+        $mainChart = [];
         foreach ($comments as $comment) {
             $commentId = $comment->id;
-            array_push($data, [
-                    'label' => $comment->value.' (Grade: '.$comment->grade.')',
-                    'value' => $matrix[ $factorID ][ $commentId ]
-            ]);
+            array_push($mainChart, ['label' => ($comment->value.' (Grade: '.$comment->grade.')'), 'value' => ($results[ $subjectId ][ $commentId ])]);
         }
 
-        $factorRatingChart['title'] = $factor->text.' (Weight: '.$factor->weight.')';
-        $factorRatingChart['data'] = $data;
-        $factorCharts[ $factorID ] = $factorRatingChart;
-    }
+        $factorCharts = [];
+        $matrix = $subject->evaluation_matrix;
+        foreach ($factors as $factor) {
+            $factorID = $factor->id;
+            $data = [];
+            foreach ($comments as $comment) {
+                $commentId = $comment->id;
+                array_push($data, [
+                        'label' => $comment->value.' (Grade: '.$comment->grade.')',
+                        'value' => $matrix[ $factorID ][ $commentId ]
+                ]);
+            }
 
-    $payload[ $subjectId ] = ['main' => $mainChart, 'factors' => $factorCharts];
-}
-?>
-@section('extra_scripts')
+            $factorRatingChart['title'] = $factor->text.' (Weight: '.$factor->weight.')';
+            $factorRatingChart['data'] = $data;
+            $factorCharts[ $factorID ] = $factorRatingChart;
+        }
+
+        $payload[ $subjectId ] = ['main' => $mainChart, 'factors' => $factorCharts];
+    }
+    ?>
     <script src="{{ asset('js/app.utils.js') }}"></script>
     <script src="{{ asset('js/charts.utils.js') }}"></script>
     <script src="{{ asset('js/fusioncharts/fusioncharts.js') }}"></script>
     <script src="{{ asset('js/fusioncharts/fusioncharts.charts.js') }}"></script>
     <script type="text/javascript">
-        var tabStates = {};
         $(function () {
             var payLoad = <?= json_encode($payload); ?>;
             var collapsibleStates = {};
+            var tabStates = {};
             var barChart = {
                 "paletteColors": "#2196F3",
                 "bgColor": "#ffffff",

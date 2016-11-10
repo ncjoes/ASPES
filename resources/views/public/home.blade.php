@@ -13,7 +13,7 @@ $lsCount = count($listed_as_subject);
 @extends('layouts.public')
 @section('content')
     <div class="section">
-        <div class="valign-wrapper mh-50vh">
+        <div class="valign-wrapper sh-70vh mh-60vh">
             <div class="container valign">
                 <div class="row">
                     <div class="col l6 offset-l0 hide-on-med-and-down">
@@ -29,6 +29,7 @@ $lsCount = count($listed_as_subject);
                                 <h5 class="right-align">{{!empty($user->name()) ? $user->name() : 'User'}}</h5>
                                 @if($lsCount)
                                     <div class="divider"></div>
+                                <div class="section">
                                     <p class="font-bold">
                                         You are currently being evaluated in the following
                                         @if($lsCount>1) exercises. @else exercise. @endif
@@ -38,17 +39,19 @@ $lsCount = count($listed_as_subject);
                                         @foreach($listed_as_subject as $exercise)
                                             <li>
                                                 <a href="{{url()->route('app.results.view', ['id'=>$exercise->id])}}"
-                                                   class="btn btn-flat bordered full-width orange darken-2 white-text">
-                                                    <span class="left truncate">{{$exercise->title}}</span>
+                                                   class="btn btn-flat bordered full-width full-height orange-text text-darken-1 white-text">
+                                                    <span class="left">{{$exercise->title}}</span>
                                                     <i class="material-icons right hide-on-small-and-down">launch</i>
                                                 </a>
                                             </li>
                                         @endforeach
                                     </ul>
+                                </div>
                                 @endif
                                 @if($leCount)
                                     @if(!$lsCount)
-                                        <div class="divider"></div> @endif
+                                        <div class="divider"></div>
+                                    @endif
                                     <p class="font-bold">
                                         You have @if($lsCount) also @endif been invited to take part in the following
                                         @if($leCount>1) exercises @else exercise @endif as one of the evaluators.
@@ -58,8 +61,8 @@ $lsCount = count($listed_as_subject);
                                         @foreach($listed_as_evaluator as $exercise)
                                             <li>
                                                 <a href="{{url()->route('app.live.evaluator', ['id'=>$exercise->id])}}"
-                                                   class="btn btn-flat bordered full-width green white-text">
-                                                    <span class="left truncate">{{$exercise->title}}</span>
+                                                   class="btn btn-flat bordered full-width full-height text-darken-3 green-text">
+                                                    <span class="left">{{$exercise->title}}</span>
                                                     <i class="material-icons right hide-on-small-and-down">launch</i>
                                                 </a>
                                             </li>
@@ -67,17 +70,19 @@ $lsCount = count($listed_as_subject);
                                     </ul>
                                 @endif
                                 @if($leCount)
-                                    <div class="center-align white-text blue">
-                                        <div class="divider"></div>
-                                        <p class="font-bold">
-                                            Explore exercises here...
-                                        </p>
-                                        <p class="padding-btm-1em">
-                                            <a href="{{url()->route('app.live.list')}}" class="btn white blue-text z-depth-half"><i
-                                                        class="material-icons left">timelapse</i>LIVE</a>
-                                            <a href="{{url()->route('app.results.list')}}" class="btn green white-text z-depth-half"><i
-                                                        class="material-icons left">timelapse</i>RESULTS</a>
-                                        </p>
+                                    <div class="section">
+                                        <div class="center-align white-text blue">
+                                            <div class="divider"></div>
+                                            <p class="font-bold">
+                                                Explore exercises here...
+                                            </p>
+                                            <p class="padding-btm-1em">
+                                                <a href="{{url()->route('app.live.list')}}" class="btn white blue-text z-depth-half"><i
+                                                            class="material-icons left">timelapse</i>LIVE</a>
+                                                <a href="{{url()->route('app.results.list')}}" class="btn green white-text z-depth-half"><i
+                                                            class="material-icons left">timelapse</i>RESULTS</a>
+                                            </p>
+                                        </div>
                                     </div>
                                 @endif
                             </div>

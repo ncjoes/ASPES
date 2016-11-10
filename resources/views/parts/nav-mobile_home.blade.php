@@ -7,7 +7,7 @@
  * Time:    3:17 PM
  **/
 ?>
-<li class="blue nav-mobile-home">
+<li class="blue darken-1 nav-mobile-home">
     <a class="logo" href="{{url()->route('app.home')}}">
         <i class="material-icons left">trending_up</i>
         <img src="{{asset('icon.svg')}}" class="logo">
