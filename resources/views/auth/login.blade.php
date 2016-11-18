@@ -6,7 +6,7 @@
             <div class="container valign">
                 <div class="row">
 
-                    <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
+                    <div class="col l5 offset-l0 m10 offset-m1 s10 offset-s1">
                         <div class="row">
                             <div class="col s12">
                                 <h4>One click away!</h4>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
 
-                    <form id="login-form" class="col l5 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
+                    <form id="login-form" class="col l6 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
                           action="{{ url()->route('auth.login') }}">
                         {{ csrf_field() }}
 
@@ -88,12 +88,12 @@
                         <div class="row divider"></div>
                         <div class="row center-align">
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.signup') }}" class="font-sm">
+                                <a href="{{ url()->route('auth.signup') }}">
                                     <span class="hide-on-small-only">Don't have an account?</span> Sign Up
                                 </a>
                             </div>
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.password.reset') }}" class="font-sm">
+                                <a href="{{ url()->route('auth.password.reset') }}">
                                     <span class="hide-on-small-only">Forgot Your Password?</span> Reset Password
                                 </a>
                             </div>
@@ -112,7 +112,7 @@
             var form = $('#login-form');
             form.submit(function (e) {
                 e.preventDefault();
-                $this = $('#login-form');
+                var $this = $('#login-form');
 
                 $.post($this.prop('action'), $this.serialize(), null, 'json')
                         .done(function (response) {

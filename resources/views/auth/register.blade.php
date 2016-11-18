@@ -5,7 +5,7 @@
         <div class="valign-wrapper mh-75vh">
             <div class="container valign">
                 <div class="row">
-                    <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
+                    <div class="col l5 offset-l0 m10 offset-m1 s10 offset-s1">
                         <div class="row">
                             <h4>Lets get your opinions heard!</h4>
                             <p class="font-lg">
@@ -35,7 +35,7 @@
                             <div class="divider col s5"></div>
                         </div>
                     </div>
-                    <form id="reg-form" class="col l5 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="post"
+                    <form id="reg-form" class="col l6 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="post"
                           action="{{ url()->route('auth.signup') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
@@ -98,7 +98,7 @@
                         <div class="row divider"></div>
                         <div class="row center-align">
                             <div class="col s12">
-                                <a href="{{ url()->route('auth.login') }}" class="font-sm">
+                                <a href="{{ url()->route('auth.login') }}">
                                     Already have an account? Log In
                                 </a>
                             </div>
@@ -117,7 +117,7 @@
             var form = $('#reg-form');
             form.submit(function (e) {
                 e.preventDefault();
-                $this = $('#reg-form');
+                var $this = $('#reg-form');
 
                 try {
                     $.post($this.prop('action'), $this.serialize(), null, 'json')

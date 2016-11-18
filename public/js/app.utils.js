@@ -117,7 +117,7 @@
             return value.is(':visible')
           })
           visible = visible.sort(function (a, b) {
-            return b.offset().top - a.offset().top
+            return b.offset().top - a.offset().top;
           })
 
           if (visible[0]) {
@@ -169,23 +169,29 @@
     },
     isJsonString: function (str) {
       try {
-        $.parseJSON(str)
+        $.parseJSON(str);
+        return true;
       } catch (e) {
-        return false
+        return false;
       }
-      return true
     },
-    parseJSON: function (str) {
-      var $object
-      try {
-        $object = $.parseJSON(str)
-      } catch (e) {
-        return false
+    safeParseJSON: function (str) {
+      var $object;
+      if(typeof str === 'string') {
+        try {
+          $object = $.parseJSON(str);
+          return $object;
+        } catch (e) {
+          console.log(str);
+          return null;
+        }
       }
-      return $object
+      else if(typeof str === 'object') {
+        return str;
+      }
     },
-    jsonDecode: function (jsonObject) {
-      return jsonDecode(jsonObject);
+    jsonDecode: function (jsonString) {
+      return $.safeParseJSON(jsonString);
     },
     isInPageAnchor: function (baseUrl, link) {
       return (new RegExp(baseUrl)).test(link) && (new RegExp('#')).test(link)

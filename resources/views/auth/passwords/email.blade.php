@@ -6,8 +6,8 @@
             <div class="container valign">
                 <div class="row">
 
-                    <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
-                        <div class="row center-align">
+                    <div class="col l5 offset-l0 m10 offset-m1 s10 offset-s1">
+                        <div class="row">
                             <h3>No Worries</h3>
                             <h5 class="font-bold">
                                 We all forget sometimes...
@@ -20,7 +20,7 @@
                         </div>
                     </div>
 
-                    <form id="email-form" class="col l5 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
+                    <form id="email-form" class="col l6 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
                           action="{{ url()->route('auth.password.email') }}">
                         {{ csrf_field() }}
 
@@ -50,12 +50,12 @@
                         <div class="row divider"></div>
                         <div class="row center-align">
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.signup') }}" class="font-sm">
+                                <a href="{{ url()->route('auth.signup') }}">
                                     <span class="hide-on-small-only">Don't have an account?</span> Sign Up
                                 </a>
                             </div>
                             <div class="col s6">
-                                <a href="{{ url()->route('auth.login') }}" class="font-sm">
+                                <a href="{{ url()->route('auth.login') }}">
                                     Log-In with email
                                 </a>
                             </div>
@@ -74,7 +74,7 @@
             var form = $('#email-form');
             form.submit(function (e) {
                 e.preventDefault();
-                $this = $('#email-form');
+                var $this = $('#email-form');
 
                 $.post($this.prop('action'), $this.serialize(), null, 'json')
                         .done(function (response) {

@@ -6,7 +6,7 @@
             <div class="container valign">
                 <div class="row">
 
-                    <div class="col l6 offset-l0 m10 offset-m1 s10 offset-s1">
+                    <div class="col l5 offset-l0 m10 offset-m1 s10 offset-s1">
                         <div class="row center-align">
                             <h4>You're almost done</h4>
                             <h6>
@@ -20,7 +20,7 @@
                         </div>
                     </div>
 
-                    <form id="reset-form" class="col l5 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
+                    <form id="reset-form" class="col l6 offset-l1 m10 offset-m1 s10 offset-s1 valign white z-depth-half" role="form" method="POST"
                           action="{{ url()->route('auth.password.reset') }}">
                         {{ csrf_field() }}
 
@@ -80,7 +80,7 @@
             var form = $('#reset-form');
             form.submit(function (e) {
                 e.preventDefault();
-                $this = $('#reset-form');
+                var $this = $('#reset-form');
 
                 $.post($this.prop('action'), $this.serialize(), null, 'json')
                         .done(function (response) {
