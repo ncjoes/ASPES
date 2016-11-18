@@ -138,11 +138,17 @@ class User extends Authenticatable
     }
 
     /**
+     * @param string $role
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function sent_invitations()
+    public function invitations($role = 'invited')
     {
-        return $this->hasMany(Invitation::class);
+        if ($role === 'invited') {
+            return $this->hasMany(Invitation::class, 'recipient_id');
+        }
+
+        return $this->hasMany(Invitation::class, 'sender_id');
     }
 
     /**

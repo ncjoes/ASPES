@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Core\ExerciseController;
 use App\Models\Exercise;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -41,15 +42,24 @@ class PublicController
     public function home(Request $request)
     {
         $data['live_exercises'] = Exercise::allLive()->get();
-        $data['listed_as_evaluator'] = [];
-        $data['listed_as_subject'] = [];
-        if(!\Auth::guest()){
+        $data['invited'] = [];
+        $data['listed'] = [];
+        if (!\Auth::guest()) {
             /**
              * @var User $user
              */
             $user = $request->user();
-            $data['listed_as_evaluator'] = $user->exercises(User::ER_EVALUATOR)->wherePivot('done', 0)->getResults()->unique();
-            $data['listed_as_subject'] = $user->exercises(User::ER_SUBJECT)->getResults()->reject(function ($exercise){
+            /**
+             * @var Invitation $invitation
+             */
+            foreach ($user->invitations as $invitation) {
+                $exercise = $invitation->exercise;
+                if (!in_array($exercise, $data['invited'])) {
+                    array_push($data['invited'], $exercise);
+                }
+            }
+
+            $data['listed'] = $user->exercises(User::ER_SUBJECT)->getResults()->reject(function (Exercise $exercise){
                 return !$exercise->isLive();
             })->unique();
         }
@@ -119,7 +129,7 @@ class PublicController
         /**
          * @var Exercise $exercise
          */
-        if (is_object($exercise = Exercise::find($id))){//} and $exercise->isLive()) {
+        if (is_object($exercise = Exercise::find($id))) {//} and $exercise->isLive()) {
             $data = $this->EC()->getExerciseRelations($exercise);
 
             return iResponse('public.evaluator', $data);

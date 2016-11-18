@@ -78,9 +78,22 @@ class Exercise extends Model
         return $this->state === self::IS_PUBLISHED;
     }
 
+    /**
+     * @return mixed
+     */
     public static function allLive()
     {
         return self::where('state', self::IS_LIVE);
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function invitedUsers()
+    {
+        return $this->hasManyThrough(User::class, Invitation::class);
     }
 
     /**

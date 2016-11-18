@@ -7,8 +7,8 @@
  * Time:    12:16 PM
  **/
 $user = \Auth::user();
-$leCount = count($listed_as_evaluator);
-$lsCount = count($listed_as_subject);
+$leCount = count($invited);
+$lsCount = count($listed);
 ?>
 @extends('layouts.public')
 @section('content')
@@ -29,24 +29,24 @@ $lsCount = count($listed_as_subject);
                                 <h5 class="right-align">{{!empty($user->name()) ? $user->name() : 'User'}}</h5>
                                 @if($lsCount)
                                     <div class="divider"></div>
-                                <div class="section">
-                                    <p class="font-bold">
-                                        You are currently being evaluated in the following
-                                        @if($lsCount>1) exercises. @else exercise. @endif
-                                        Click on the @if($lsCount>1) links @else link @endif to find out how great you are doing!.
-                                    </p>
-                                    <ul>
-                                        @foreach($listed_as_subject as $exercise)
-                                            <li>
-                                                <a href="{{url()->route('app.results.view', ['id'=>$exercise->id])}}"
-                                                   class="btn btn-flat bordered full-width full-height orange-text text-darken-1 white-text">
-                                                    <span class="left">{{$exercise->title}}</span>
-                                                    <i class="material-icons right hide-on-small-and-down">launch</i>
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                    <div class="section">
+                                        <p class="font-bold">
+                                            You are currently being evaluated in the following
+                                            @if($lsCount>1) exercises. @else exercise. @endif
+                                            Click on the @if($lsCount>1) links @else link @endif to find out how great you are doing!.
+                                        </p>
+                                        <ul>
+                                            @foreach($listed as $exercise)
+                                                <li>
+                                                    <a href="{{url()->route('app.results.view', ['id'=>$exercise->id])}}"
+                                                       class="btn btn-flat bordered full-width full-height orange-text text-darken-1 white-text">
+                                                        <span class="left">{{$exercise->title}}</span>
+                                                        <i class="material-icons right hide-on-small-and-down">launch</i>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 @endif
                                 @if($leCount)
                                     @if(!$lsCount)
@@ -58,7 +58,7 @@ $lsCount = count($listed_as_subject);
                                         Kindly click on the @if($leCount>1) links @else link @endif to contribute your honest opinion.
                                     </p>
                                     <ul>
-                                        @foreach($listed_as_evaluator as $exercise)
+                                        @foreach($invited as $exercise)
                                             <li>
                                                 <a href="{{url()->route('app.live.evaluator', ['id'=>$exercise->id])}}"
                                                    class="btn btn-flat bordered full-width full-height text-darken-3 green-text">
@@ -69,22 +69,20 @@ $lsCount = count($listed_as_subject);
                                         @endforeach
                                     </ul>
                                 @endif
-                                @if($leCount)
-                                    <div class="section">
-                                        <div class="center-align white-text blue">
-                                            <div class="divider"></div>
-                                            <p class="font-bold">
-                                                Explore exercises here...
-                                            </p>
-                                            <p class="padding-btm-1em">
-                                                <a href="{{url()->route('app.live.list')}}" class="btn white blue-text z-depth-half"><i
-                                                            class="material-icons left">timelapse</i>LIVE</a>
-                                                <a href="{{url()->route('app.results.list')}}" class="btn green white-text z-depth-half"><i
-                                                            class="material-icons left">timelapse</i>RESULTS</a>
-                                            </p>
-                                        </div>
+                                <div class="section">
+                                    <div class="center-align white-text blue">
+                                        <div class="divider"></div>
+                                        <p class="font-bold">
+                                            Explore all exercises here...
+                                        </p>
+                                        <p class="padding-btm-1em">
+                                            <a href="{{url()->route('app.live.list')}}" class="btn white blue-text z-depth-half"><i
+                                                        class="material-icons left">timelapse</i>LIVE</a>
+                                            <a href="{{url()->route('app.results.list')}}" class="btn green white-text z-depth-half"><i
+                                                        class="material-icons left">timelapse</i>RESULTS</a>
+                                        </p>
                                     </div>
-                                @endif
+                                </div>
                             </div>
                         @else
                             <div class="center-align">

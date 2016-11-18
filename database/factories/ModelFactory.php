@@ -72,7 +72,7 @@ $factory->define(Models\User::class, function (Faker\Generator $faker) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'middle_name' => $faker->firstName,
-        'photo' => $faker->imageUrl(),
+        'photo' => $faker->imageUrl(300,300),
         'email' => $faker->safeEmail,
         'phone' => $faker->numerify('070########'),
         'password' => $password ?: $password = bcrypt('secret'),
