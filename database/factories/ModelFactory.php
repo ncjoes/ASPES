@@ -72,7 +72,7 @@ $factory->define(Models\User::class, function (Faker\Generator $faker) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'middle_name' => $faker->firstName,
-        'photo' => $faker->imageUrl(300,300),
+        'photo' => $faker->imageUrl(300, 300),
         'email' => $faker->safeEmail,
         'phone' => $faker->numerify('070########'),
         'password' => $password ?: $password = bcrypt('secret'),
@@ -98,6 +98,21 @@ $factory->define(Models\Exercise::class, function (Faker\Generator $faker) {
         'state' => Models\Exercise::IS_DRAFT,
         'start_at' => $faker->dateTimeBetween('-1 month', 'now'),
         'stop_at' => $faker->dateTimeBetween('+1 week', '+1 month'),
+        'created_by' => Models\User::all()->first()->id
+    ];
+});
+
+/**
+ * Invitation
+ */
+$factory->define(Models\Invitation::class, function (Faker\Generator $faker) {
+    $users = Models\User::all();
+
+    return [
+        'exercise_id' => Models\Exercise::all()->random()->id,
+        'sender_id' => $users->random()->id,
+        'recipient_id' => $users->random()->id,
+        'role' => $faker->randomElement([Models\Invitation::ROLE_EVALUATOR, Models\Invitation::ROLE_SUBJECT])
     ];
 });
 
