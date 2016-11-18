@@ -86,11 +86,25 @@ class Exercise extends Model
         return self::where('state', self::IS_LIVE);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function invitations()
     {
         return $this->hasMany(Invitation::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function invitedUsers()
     {
         return $this->hasManyThrough(User::class, Invitation::class);

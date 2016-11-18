@@ -24,12 +24,15 @@ class CreateExercisesTable extends Migration
             $table->text('decision_matrix')->nullable();
             $table->text('factor_weights')->nullable();
             $table->text('results')->nullable();
+            $table->unsignedInteger('created_by');
             $table->nullableTimestamps();
             $table->softDeletes();
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
+
+            $table->foreign('created_by', 'ex_created_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
