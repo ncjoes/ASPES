@@ -60,7 +60,7 @@ $lsCount = count($listed);
                                     <ul>
                                         @foreach($invited as $exercise)
                                             <li>
-                                                <a href="{{url()->route('app.live.evaluator', ['id'=>$exercise->id])}}"
+                                                <a href="{{url()->route('app.live.evaluate', ['id'=>$exercise->id])}}"
                                                    class="btn btn-flat bordered full-width full-height text-darken-3 green-text">
                                                     <span class="left">{{$exercise->title}}</span>
                                                     <i class="material-icons right hide-on-small-and-down">launch</i>

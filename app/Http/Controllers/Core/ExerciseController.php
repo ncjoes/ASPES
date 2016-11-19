@@ -10,8 +10,10 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataTypes\FuzzyNumber;
+use App\Models\Evaluator;
 use App\Models\Exercise;
 use App\Models\FCV;
+use App\Models\Subject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
@@ -86,7 +88,7 @@ class ExerciseController extends Controller
                 'id' => $exercise->id,
                 'main' => $exercise,
                 'relations' => [
-                    'fcvs' => $exercise->fcvs()->getResults()->sortBy(function (FCV $FCV){
+                    'fcvs' => $exercise->fcvs()->getResults()->sortBy(function (FCV $FCV) {
                         return (new FuzzyNumber($FCV->value))->defuzzify();
                     }),
                     'comments' => $exercise->comments()->getResults()->sortByDesc('grade'),
@@ -199,14 +201,16 @@ class ExerciseController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
-     * @return string
+     * @param Evaluator $evaluator
+     * @param Subject $subject
+     * @param array $evaluations
      */
-    public function evaluateSubject(Request $request)
+    public function evaluateSubject(Evaluator $evaluator, Subject $subject, array $evaluations)
     {
-        $data = [];
+        $evaluator->evaluations()->where('subject_id', $subject->id)->delete();
 
-        return $data;
+        foreach ($evaluations as $factorId => $commentId) {
+            $evaluator->evaluations()->create(['subject_id' => $subject->id, 'factor_id' => $factorId, 'comment_id' => $commentId]);
+        }
     }
 }

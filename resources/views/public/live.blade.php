@@ -39,7 +39,7 @@ $user = \Auth::user();
                                 </div>
                                 <p class="card-action">
                                     @if($user)
-                                        <a href="{{url()->route('app.live.evaluator', ['id'=>$exercise->id])}}"
+                                        <a href="{{url()->route('app.live.evaluate', ['id'=>$exercise->id])}}"
                                            class="btn btn-flat green white-text">
                                             <i class="material-icons left">record_voice_over</i> Vote
                                         </a>

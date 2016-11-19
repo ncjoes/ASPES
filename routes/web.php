@@ -48,7 +48,8 @@ Route::group(['namespace' => 'Web'], function () {
         });
         Route::group(['prefix' => 'live', 'as' => 'live.'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'PublicController@listLiveExercises']);
-            Route::get('eval/{id}', ['as' => 'evaluator', 'uses' => 'PublicController@showEvaluationForm'])->middleware('auth');
+            Route::get('eval/{id}', ['as' => 'evaluate', 'uses' => 'PublicController@showEvaluationForm'])->middleware('auth');
+            Route::post('evaluate', ['as' => 'evaluate.submit', 'uses' => 'PublicController@processEvaluationForm'])->middleware('auth');
         });
     });
 

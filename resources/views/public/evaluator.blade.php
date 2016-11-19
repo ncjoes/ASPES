@@ -48,7 +48,7 @@ $nComments = $comments->count();
                     <div class="divider clearfix"></div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="tabs">
                 <div class="col s12">
                     <ul class="tabs">
                         @foreach($subjects as $subject)
@@ -60,25 +60,27 @@ $nComments = $comments->count();
                 </div>
                 @foreach($subjects as $subject)
                     <div id="subject-{{$subject->id}}" class="col s12">
-                        <div class="divider"></div>
-                        <div class="row padding-top-1em no-margin">
-                            <div class="col l3 s12">
-                                <div class="row no-margin">
-                                    <div class="col s8 offset-s2 m3 l12">
-                                        <div class="user-photo">
-                                            <img src="{{$subject->profile->getPhotoUrl()}}" class="responsive-img">
+                        <form class="evaluation-form" action="{{url()->route('app.live.evaluate.submit')}}" onsubmit="return false;">
+                            {{csrf_field()}}
+                            <input type="hidden" name="subject-id" value="{{$subject->id}}">
+                            <div class="divider"></div>
+                            <div class="row padding-top-1em no-margin">
+                                <div class="col l3 s12">
+                                    <div class="row no-margin">
+                                        <div class="col s8 offset-s2 m3 l12">
+                                            <div class="user-photo">
+                                                <img src="{{$subject->profile->getPhotoUrl()}}" class="responsive-img">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m9 l12">
+                                            <h6 class="font-bold">{{$subject->profile->name()}}</h6>
+                                            <div class="divider"></div>
+                                            <div class="grey lighten-5">{{$subject->profile->biography}}</div>
                                         </div>
                                     </div>
-                                    <div class="col s12 m9 l12">
-                                        <h6 class="font-bold">{{$subject->profile->name()}}</h6>
-                                        <div class="divider"></div>
-                                        <div class="grey lighten-5">{{$subject->profile->biography}}</div>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="col l9 s12">
-                                <div id="questionnaire-{{$subject->id}}" class="section">
-                                    <form onsubmit="return false;">
+                                <div class="col l9 s12">
+                                    <div id="questionnaire-{{$subject->id}}" class="section">
                                         @foreach($factors as $factor)
                                             <div class="row">
                                                 <div class="col l3 s12">
@@ -88,9 +90,10 @@ $nComments = $comments->count();
                                                     <div class="row" data-SID="{{$subject->id}}" data-FID="{{$factor->id}}">
                                                         @foreach($comments as $comment)
                                                             <div class="col s6 m-auto-20">
-                                                                <input name="c-[{{$factor->id}}]" type="radio" value="{{$comment->id}}"
-                                                                       id="c-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}"/>
-                                                                <label for="c-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}" class="font-sm">
+                                                                <input name="e[{{$factor->id}}]" type="radio" value="{{$comment->id}}"
+                                                                       id="e-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}"
+                                                                       @if($loop->first) checked="checked" @endif />
+                                                                <label for="e-{{$subject->id}}-{{$factor->id}}-{{$comment->id}}" class="font-sm">
                                                                     {{$comment->value}}
                                                                 </label>
                                                             </div>
@@ -99,22 +102,36 @@ $nComments = $comments->count();
                                                 </div>
                                             </div>
                                         @endforeach
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="divider"></div>
+                                <div class="col s12">
+                                    <div class="center-align"><strong id="notify"></strong></div>
+                                    <p class="center-align">
+                                        @if(!$loop->first)
+                                            <button class="btn grey lighten-2 white-text navbar-btn" type="button"
+                                                    data-tab="subject-{{$subject->id}}" data-action="previous">
+                                                <i class="material-icons">skip_previous</i>
+                                            </button>
+                                        @endif
+                                        <button class="btn blue white-text" type="submit">
+                                            <i class="material-icons left">done</i>
+                                            SUBMIT @if(!$loop->last) &amp; GO TO NEXT @endif
+                                        </button>
+                                        @if(!$loop->last)
+                                            <button class="btn grey lighten-2 white-text navbar-btn" type="button"
+                                                    data-tab="subject-{{$subject->id}}" data-action="next">
+                                                <i class="material-icons">skip_next</i>
+                                            </button>
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 @endforeach
-            </div>
-            <div class="divider"></div>
-            <div class="row">
-                <div class="col s12">
-                    <p class="center-align">
-                        <button class="btn blue white-text"><i class="material-icons left">done</i>NEXT</button>
-                        <button class="btn green white-text"><i class="material-icons left">done_all</i>SUBMIT</button>
-                        <button class="btn grey white-text"><i class="material-icons left">done</i>SKIP</button>
-                    </p>
-                </div>
             </div>
             <div class="divider"></div>
             <div class="row section align-s-centre align-m-left" id="factors-state-container">
@@ -215,6 +232,11 @@ $nComments = $comments->count();
     <script src="{{asset('js/countdown-timer/jquery.countdownTimer.min.js')}}"></script>
     <script type="text/javascript">
         $(function () {
+            //countdown timer
+            $("#count-down").countdowntimer({
+                dateAndTime: '<?= $exercise->stop_at ?>'
+            });
+
             var payLoad = <?= json_encode($payload); ?>;
             var barChart = {
                 "paletteColors": "#2196F3",
@@ -266,9 +288,37 @@ $nComments = $comments->count();
                 });
             });
 
-            //Attach listeners
-            $("#count-down").countdowntimer({
-                dateAndTime: '<?= $exercise->stop_at ?>'
+            //form processing
+            var form = $('.evaluation-form');
+            var currentTab;
+            form.submit(function (e) {
+                e.preventDefault();
+                var $this = $(e.target);
+
+                $.post($this.prop('action'), $this.serialize(), null, 'json')
+                        .done(function (response) {
+                            notify($('#notify', $this), response);
+                            if (response.status == true) {
+                                setTimeout(function () {
+                                    currentTab = $('div#subject-' + $('[name="subject-id"]', $this).val());
+                                    nextTab(currentTab);
+                                }, 1500)
+                            }
+                        })
+                        .fail(function (xhr) {
+                            handleHttpErrors(xhr, $this)
+                        });
+            });
+
+            $('button.navbar-btn', form).click(function (e) {
+                var button = $(this);
+                currentTab = $('div#' + button.attr('data-tab'));
+                if (button.attr('data-action') === 'next') {
+                    nextTab(currentTab);
+                }
+                else {
+                    previousTab(currentTab);
+                }
             });
 
             $('#comparator-trigger').on('click', function () {
@@ -286,6 +336,20 @@ $nComments = $comments->count();
                         }
                 );
             });
+
+            function nextTab(currentTab) {
+                if (currentTab.next().length) {
+                    $('ul.tabs').tabs('select_tab', currentTab.next().attr('id'));
+                    $.scrollTo('tabs');
+                }
+            }
+
+            function previousTab(currentTab) {
+                if (currentTab.prev().length) {
+                    $('ul.tabs').tabs('select_tab', currentTab.prev().attr('id'));
+                    $.scrollTo('tabs');
+                }
+            }
         });
     </script>
 @endsection

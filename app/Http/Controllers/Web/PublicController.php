@@ -10,8 +10,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Core\ExerciseController;
+use App\Models\Evaluator;
 use App\Models\Exercise;
 use App\Models\Invitation;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -59,7 +61,7 @@ class PublicController
                 }
             }
 
-            $data['listed'] = $user->exercises(User::ER_SUBJECT)->getResults()->reject(function (Exercise $exercise){
+            $data['listed'] = $user->exercises(User::ER_SUBJECT)->getResults()->reject(function (Exercise $exercise) {
                 return !$exercise->isLive();
             })->unique();
         }
@@ -136,5 +138,50 @@ class PublicController
         }
 
         return abort(404);
+    }
+
+    public function processEvaluationForm(Request $request)
+    {
+        /**
+         * @var Subject $subject
+         */
+        $subject = $request->has('subject-id') ? Subject::find($request->input('subject-id')) : null;
+        $evaluations = $request->has('e') ? $request->input('e') : null;
+
+        if (is_object($subject) and is_array($evaluations)) {
+            /**
+             * @var Exercise $exercise
+             */
+            $exercise = $subject->exercise;
+            /**
+             * @var User $user
+             */
+            $user = $request->user();
+
+            /**
+             * @var Invitation $invitation
+             */
+            $invitation = $user->invitations()->where(['exercise_id' => $exercise->id, 'open' => 1])->get();
+            if (is_object($invitation)) {
+                if (!is_object(
+                    $evaluator = Evaluator::where([
+                        'exercise_id' => $exercise->id,
+                        'user_id' => $user->id,
+                        'type' => Evaluator::SE
+                    ])->get()->first())
+                ) {
+                    $evaluator = Evaluator::create([
+                        'exercise_id' => $exercise->id,
+                        'user_id' => $user->id,
+                        'type' => Evaluator::SE
+                    ]);
+                }
+                $this->EC()->evaluateSubject($evaluator, $subject, $evaluations);
+
+                return ['status' => true,'message'=>'Saved!'];
+            }
+        }
+
+        return ['subject' => $subject];
     }
 }
