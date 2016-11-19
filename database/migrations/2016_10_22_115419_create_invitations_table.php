@@ -20,6 +20,7 @@ class CreateInvitationsTable extends Migration
             $table->unsignedInteger('recipient_id')->nullable();
             $table->string('recipient_email')->nullable();
             $table->unsignedTinyInteger('role');
+            $table->boolean('open')->default(true);
             $table->nullableTimestamps();
             $table->softDeletes();
 

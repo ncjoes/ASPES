@@ -23,6 +23,7 @@ class Evaluation extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    protected $fillable = ['evaluator_id','subject_id','factor_id','comment_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

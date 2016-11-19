@@ -28,9 +28,10 @@ class Evaluator extends Model
     /**
      * @var array
      */
-    protected $dates  = ['deleted_at'];
-    protected $casts  = ['comparison_matrix' => 'array'];
-    protected $hidden = ['comparison_matrix'];
+    protected $dates    = ['deleted_at'];
+    protected $casts    = ['comparison_matrix' => 'array'];
+    protected $hidden   = ['comparison_matrix'];
+    protected $fillable = ['exercise_id', 'user_id', 'type'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
