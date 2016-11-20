@@ -34,7 +34,7 @@ class ComparisonTableSeeder extends Seeder
             /**
              * @var Collection $eEvaluators
              */
-            $eEvaluators = $exercise->evaluators()->where('type', Evaluator::DM)->get();
+            $eEvaluators = $exercise->evaluators()->where('type', Evaluator::DECISION_MAKER)->get();
 
             /**
              * @var Collection $xFactors

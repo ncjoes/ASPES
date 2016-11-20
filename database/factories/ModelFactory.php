@@ -112,7 +112,11 @@ $factory->define(Models\Invitation::class, function (Faker\Generator $faker) {
         'exercise_id' => Models\Exercise::all()->random()->id,
         'sender_id' => $users->random()->id,
         'recipient_id' => $users->random()->id,
-        'role' => $faker->randomElement([Models\Invitation::ROLE_EVALUATOR, Models\Invitation::ROLE_SUBJECT])
+        'role' => $faker->randomElement([
+            Models\Invitation::ROLE_EVALUATOR,
+            Models\Invitation::ROLE_DECISION_MAKE,
+            Models\Invitation::ROLE_SUBJECT
+        ])
     ];
 });
 
@@ -134,7 +138,7 @@ $factory->define(Models\Evaluator::class, function (Faker\Generator $faker) {
     return [
         'exercise_id' => Models\Exercise::all()->random()->id,
         'user_id' => Models\User::all()->random()->id,
-        'type' => $faker->randomElement([Models\Evaluator::DM, Models\Evaluator::SE]),
+        'type' => $faker->randomElement([Models\Evaluator::DECISION_MAKER, Models\Evaluator::EVALUATOR]),
     ];
 });
 

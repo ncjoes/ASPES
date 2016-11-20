@@ -29,7 +29,7 @@ class EvaluationTableSeeder extends Seeder
             /**
              * @var Collection $eEvaluators
              */
-            $eEvaluators = $exercise->evaluators()->where('type', Evaluator::SE)->get();
+            $eEvaluators = $exercise->evaluators()->where('type', Evaluator::EVALUATOR)->get();
 
             /**
              * @var Collection $eFactors

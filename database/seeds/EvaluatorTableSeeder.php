@@ -23,7 +23,7 @@ class EvaluatorTableSeeder extends Seeder
                 factory(Evaluator::class)->create([
                     'exercise_id' => $exercise->id,
                     'user_id'     => $user->id,
-                    'type'        => Evaluator::DM,
+                    'type'        => Evaluator::DECISION_MAKER,
                 ]);
             }
 
@@ -32,7 +32,7 @@ class EvaluatorTableSeeder extends Seeder
                 factory(Evaluator::class)->create([
                     'exercise_id' => $exercise->id,
                     'user_id'     => $user->id,
-                    'type'        => Evaluator::SE,
+                    'type'        => Evaluator::EVALUATOR,
                 ]);
             }
 

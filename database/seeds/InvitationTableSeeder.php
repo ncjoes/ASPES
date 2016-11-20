@@ -20,6 +20,12 @@ class InvitationTableSeeder extends Seeder
                 'sender_id'=> $exercise->creator->id,
                 'role'=>Invitation::ROLE_EVALUATOR
             ]);
+
+            factory(Invitation::class, rand(10, 15))->create([
+                'exercise_id' => $exercise->id,
+                'sender_id'=> $exercise->creator->id,
+                'role'=>Invitation::ROLE_DECISION_MAKE
+            ]);
         }
     }
 }
