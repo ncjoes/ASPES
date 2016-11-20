@@ -183,7 +183,7 @@ class Exercise extends Model
      */
     public function factor_evaluators()
     {
-        return $this->evaluators()->where('type', Evaluator::DM);
+        return $this->evaluators()->where('type', Evaluator::DECISION_MAKER);
     }
 
     /**
@@ -191,7 +191,7 @@ class Exercise extends Model
      */
     public function subject_evaluators()
     {
-        return $this->evaluators()->where('type', Evaluator::SE);
+        return $this->evaluators()->where('type', Evaluator::EVALUATOR);
     }
 
     /**

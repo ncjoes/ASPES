@@ -22,14 +22,16 @@ class Evaluator extends Model
 {
     use SoftDeletes;
 
-    const DM = 1;
-    const SE = 2;
+    const EVALUATOR      = 1;
+    const DECISION_MAKER = 2;
+
+    const CR_CAP = 0.1;
 
     /**
      * @var array
      */
     protected $dates    = ['deleted_at'];
-    protected $casts    = ['comparison_matrix' => 'array'];
+    protected $casts    = ['comparison_matrix' => 'array', 'consistency_ratio' => 'float'];
     protected $hidden   = ['comparison_matrix'];
     protected $fillable = ['exercise_id', 'user_id', 'type'];
 
@@ -87,6 +89,52 @@ class Evaluator extends Model
     }
 
     /**
+     * @return array|float|mixed
+     */
+    public function getConsistencyRatio()
+    {
+        if ($this->exercise->isPublished()) {
+            $CR = $this->consistency_ratio;
+            if (!is_float($CR)) {
+                $CR = $this->consistency_ratio = $this->calcConsistencyRatio();
+                $this->save();
+            }
+
+            return $CR;
+        }
+
+        $CR = $this->consistency_ratio = $this->calcConsistencyRatio();
+        $this->save();
+
+        return $CR;
+    }
+
+    /**
+     * @param bool $reCalc
+     *
+     * @return bool
+     */
+    public function hasAcceptableCR($reCalc = false)
+    {
+        $CR = $this->consistency_ratio;
+        if ($reCalc) {
+            $CR = $this->calcConsistencyRatio();
+        }
+
+        return $CR <= self::CR_CAP;
+    }
+
+    /**
+     *
+     */
+    public function clearComparisons()
+    {
+        $this->comparisons()->forceDelete();
+        $this->consistency_ratio = null;
+        $this->save();
+    }
+
+    /**
      * @return array
      */
     protected function buildComparisonMatrix()
@@ -107,5 +155,29 @@ class Evaluator extends Model
         }
 
         return $matrix;
+    }
+
+    /**
+     * @return float
+     */
+    protected function calcConsistencyRatio()
+    {
+        $MATRIX = $this->defuzzifyComparisonMatrix();
+
+        return 0.11;
+    }
+
+    protected function defuzzifyComparisonMatrix()
+    {
+        $MATRIX = $this->buildComparisonMatrix();
+        foreach ($MATRIX as $rowId=>$column) {
+            /**
+             * @var FuzzyNumber $item
+             */
+            foreach ($column as $columnId=>$item) {
+                $MATRIX[$rowId][$columnId] = $item->defuzzify(16);
+            }
+        }
+        return $MATRIX;
     }
 }

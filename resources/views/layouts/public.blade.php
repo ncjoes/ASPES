@@ -15,7 +15,7 @@ $user = \Auth::user();
             @include('parts.nav-desktop_home')
         @endif
         <li>
-            <a href="{{url()->route('app.live.list')}}" style="background-color: white; color: #2196F3; min-width: 8em;">
+            <a href="{{url()->route('app.live.list')}}">
                 <i class="material-icons left">timelapse</i> LIVE
             </a>
         </li>

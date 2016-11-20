@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Comparison
+ *
  * @package App\Models
  */
 class Comparison extends Model
@@ -22,7 +23,8 @@ class Comparison extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates    = ['deleted_at'];
+    protected $fillable = ['f1_id', 'f2_id', 'fcv__id', 'evaluator_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

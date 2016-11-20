@@ -17,8 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Invitation extends Model
 {
-    const ROLE_EVALUATOR = 1;
-    const ROLE_SUBJECT   = 2;
+    const ROLE_EVALUATOR     = 1;
+    const ROLE_DECISION_MAKE = 2;
+    const ROLE_SUBJECT       = 3;
 
     protected $casts = ['open' => 'boolean'];
 

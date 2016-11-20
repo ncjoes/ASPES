@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comparison;
 use App\Models\DataTypes\FuzzyNumber;
 use App\Models\Evaluator;
 use App\Models\Exercise;
@@ -189,28 +190,41 @@ class ExerciseController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
-     * @return string
-     */
-    public function compareFactors(Request $request)
-    {
-        $data = [];
-
-        return $data;
-    }
-
-    /**
      * @param Evaluator $evaluator
      * @param Subject $subject
      * @param array $evaluations
      */
-    public function evaluateSubject(Evaluator $evaluator, Subject $subject, array $evaluations)
+    public function saveSubjectEvaluation(Evaluator $evaluator, Subject $subject, array $evaluations)
     {
         $evaluator->evaluations()->where('subject_id', $subject->id)->delete();
 
         foreach ($evaluations as $factorId => $commentId) {
             $evaluator->evaluations()->create(['subject_id' => $subject->id, 'factor_id' => $factorId, 'comment_id' => $commentId]);
+        }
+    }
+
+    public function saveFactorComparisons(Evaluator $evaluator, array $comparisons)
+    {
+        $C = [];
+
+        try {
+            foreach ($comparisons as $FX_ID => $FX_Comparisons) {
+                foreach ($FX_Comparisons as $FY_ID => $FCV_ID) {
+                    $C[] = new Comparison([
+                        'f1_id' => $FX_ID,
+                        'f2_id' => $FY_ID,
+                        'fcv__id' => $FCV_ID,
+                        'evaluator_id' => $evaluator->id
+                    ]);
+                }
+            }
+
+            $evaluator->comparisons()->saveMany($C);
+
+            return true;
+        }
+        catch (\Exception $exception) {
+            return false;
         }
     }
 }

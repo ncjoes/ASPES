@@ -12,8 +12,13 @@ if (config('app.env') == 'local' or config('app.debug')) {
             'as' => 'tester', 'uses' => function () {
                 //return (\App\Models\Evaluator::find(5))->getComparisonMatrix();
                 //return (\App\Models\Factor::find(1))->getRawWeight();
-                return (\App\Models\Exercise::find(2))->getResult();
+                //return (\App\Models\Exercise::find(2))->getResult();
                 //return (\App\Models\Subject::find(3))->getEvaluationMatrix();
+                return Lapack::eigenValues([
+                    [1, 2, 3],
+                    [4, 5, 6],
+                    [7, 8, 9]
+                ]);
             }
         ]);
     });
@@ -50,6 +55,7 @@ Route::group(['namespace' => 'Web'], function () {
             Route::get('/', ['as' => 'list', 'uses' => 'PublicController@listLiveExercises']);
             Route::get('eval/{id}', ['as' => 'evaluate', 'uses' => 'PublicController@showEvaluationForm'])->middleware('auth');
             Route::post('evaluate', ['as' => 'evaluate.submit', 'uses' => 'PublicController@processEvaluationForm'])->middleware('auth');
+            Route::post('compare', ['as' => 'compare.submit', 'uses' => 'PublicController@processComparisonForm'])->middleware('auth');
         });
     });
 

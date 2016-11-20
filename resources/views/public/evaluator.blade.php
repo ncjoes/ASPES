@@ -111,7 +111,7 @@ $nComments = $comments->count();
                                     <div class="center-align"><strong id="notify"></strong></div>
                                     <p class="center-align">
                                         @if(!$loop->first)
-                                            <button class="btn grey lighten-2 white-text navbar-btn" type="button"
+                                            <button class="btn btn-flat outline-all grey lighten-2 white-text nav-btn" type="button"
                                                     data-tab="subject-{{$subject->id}}" data-action="previous">
                                                 <i class="material-icons">skip_previous</i>
                                             </button>
@@ -121,7 +121,7 @@ $nComments = $comments->count();
                                             SUBMIT @if(!$loop->last) &amp; GO TO NEXT @endif
                                         </button>
                                         @if(!$loop->last)
-                                            <button class="btn grey lighten-2 white-text navbar-btn" type="button"
+                                            <button class="btn btn-flat outline-all grey lighten-2 white-text nav-btn" type="button"
                                                     data-tab="subject-{{$subject->id}}" data-action="next">
                                                 <i class="material-icons">skip_next</i>
                                             </button>
@@ -157,7 +157,10 @@ $nComments = $comments->count();
         </div>
     </div>
     <div id="comparator" class="modal modal-fixed-footer">
-        <form onsubmit="return false;">
+        <form id="comparison-form" action="{{url()->route('app.live.compare.submit')}}" onsubmit="return false;">
+            {{csrf_field()}}
+            <input type="hidden" name="exercise-id" value="{{$exercise->id}}">
+
             <div class="modal-content">
                 <div class="blue darken-1 white-text tiny-padding">
                     <h5 class="center-align">Compare Evaluation Factors</h5>
@@ -204,11 +207,14 @@ $nComments = $comments->count();
                     </div>
                 </div>
             </div>
-            <div class="modal-footer right-align">
-                <button class="btn z-depth-half blue waves-effect waves-light" id="comparator-trigger"
-                >SUBMIT<i class="material-icons right">send</i>
-                </button>
-                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CLOSE</a>
+            <div class="modal-footer">
+                <p class="center-align"><strong id="notify"></strong></p>
+                <div class="center-align">
+                    <button type="submit" class="btn z-depth-half blue waves-effect waves-light">
+                        SUBMIT <i class="material-icons right">send</i>
+                    </button>
+                    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">CLOSE</a>
+                </div>
             </div>
         </form>
     </div>
@@ -289,9 +295,9 @@ $nComments = $comments->count();
             });
 
             //form processing
-            var form = $('.evaluation-form');
+            var evaluationForms = $('.evaluation-form');
             var currentTab;
-            form.submit(function (e) {
+            evaluationForms.submit(function (e) {
                 e.preventDefault();
                 var $this = $(e.target);
 
@@ -310,7 +316,24 @@ $nComments = $comments->count();
                         });
             });
 
-            $('button.navbar-btn', form).click(function (e) {
+            $('#comparison-form').submit(function (e) {
+                e.preventDefault();
+                var $this = $(this);
+
+                $.post($this.prop('action'), $this.serialize(), null, 'json')
+                        .done(function (response) {
+                            notify($('#notify', $this), response);
+                            if (response.status == true) {
+                            }
+                        })
+                        .fail(function (xhr) {
+                            handleHttpErrors(xhr, $this)
+                        });
+            });
+
+
+            //----------------------------------------------------------------------//
+            $('button.nav-btn', evaluationForms).click(function (e) {
                 var button = $(this);
                 currentTab = $('div#' + button.attr('data-tab'));
                 if (button.attr('data-action') === 'next') {
@@ -323,15 +346,13 @@ $nComments = $comments->count();
 
             $('#comparator-trigger').on('click', function () {
                 $('#comparator').openModal({
-                            dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                            opacity: .5, // Opacity of modal background
-                            in_duration: 300, // Transition in duration
-                            out_duration: 200, // Transition out duration
-                            starting_top: '4%', // Starting top style attribute
-                            ending_top: '3%', // Ending top style attribute
-                            ready: function (modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-                                //alert("Ready");
-                                console.log(modal, trigger);
+                            dismissible: true,
+                            opacity: .5,
+                            in_duration: 300,
+                            out_duration: 200,
+                            starting_top: '4%',
+                            ending_top: '3%',
+                            ready: function (modal, trigger) {
                             }
                         }
                 );
