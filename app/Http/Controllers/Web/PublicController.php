@@ -9,11 +9,11 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Commons\ComparisonFormProcessor;
+use App\Http\Controllers\Commons\EvaluationFormProcessor;
 use App\Http\Controllers\Core\ExerciseController;
-use App\Models\Evaluator;
 use App\Models\Exercise;
 use App\Models\Invitation;
-use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -24,22 +24,8 @@ use Illuminate\Http\Request;
  */
 class PublicController
 {
-    /**
-     * @var
-     */
-    protected $ExerciseController;
-
-    /**
-     * @return ExerciseController
-     */
-    protected function EC()
-    {
-        if (!is_object($this->ExerciseController)) {
-            $this->ExerciseController = new ExerciseController;
-        }
-
-        return $this->ExerciseController;
-    }
+    use EvaluationFormProcessor;
+    use ComparisonFormProcessor;
 
     /**
      * @param Request $request
@@ -85,7 +71,7 @@ class PublicController
             return redirect()->route('app.results.view', ['id' => $request->input('id')]);
         }
 
-        $data = $this->EC()->getLiveList($request);
+        $data = ExerciseController::instance()->getLiveList($request);
 
         return iResponse('public.live', $data);
     }
@@ -101,7 +87,7 @@ class PublicController
             return redirect()->route('app.results.view', ['id' => $request->input('id')]);
         }
 
-        $data = $this->EC()->getResultsList($request);
+        $data = ExerciseController::instance()->getResultsList($request);
 
         return iResponse('public.results', $data);
     }
@@ -117,8 +103,8 @@ class PublicController
          * @var Exercise $exercise
          */
         if (is_object($exercise = Exercise::find($id)) and ($exercise->isPublished() or $exercise->isLive())) {
-            $data = $this->EC()->getResultsList(request());
-            $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
+            $data = ExerciseController::instance()->getResultsList(request());
+            $data = array_merge($data, ExerciseController::instance()->getExerciseRelations($exercise));
 
             return iResponse('public.result', $data);
         }
@@ -136,122 +122,12 @@ class PublicController
         /**
          * @var Exercise $exercise
          */
-        if (is_object($exercise = Exercise::find($id))) {//} and $exercise->isLive()) {
-            $data = $this->EC()->getExerciseRelations($exercise);
+        if (is_object($exercise = Exercise::find($id)) and $exercise->isLive()) {
+            $data = ExerciseController::instance()->getExerciseRelations($exercise);
 
             return iResponse('public.evaluator', $data);
         }
 
         return abort(404);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    public function processEvaluationForm(Request $request)
-    {
-        /**
-         * @var Subject $subject
-         */
-        $subject = Subject::find($request->input('subject-id'));
-        $evaluations = $request->input('e');
-
-        if (is_object($subject) and is_array($evaluations)) {
-            /**
-             * @var Exercise $exercise
-             */
-            $exercise = $subject->exercise;
-            /**
-             * @var User $user
-             */
-            $user = $request->user();
-
-            /**
-             * @var Invitation $invitation
-             */
-            $invitation = $user->invitations()->where(['exercise_id' => $exercise->id, 'role' => Invitation::ROLE_EVALUATOR, 'open' => 1])->get();
-            if (is_object($invitation)) {
-                if (!is_object(
-                    $evaluator = Evaluator::where([
-                        'exercise_id' => $exercise->id,
-                        'user_id' => $user->id,
-                        'type' => Evaluator::EVALUATOR
-                    ])->get()->first())
-                ) {
-                    $evaluator = Evaluator::create([
-                        'exercise_id' => $exercise->id,
-                        'user_id' => $user->id,
-                        'type' => Evaluator::EVALUATOR
-                    ]);
-                }
-                $this->EC()->saveSubjectEvaluation($evaluator, $subject, $evaluations);
-
-                return ['status' => true, 'message' => 'Saved! Thanks for your wonderful contributions.'];
-            }
-
-            return ['status' => false, 'message' => 'Access Denied! You were not invited to this exercise.'];
-        }
-
-        return ['status' => false, 'message' => 'Data Error!'];
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    public function processComparisonForm(Request $request)
-    {
-        /**
-         * @var Exercise $exercise
-         */
-        $exercise = Exercise::find($request->input('exercise-id'));
-        $comparisons = $request->input('comparisons');
-
-        if (is_object($exercise) and is_array($comparisons)) {
-            /**
-             * @var User $user
-             */
-            $user = $request->user();
-
-            /**
-             * @var Invitation $invitation
-             */
-            $invitation = $user->invitations()->where([
-                'exercise_id' => $exercise->id,
-                'role' => Invitation::ROLE_DECISION_MAKE,
-                'open' => 1
-            ])->get();
-
-            if (is_object($invitation)) {
-                if (!is_object(
-                    $evaluator = Evaluator::where([
-                        'exercise_id' => $exercise->id,
-                        'user_id' => $user->id,
-                        'type' => Evaluator::DECISION_MAKER
-                    ])->get()->first())
-                ) {
-                    $evaluator = Evaluator::create([
-                        'exercise_id' => $exercise->id,
-                        'user_id' => $user->id,
-                        'type' => Evaluator::DECISION_MAKER
-                    ]);
-                }
-                if ($this->EC()->saveFactorComparisons($evaluator, $comparisons)) {
-                    if ($evaluator->hasAcceptableCR(true)) {
-                        return ['status' => true, 'message' => 'Saved! Thanks for your wonderful contributions.'];
-                    }
-                    $evaluator->clearComparisons();
-
-                    return ['status' => false, 'message' => 'Please review your comparisons and try again. They seem not consistent enough.'];
-                }
-            }
-
-            return ['status' => false, 'message' => 'Access Denied! You are not invited to this exercise.'];
-        }
-
-        return ['status' => false, 'message' => 'Data Error!'];
     }
 }

@@ -16,17 +16,6 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    protected $ExerciseController;
-
-    protected function EC()
-    {
-        if (!is_object($this->ExerciseController)) {
-            $this->ExerciseController = new ExerciseController;
-        }
-
-        return $this->ExerciseController;
-    }
-
     public function dashboard()
     {
         $data = ['title' => 'Admin Dashboard'];
@@ -36,7 +25,7 @@ class AdminController extends Controller
 
     public function listExercises(Request $request)
     {
-        $data = $this->EC()->getExerciseList($request);
+        $data = ExerciseController::instance()->getExerciseList($request);
 
         return iResponse('admin.exercises', $data);
     }
@@ -48,8 +37,8 @@ class AdminController extends Controller
              * @var Exercise $exercise
              */
             if (is_object($exercise = Exercise::find($request->input('id')))) {
-                $data = $this->EC()->getExerciseList($request);
-                $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
+                $data = ExerciseController::instance()->getExerciseList($request);
+                $data = array_merge($data, ExerciseController::instance()->getExerciseRelations($exercise));
 
                 return iResponse('admin.view_exercise', $data);
             }
@@ -65,8 +54,8 @@ class AdminController extends Controller
              * @var Exercise $exercise
              */
             if (is_object($exercise = Exercise::find($request->input('id')))) {
-                $data = $this->EC()->getExerciseList($request);
-                $data = array_merge($data, $this->EC()->getExerciseRelations($exercise));
+                $data = ExerciseController::instance()->getExerciseList($request);
+                $data = array_merge($data, ExerciseController::instance()->getExerciseRelations($exercise));
 
                 return iResponse('admin.edit_exercise', $data);
             }

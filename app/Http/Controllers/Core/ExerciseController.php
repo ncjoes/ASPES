@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Core;
 
+use App\Http\Controllers\Commons\SingletonInstance;
 use App\Http\Controllers\Controller;
 use App\Models\Comparison;
 use App\Models\DataTypes\FuzzyNumber;
@@ -25,6 +26,8 @@ use Illuminate\Http\Request;
  */
 class ExerciseController extends Controller
 {
+    use SingletonInstance;
+
     /**
      * @param Request $request
      *
@@ -193,16 +196,30 @@ class ExerciseController extends Controller
      * @param Evaluator $evaluator
      * @param Subject $subject
      * @param array $evaluations
+     *
+     * @return bool
      */
     public function saveSubjectEvaluation(Evaluator $evaluator, Subject $subject, array $evaluations)
     {
-        $evaluator->evaluations()->where('subject_id', $subject->id)->delete();
+        try{
+            $evaluator->evaluations()->where('subject_id', $subject->id)->delete();
 
-        foreach ($evaluations as $factorId => $commentId) {
-            $evaluator->evaluations()->create(['subject_id' => $subject->id, 'factor_id' => $factorId, 'comment_id' => $commentId]);
+            foreach ($evaluations as $factorId => $commentId) {
+                $evaluator->evaluations()->create(['subject_id' => $subject->id, 'factor_id' => $factorId, 'comment_id' => $commentId]);
+            }
+            return true;
+        }
+        catch (\Exception $exception) {
+            return false;
         }
     }
 
+    /**
+     * @param Evaluator $evaluator
+     * @param array $comparisons
+     *
+     * @return bool
+     */
     public function saveFactorComparisons(Evaluator $evaluator, array $comparisons)
     {
         $C = [];
