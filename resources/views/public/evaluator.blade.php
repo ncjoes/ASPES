@@ -28,6 +28,10 @@ $factors = $object['relations']['factors'];
  * @var Collection $comments ;
  */
 $comments = $object['relations']['comments'];
+/**
+ * @var Collection $fcvs ;
+ */
+$fcvs = $object['relations']['fcvs'];
 
 $nFactors = $factors->count();
 $nComments = $comments->count();
@@ -190,8 +194,8 @@ $nComments = $comments->count();
                                             <select name="comparisons[{{$f1->id}}][{{$f2->id}}]" id="c-{{$f1->id}}-{{$f2->id}}"
                                                     class="browser-default no-margin no-padding" required="required">
                                                 <option></option>
-                                                @foreach($comments as $comment)
-                                                    <option value="{{$comment->id}}">{{$comment->value}}</option>
+                                                @foreach($fcvs as $fcv)
+                                                    <option value="{{$fcv->id}}">{{$fcv->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -324,6 +328,10 @@ $nComments = $comments->count();
                         .done(function (response) {
                             notify($('#notify', $this), response);
                             if (response.status == true) {
+                                setTimeout(function () {
+                                    $('#comparator').closeModal();
+                                    window.location = '<?= route('app.live.list') ?>';
+                                }, 3500)
                             }
                         })
                         .fail(function (xhr) {

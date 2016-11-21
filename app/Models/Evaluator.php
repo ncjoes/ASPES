@@ -157,6 +157,9 @@ class Evaluator extends Model
             $matrix[ $comparison->factor1->id ][ $comparison->factor2->id ] = $FN;
             $matrix[ $comparison->factor2->id ][ $comparison->factor1->id ] = $FN->reciprocal();
         }
+        foreach ($this->exercise->factors as $factor) {
+            $matrix[ $factor->id ][ $factor->id ] = new FuzzyNumber([1, 1, 1]);
+        }
 
         return $matrix;
     }
