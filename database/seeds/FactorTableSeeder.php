@@ -15,8 +15,34 @@ class FactorTableSeeder extends Seeder
     {
         $exercises = Exercise::all();
         foreach ($exercises as $exercise) {
-            factory(Factor::class, rand(5, 7))->create([
-                'exercise_id' => $exercise->id
+            factory(Factor::class)->create([
+                'exercise_id' => $exercise->id,
+                'text'=>'Planning and preparation'
+            ]);
+
+            factory(Factor::class)->create([
+                'exercise_id' => $exercise->id,
+                'text'=>'Communication and interaction'
+            ]);
+
+            factory(Factor::class)->create([
+                'exercise_id' => $exercise->id,
+                'text'=>'Teaching for learning'
+            ]);
+
+            factory(Factor::class)->create([
+                'exercise_id' => $exercise->id,
+                'text'=>'Managing the learning environment'
+            ]);
+
+            factory(Factor::class)->create([
+                'exercise_id' => $exercise->id,
+                'text'=>'Student Evaluation'
+            ]);
+
+            factory(Factor::class)->create([
+                'exercise_id' => $exercise->id,
+                'text'=>'Professionalism'
             ]);
         }
     }
