@@ -10,15 +10,7 @@ if (config('app.env') == 'local' or config('app.debug')) {
         Route::get('console', ['as' => 'console', 'uses' => 'Tools@showWebConsole']);
         Route::get('tester', [
             'as' => 'tester', 'uses' => function () {
-                //return (\App\Models\Evaluator::find(5))->getComparisonMatrix();
-                //return (\App\Models\Factor::find(1))->getRawWeight();
-                //return (\App\Models\Exercise::find(2))->getResult();
-                //return (\App\Models\Subject::find(3))->getEvaluationMatrix();
-                return Lapack::eigenValues([
-                    [1, 2, 3],
-                    [4, 5, 6],
-                    [7, 8, 9]
-                ]);
+                ///
             }
         ]);
     });
