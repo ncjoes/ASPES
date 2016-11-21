@@ -20,6 +20,7 @@ trait FuzzyAHP
 {
     /**
      * @param $fuzzyMatrix
+     *
      * @return array
      */
     protected function defuzzifyComparisonMatrix($fuzzyMatrix)
@@ -61,9 +62,15 @@ trait FuzzyAHP
      */
     protected function calcEigenvalues(array $matrix)
     {
-        //ToDo
-        // use numpy package to compute eigenvalues
-        return $this->randomArray(count($matrix), -2, 2);
+        $matrix = array_values_recursive($matrix);
+        $result = iExec('python.exe '.realpath(__DIR__.'/scripts/eigenvalues.py').' '.json_encode($matrix));
+
+        $eigenvalues = explode(',', trim($result['stdout']));
+        $eigenvalues = array_map(function ($value) {
+            return floatval(str_replace(['(', ')'], '', $value));
+        }, $eigenvalues);
+
+        return $eigenvalues;
     }
 
     /**
@@ -83,9 +90,10 @@ trait FuzzyAHP
             '9' => 1.45
         ];
         $order = (string)$order;
-        if (array_key_exists($order, $knowCI)){
+        if (array_key_exists($order, $knowCI)) {
             return $knowCI[ $order ];
         }
+
         return $this->calcConsistencyIndex($this->randomMatrix($order));
     }
 
