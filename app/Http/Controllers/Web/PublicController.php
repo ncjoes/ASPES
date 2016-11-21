@@ -240,7 +240,7 @@ class PublicController
                     ]);
                 }
                 if ($this->EC()->saveFactorComparisons($evaluator, $comparisons)) {
-                    if ($evaluator->hasAcceptableCR()) {
+                    if ($evaluator->hasAcceptableCR(true)) {
                         return ['status' => true, 'message' => 'Saved! Thanks for your wonderful contributions.'];
                     }
                     $evaluator->clearComparisons();

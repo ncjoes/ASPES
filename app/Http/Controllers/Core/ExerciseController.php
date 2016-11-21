@@ -219,6 +219,7 @@ class ExerciseController extends Controller
                 }
             }
 
+            $evaluator->comparisons()->forceDelete();
             $evaluator->comparisons()->saveMany($C);
 
             return true;

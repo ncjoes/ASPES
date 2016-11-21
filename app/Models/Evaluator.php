@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use App\Models\DataTypes\FuzzyNumber;
+use App\Models\Helpers\FuzzyAHP;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Evaluator extends Model
 {
     use SoftDeletes;
+    use FuzzyAHP;
 
     const EVALUATOR      = 1;
     const DECISION_MAKER = 2;
@@ -68,13 +70,15 @@ class Evaluator extends Model
     }
 
     /**
+     * @param bool $reCalc
+     *
      * @return array|mixed
      */
-    public function getComparisonMatrix()
+    public function getComparisonMatrix($reCalc = false)
     {
         if ($this->exercise->isPublished()) {
             $arr = $this->comparison_matrix;
-            if (!is_array($arr)) {
+            if (!is_array($arr) or $reCalc) {
                 $arr = $this->comparison_matrix = $this->buildComparisonMatrix();
                 $this->save();
             }
@@ -89,13 +93,15 @@ class Evaluator extends Model
     }
 
     /**
-     * @return array|float|mixed
+     * @param bool $reCalc
+     *
+     * @return float|mixed
      */
-    public function getConsistencyRatio()
+    public function getConsistencyRatio($reCalc = false)
     {
         if ($this->exercise->isPublished()) {
             $CR = $this->consistency_ratio;
-            if (!is_float($CR)) {
+            if (!is_float($CR) or $reCalc) {
                 $CR = $this->consistency_ratio = $this->calcConsistencyRatio();
                 $this->save();
             }
@@ -116,10 +122,7 @@ class Evaluator extends Model
      */
     public function hasAcceptableCR($reCalc = false)
     {
-        $CR = $this->consistency_ratio;
-        if ($reCalc) {
-            $CR = $this->calcConsistencyRatio();
-        }
+        $CR = $this->getConsistencyRatio($reCalc);
 
         return $CR <= self::CR_CAP;
     }
@@ -130,6 +133,7 @@ class Evaluator extends Model
     public function clearComparisons()
     {
         $this->comparisons()->forceDelete();
+        $this->comparison_matrix = null;
         $this->consistency_ratio = null;
         $this->save();
     }
@@ -159,25 +163,16 @@ class Evaluator extends Model
 
     /**
      * @return float
+     * @throws \Exception
      */
     protected function calcConsistencyRatio()
     {
-        $MATRIX = $this->defuzzifyComparisonMatrix();
+        $compMatrix = $this->getComparisonMatrix(true);
+        $MATRIX = $this->defuzzifyComparisonMatrix($compMatrix);
 
-        return 0.11;
-    }
+        $CI_ComparisonMatrix = $this->calcConsistencyIndex($MATRIX);
+        $CI_RandomMatrix = $this->randomConsistencyIndex(count($MATRIX));
 
-    protected function defuzzifyComparisonMatrix()
-    {
-        $MATRIX = $this->buildComparisonMatrix();
-        foreach ($MATRIX as $rowId=>$column) {
-            /**
-             * @var FuzzyNumber $item
-             */
-            foreach ($column as $columnId=>$item) {
-                $MATRIX[$rowId][$columnId] = $item->defuzzify(16);
-            }
-        }
-        return $MATRIX;
+        return $CI_ComparisonMatrix / $CI_RandomMatrix;
     }
 }
