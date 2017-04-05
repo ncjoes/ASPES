@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Exercise;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class ExerciseTableSeeder extends Seeder
 {
@@ -16,27 +16,27 @@ class ExerciseTableSeeder extends Seeder
     {
         $creator = User::all()->first();
         factory(Exercise::class)->create([
-            'title'=>'Best Database Lecturer of the Decade',
-            'state'=>Exercise::IS_DRAFT,
-            'start_at'=>Carbon::now(),
-            'stop_at'=>Carbon::tomorrow(),
-            'created_by'=>$creator->id
+            'title' => 'Best Database Lecturer of the Decade',
+            'state' => Exercise::IS_DRAFT,
+            'start_at' => Carbon::now(),
+            'stop_at' => Carbon::tomorrow(),
+            'created_by' => $creator->id
         ]);
 
         factory(Exercise::class)->create([
-            'title'=>'Best HOD of the Year',
-            'state'=>Exercise::IS_LIVE,
-            'start_at'=>Carbon::now(),
-            'stop_at'=>Carbon::tomorrow(),
-            'created_by'=>$creator->id
+            'title' => 'Best HOD of the Year',
+            'state' => Exercise::IS_LIVE,
+            'start_at' => Carbon::now(),
+            'stop_at' => Carbon::tomorrow(),
+            'created_by' => $creator->id
         ]);
 
         factory(Exercise::class)->create([
-            'title'=>'Female Lecturer of the Year',
-            'state'=>Exercise::IS_PUBLISHED,
-            'start_at'=>Carbon::now(),
-            'stop_at'=>Carbon::tomorrow(),
-            'created_by'=>$creator->id
+            'title' => 'Female Lecturer of the Year',
+            'state' => Exercise::IS_LIVE,
+            'start_at' => Carbon::now(),
+            'stop_at' => Carbon::tomorrow(),
+            'created_by' => $creator->id
         ]);
     }
 }

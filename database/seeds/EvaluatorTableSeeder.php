@@ -22,8 +22,8 @@ class EvaluatorTableSeeder extends Seeder
             foreach ($users as $user) {
                 factory(Evaluator::class)->create([
                     'exercise_id' => $exercise->id,
-                    'user_id'     => $user->id,
-                    'type'        => Evaluator::DECISION_MAKER,
+                    'user_id' => $user->id,
+                    'type' => Evaluator::DECISION_MAKER,
                 ]);
             }
 
@@ -31,11 +31,10 @@ class EvaluatorTableSeeder extends Seeder
             foreach ($users as $user) {
                 factory(Evaluator::class)->create([
                     'exercise_id' => $exercise->id,
-                    'user_id'     => $user->id,
-                    'type'        => Evaluator::EVALUATOR,
+                    'user_id' => $user->id,
+                    'type' => Evaluator::EVALUATOR,
                 ]);
             }
-
         }
     }
 }

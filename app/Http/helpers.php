@@ -25,7 +25,7 @@ function iResponse($view, $data)
 
 /**
  * More intelligent interface to system calls
- * Credits: http://php.net/manual/en/function.system.php
+ * @link http://php.net/manual/en/function.system.php
  *
  * @param $cmd
  * @param string $input

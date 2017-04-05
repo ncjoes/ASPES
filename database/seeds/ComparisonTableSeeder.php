@@ -54,9 +54,9 @@ class ComparisonTableSeeder extends Seeder
                     $yFactors = (clone $xFactors)->splice($x);
                     foreach ($yFactors as $f2) {
                         factory(Comparison::class)->create([
-                            'f1_id'        => $f1->id,
-                            'f2_id'        => $f2->id,
-                            'fcv__id'      => $fcvs->random()->id,
+                            'f1_id' => $f1->id,
+                            'f2_id' => $f2->id,
+                            'fcv__id' => $fcvs->random()->id,
                             'evaluator_id' => $evaluator->id,
                         ]);
                     }

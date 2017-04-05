@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Exercise;
 use App\Models\Factor;
+use Illuminate\Database\Seeder;
 
 class FactorTableSeeder extends Seeder
 {
@@ -17,32 +17,32 @@ class FactorTableSeeder extends Seeder
         foreach ($exercises as $exercise) {
             factory(Factor::class)->create([
                 'exercise_id' => $exercise->id,
-                'text'=>'Planning and preparation'
+                'text' => 'Planning and preparation'
             ]);
 
             factory(Factor::class)->create([
                 'exercise_id' => $exercise->id,
-                'text'=>'Communication and interaction'
+                'text' => 'Communication and interaction'
             ]);
 
             factory(Factor::class)->create([
                 'exercise_id' => $exercise->id,
-                'text'=>'Teaching for learning'
+                'text' => 'Teaching for learning'
             ]);
 
             factory(Factor::class)->create([
                 'exercise_id' => $exercise->id,
-                'text'=>'Managing the learning environment'
+                'text' => 'Managing the learning environment'
             ]);
 
             factory(Factor::class)->create([
                 'exercise_id' => $exercise->id,
-                'text'=>'Student Evaluation'
+                'text' => 'Student Evaluation'
             ]);
 
             factory(Factor::class)->create([
                 'exercise_id' => $exercise->id,
-                'text'=>'Professionalism'
+                'text' => 'Professionalism'
             ]);
         }
     }

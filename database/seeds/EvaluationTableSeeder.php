@@ -63,9 +63,9 @@ class EvaluationTableSeeder extends Seeder
                     foreach ($eFactors as $factor) {
                         factory(Evaluation::class)->create([
                             'evaluator_id' => $evaluator->id,
-                            'subject_id'  => $subject->id,
-                            'factor_id'   => $factor->id,
-                            'comment_id'  => $comments->random()->id,
+                            'subject_id' => $subject->id,
+                            'factor_id' => $factor->id,
+                            'comment_id' => $comments->random()->id,
                         ]);
                     }
                 }
