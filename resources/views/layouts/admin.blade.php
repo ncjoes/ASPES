@@ -17,9 +17,11 @@ $user = \Auth::user();
         @endif
         <li><a href="{{url()->route('admin.dashboard')}}"><i class="material-icons">dashboard</i></a></li>
         <li><a href="{{url()->route('admin.exercises.list')}}">EXERCISES</a></li>
+            <!--
         <li><a href="{{url()->route('admin.users.list')}}">USERS</a></li>
         <li><a href="{{url()->route('admin.notes.list')}}">NOTIFICATIONS</a></li>
         <li><a href="{{url()->route('admin.settings')}}">SETTINGS</a></li>
+        -->
         @include('parts.nav-desktop_user')
     </ul>
 
@@ -27,9 +29,11 @@ $user = \Auth::user();
         @include('parts.nav-mobile_home')
         <li><a href="{{url()->route('admin.dashboard')}}">DASHBOARD</a></li>
         <li><a href="{{url()->route('admin.exercises.list')}}">EXERCISES</a></li>
+        <!--
         <li><a href="{{url()->route('admin.users.list')}}">USERS</a></li>
         <li><a href="{{url()->route('admin.notes.list')}}">NOTIFICATIONS</a></li>
         <li><a href="{{url()->route('admin.settings')}}">SETTINGS</a></li>
+        -->
         <li class="divider"></li>
         @include('parts.nav-mobile_user')
         <li class="divider"></li>

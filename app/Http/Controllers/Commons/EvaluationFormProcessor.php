@@ -51,13 +51,11 @@ trait EvaluationFormProcessor
                     $evaluator = Evaluator::where([
                         'exercise_id' => $exercise->id,
                         'user_id' => $user->id,
-                        'type' => Evaluator::EVALUATOR
                     ])->get()->first())
                 ) {
                     $evaluator = Evaluator::create([
                         'exercise_id' => $exercise->id,
                         'user_id' => $user->id,
-                        'type' => Evaluator::EVALUATOR
                     ]);
                 }
                 ExerciseController::instance()->saveSubjectEvaluation($evaluator, $subject, $evaluations);

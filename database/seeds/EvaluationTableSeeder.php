@@ -29,12 +29,17 @@ class EvaluationTableSeeder extends Seeder
             /**
              * @var Collection $eEvaluators
              */
-            $eEvaluators = $exercise->evaluators()->where('type', Evaluator::EVALUATOR)->get();
+            $eEvaluators = $exercise->evaluators;
 
             /**
-             * @var Collection $eFactors
+             * @var Collection $courseFactors
              */
-            $eFactors = $exercise->factors;
+            $courseFactors = $exercise->courseFactors;
+
+            /**
+             * @var Collection $instructorFactors
+             */
+            $instructorFactors = $exercise->instructorFactors;
 
             /**
              * @var Collection $subjects
@@ -43,9 +48,14 @@ class EvaluationTableSeeder extends Seeder
             $sN = $subjects->count();
 
             /**
-             * @var Collection $comments
+             * @var Collection $courseComments
              */
-            $comments = $exercise->comments;
+            $courseComments = $exercise->courseComments;
+
+            /**
+             * @var Collection $instructorComments
+             */
+            $instructorComments = $exercise->instructorComments;
 
             /**
              * @var Evaluator $evaluator
@@ -60,12 +70,24 @@ class EvaluationTableSeeder extends Seeder
                     /**
                      * @var Factor $factor
                      */
-                    foreach ($eFactors as $factor) {
+                    foreach ($courseFactors as $factor) {
                         factory(Evaluation::class)->create([
                             'evaluator_id' => $evaluator->id,
-                            'subject_id' => $subject->id,
-                            'factor_id' => $factor->id,
-                            'comment_id' => $comments->random()->id,
+                            'subject_id'   => $subject->id,
+                            'factor_id'    => $factor->id,
+                            'comment_id'   => $courseComments->random()->id,
+                        ]);
+                    }
+
+                    /**
+                     * @var Factor $factor
+                     */
+                    foreach ($instructorFactors as $factor) {
+                        factory(Evaluation::class)->create([
+                            'evaluator_id' => $evaluator->id,
+                            'subject_id'   => $subject->id,
+                            'factor_id'    => $factor->id,
+                            'comment_id'   => $instructorComments->random()->id,
                         ]);
                     }
                 }

@@ -80,7 +80,13 @@ class Subject extends Model
         $counter = [];
         $factors = $this->exercise->factors;
         $comments = $this->exercise->comments;
-        $CN = $comments->count();
+
+        $MATRIX = [];
+        foreach ($factors as $factor) {
+            foreach ($comments as $comment) {
+                $MATRIX[ $factor->id ][ $comment->id ] = 0;
+            }
+        }
 
         /**
          * @var Evaluation $evaluation
@@ -92,18 +98,10 @@ class Subject extends Model
                 $counter[ $evaluation->factor->id ][ $evaluation->comment->id ] = 1;
         }
 
-        $MATRIX = [];
         foreach ($counter as $factorId => $factorCommentsCounts) {
-            if (sizeof($factorCommentsCounts) < $CN) {
-                foreach ($comments as $comment) {
-                    if (!isset($factorCommentsCounts[ $comment->id ])) {
-                        $factorCommentsCounts[ $comment->id ] = 0;
-                    }
-                }
-            }
             $sum = array_sum($factorCommentsCounts);
             foreach ($factorCommentsCounts as $commentId => $commentsCount) {
-                $MATRIX[ $factorId ][ $commentId ] = $sum > 0 ? round($commentsCount / $sum, 3) : $sum;
+                $MATRIX[ $factorId ][ $commentId ] = $sum > 0 ? round($commentsCount / $sum, 3) : 0;
             }
         }
 

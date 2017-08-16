@@ -30,8 +30,17 @@ class CreateSubjectsTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->foreign('exercise_id', 's_exercise_id')->references('id')->on('exercises')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id', 's_user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('exercise_id', 's_exercise_id')
+                  ->references('id')
+                  ->on('exercises')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+
+            $table->foreign('user_id', 's_user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

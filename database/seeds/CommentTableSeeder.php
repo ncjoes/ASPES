@@ -15,34 +15,27 @@ class CommentTableSeeder extends Seeder
     {
         $exercises = Exercise::all();
         foreach ($exercises as $exercise) {
+            foreach (range(0, 7) as $value) {
+                factory(Comment::class)->create([
+                    'exercise_id' => $exercise->id,
+                    'value'       => $value,
+                    'grade'       => ($value * 10),
+                    'type'        => Comment::TYPE_COURSE,
+                ]);
+            }
+
             factory(Comment::class)->create([
                 'exercise_id' => $exercise->id,
-                'value' => 'Excellent',
-                'grade' => 100
+                'value'       => 'Yes',
+                'grade'       => 1,
+                'type'        => Comment::TYPE_INSTRUCTOR,
             ]);
 
             factory(Comment::class)->create([
                 'exercise_id' => $exercise->id,
-                'value' => 'Very Good',
-                'grade' => 85
-            ]);
-
-            factory(Comment::class)->create([
-                'exercise_id' => $exercise->id,
-                'value' => 'Good',
-                'grade' => 70
-            ]);
-
-            factory(Comment::class)->create([
-                'exercise_id' => $exercise->id,
-                'value' => 'Fair',
-                'grade' => 55
-            ]);
-
-            factory(Comment::class)->create([
-                'exercise_id' => $exercise->id,
-                'value' => 'Poor',
-                'grade' => 40
+                'value'       => 'No',
+                'grade'       => 0,
+                'type'        => Comment::TYPE_INSTRUCTOR,
             ]);
         }
     }

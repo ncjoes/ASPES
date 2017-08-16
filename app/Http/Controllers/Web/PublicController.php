@@ -95,7 +95,7 @@ class PublicController
     /**
      * @param $id
      *
-     * @return mixed|void
+     * @return mixed
      */
     public function viewResult($id)
     {
@@ -115,7 +115,7 @@ class PublicController
     /**
      * @param $id
      *
-     * @return mixed|void
+     * @return mixed
      */
     public function showEvaluationForm($id)
     {

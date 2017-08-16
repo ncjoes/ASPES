@@ -21,9 +21,6 @@ class CreateExercisesTable extends Migration
             $table->timestamp('start_at')->nullable();
             $table->timestamp('stop_at')->nullable();
             $table->unsignedTinyInteger('state')->default(Exercise::IS_DRAFT);
-            $table->text('decision_matrix')->nullable();
-            $table->text('factor_weights')->nullable();
-            $table->text('results')->nullable();
             $table->unsignedInteger('created_by');
             $table->nullableTimestamps();
             $table->softDeletes();

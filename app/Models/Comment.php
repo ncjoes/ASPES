@@ -19,6 +19,9 @@ class Comment extends Model
 {
     use SoftDeletes;
 
+    const TYPE_COURSE     = 'c';
+    const TYPE_INSTRUCTOR = 'l';
+
     /**
      * @var array
      */

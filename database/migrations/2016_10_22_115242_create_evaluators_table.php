@@ -17,9 +17,6 @@ class CreateEvaluatorsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('exercise_id');
             $table->unsignedInteger('user_id');
-            $table->tinyInteger('type');
-            $table->text('comparison_matrix')->nullable();
-            $table->float('consistency_ratio')->nullable();
             $table->nullableTimestamps();
             $table->softDeletes();
 
@@ -27,8 +24,17 @@ class CreateEvaluatorsTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->foreign('exercise_id', 'evtr_exercise_id')->references('id')->on('exercises')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id', 'evtr_user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('exercise_id', 'evtr_exercise_id')
+                  ->references('id')
+                  ->on('exercises')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+
+            $table->foreign('user_id', 'evtr_user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 

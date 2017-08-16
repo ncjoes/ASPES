@@ -18,6 +18,7 @@ class CreateCommentsTable extends Migration
             $table->unsignedInteger('exercise_id');
             $table->string('value');
             $table->smallInteger('grade')->default(1);
+            $table->char('type',2);
             $table->nullableTimestamps();
             $table->softDeletes();
 

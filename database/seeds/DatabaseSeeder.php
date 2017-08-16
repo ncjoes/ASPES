@@ -20,9 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CommentTableSeeder::class);
         $this->call(EvaluatorTableSeeder::class);
         $this->call(FactorTableSeeder::class);
-        $this->call(FCVTableSeeder::class);
         $this->call(SubjectTableSeeder::class);
-        $this->call(ComparisonTableSeeder::class);
         $this->call(EvaluationTableSeeder::class);
     }
 }

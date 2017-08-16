@@ -147,7 +147,8 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12">
-                                <textarea id="description" name="outline" class="materialize-textarea lh-20vh sh-30vh"></textarea>
+                                <textarea id="description" name="outline"
+                                          class="materialize-textarea lh-20vh sh-30vh"></textarea>
                                 <label for="description">Description</label>
                             </div>
                         </div>
@@ -175,7 +176,8 @@
                             </div>
                             <div class="row">
                                 <div class="col s12 right-align">
-                                    <button type="button" class="btn-floating grey"><i class="material-icons small">add</i></button>
+                                    <button type="button" class="btn-floating grey"><i
+                                                class="material-icons small">add</i></button>
                                 </div>
                             </div>
                         </div>
@@ -196,7 +198,8 @@
                             </div>
                             <div class="row">
                                 <div class="col s12 right-align">
-                                    <button type="button" class="btn-floating grey"><i class="material-icons small">add</i></button>
+                                    <button type="button" class="btn-floating grey"><i
+                                                class="material-icons small">add</i></button>
                                 </div>
                             </div>
                         </div>
@@ -208,13 +211,15 @@
                                 <label for="comment-1">Comment...</label>
                             </div>
                             <div class="input-field col s2">
-                                <input id="comment-grade-1" name="grades[1]" type="number" min="0" max="100" class="validate">
+                                <input id="comment-grade-1" name="grades[1]" type="number" min="0" max="100"
+                                       class="validate">
                                 <label for="comment-grade-1">Grade</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col s12 right-align">
-                                <button type="button" class="btn-floating grey"><i class="material-icons small">add</i></button>
+                                <button type="button" class="btn-floating grey"><i class="material-icons small">add</i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -232,7 +237,8 @@
                         </div>
                         <div class="row">
                             <div class="col s12">
-                                <table id="data-table" class="bordered highlight responsive-table shrink margin-btm-1em">
+                                <table id="data-table"
+                                       class="bordered highlight responsive-table shrink margin-btm-1em">
                                     <thead>
                                     <tr>
                                         <th data-field="sn" width="4%">SN</th>
@@ -265,7 +271,8 @@
                         </div>
                         <div class="row">
                             <div class="col s12">
-                                <table id="data-table" class="bordered highlight responsive-table shrink margin-btm-1em">
+                                <table id="data-table"
+                                       class="bordered highlight responsive-table shrink margin-btm-1em">
                                     <thead>
                                     <tr>
                                         <th data-field="sn" width="4%">SN</th>
@@ -288,7 +295,9 @@
             </div>
             <div class="modal-footer center-align">
                 <p class="center-align">
-                    <button class="btn z-depth-half green darken-5" id="save"><i class="material-icons right">save</i> SAVE</button>
+                    <button class="btn z-depth-half green darken-5" id="save"><i class="material-icons right">save</i>
+                        SAVE
+                    </button>
                     <a class="btn z-depth-half grey darken-5" id="x"><i class="material-icons">close</i></a>
                 </p>
             </div>
@@ -300,65 +309,64 @@
     <script src="{{ asset('js/app.utils.js') }}"></script>
     <script src="{{ asset('js/admin-panel.js') }}"></script>
     <script type="text/javascript">
-        $(function () {
-            var View = window.AppView = {
-                listBox: $('#list-box'),
-                previewBox: $('#preview-box'),
-                Storage: function () {
-                    return window.Storage;
-                }
-            };
-            var Storage = window.AppStorage = {
-                total: parseInt({{$net_total}}),
-                listed: jsonDecode(<?= json_encode($list); ?>),
-                infoUrl: '<?= url()->route('admin.exercises.view'); ?>',
-                loaded: {},
-                View: function () {
-                    return window.View;
-                }
-            };
+      $(function () {
+        var View = window.AppView = {
+          listBox: $('#list-box'),
+          previewBox: $('#preview-box'),
+          Storage: function () {
+            return window.Storage;
+          }
+        };
+        var Storage = window.AppStorage = {
+          total: parseInt({{$net_total}}),
+          listed: jsonDecode(<?= json_encode($list); ?>),
+          infoUrl: '<?= url()->route('admin.exercises.view'); ?>',
+          loaded: {},
+          View: function () {
+            return window.View;
+          }
+        };
 
-            View.listBox.on('click focus', 'tr', function () {
-                previewDataRow(this, Storage, ExercisePreviewer)
-            });
-
-            /*
-             $('ul.tabs').tabs();
-             $('.datepicker').pickadate({
-             selectMonths: true,
-             selectYears: 15
-             });
-
-             $('#exercise-editor').openModal({
-             dismissible: false,
-             starting_top: '3%',
-             ending_top: '3%'
-             });
-             */
-            $(window).on('resize', function (e) {
-                adaptContent();
-            });
-
-            buildExercisesTable(Storage.listed, View.listBox, true);
-            adaptContent();
-
-            function adaptContent() {
-                var Sidebar = $('#sidebar');
-                if ($(window).width() > 1024) {
-                    Sidebar.pushpin({top: Sidebar.offset().top});
-                } else {
-                    Sidebar.unbind();
-                }
-                Sidebar.attr('style', 'max-width:' + parseInt(Sidebar.parent().width()) + 'px;');
-
-                var SearchForm = $('#search-form');
-                if ($(window).width() > 600 && Storage.listed.length > 20) {
-                    SearchForm.pushpin({top: SearchForm.offset().top - 50});
-                } else {
-                    SearchForm.unbind();
-                    SearchForm.hide();
-                }
-            }
+        View.listBox.on('click focus', 'tr', function () {
+          previewDataRow(this, Storage, ExercisePreviewer)
         });
+
+        $('ul.tabs').tabs();
+        $('.datepicker').pickadate({
+          selectMonths: true,
+          selectYears: 15
+        });
+
+        $('#exercise-editor').openModal({
+          dismissible: true,
+          starting_top: '3%',
+          ending_top: '3%'
+        });
+
+        $(window).on('resize', function (e) {
+          adaptContent();
+        });
+
+        buildExercisesTable(Storage.listed, View.listBox, true);
+        adaptContent();
+
+        function adaptContent() {
+          var Sidebar = $('#sidebar');
+          if ($(window).width() > 1024) {
+            Sidebar.pushpin({top: Sidebar.offset().top});
+          } else {
+            Sidebar.unbind();
+          }
+          Sidebar.attr('style', 'max-width:' + parseInt(Sidebar.parent().width()) + 'px;');
+
+          var SearchForm = $('#search-form');
+          if ($(window).width() > 600 && Storage.listed.length > 20) {
+            SearchForm.pushpin({top: SearchForm.offset().top - 50});
+          } else {
+            SearchForm.unbind();
+            SearchForm.hide();
+          }
+        }
+      });
     </script>
 @endsection

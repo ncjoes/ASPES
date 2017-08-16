@@ -8,7 +8,6 @@
 
 namespace App\Models;
 
-use App\Models\DataTypes\FuzzyNumber;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +20,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Factor extends Model
 {
     use SoftDeletes;
+
+    const TYPE_COURSE     = 'c';
+    const TYPE_INSTRUCTOR = 'l';
 
     /**
      * @var array
@@ -42,14 +44,6 @@ class Factor extends Model
     public function evaluations()
     {
         return $this->hasMany(Evaluation::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function comparisons()
-    {
-        return $this->hasMany(Comparison::class, 'f1_id');
     }
 
     /**
@@ -87,32 +81,5 @@ class Factor extends Model
     public function hasSubFactors()
     {
         return $this->children()->count() > 0;
-    }
-
-    /**
-     * @return float|mixed|number
-     */
-    public function getRawWeight()
-    {
-        return $this->calculateRawWeight();
-    }
-
-    /**
-     * @return float|number
-     */
-    protected function calculateRawWeight()
-    {
-        $rb = [];
-        if ($this->hasSubFactors()) {
-            // ToDo
-        }
-
-        $DM = $this->exercise->getDecisionMatrix();
-        foreach ($this->siblings() as $factor) {
-            $rb[ $factor->id ] = FuzzyNumber::geometricMean($DM[ $factor->id ]);
-        }
-        $FN = FuzzyNumber::product($rb[ $this->id ], FuzzyNumber::addMany($rb)->reciprocal());
-
-        return $FN->defuzzify(3);
     }
 }

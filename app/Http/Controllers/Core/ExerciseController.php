@@ -10,11 +10,8 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Commons\SingletonInstance;
 use App\Http\Controllers\Controller;
-use App\Models\Comparison;
-use App\Models\DataTypes\FuzzyNumber;
 use App\Models\Evaluator;
 use App\Models\Exercise;
-use App\Models\FCV;
 use App\Models\Subject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -89,16 +86,15 @@ class ExerciseController extends Controller
         return [
             'status' => true,
             'object' => [
-                'id' => $exercise->id,
-                'main' => $exercise,
+                'id'        => $exercise->id,
+                'main'      => $exercise,
                 'relations' => [
-                    'fcvs' => $exercise->fcvs()->getResults()->sortBy(function (FCV $FCV) {
-                        return (new FuzzyNumber($FCV->value))->defuzzify();
-                    }),
-                    'comments' => $exercise->comments()->getResults()->sortByDesc('grade'),
-                    'factors' => $exercise->factors()->getResults()->sortByDesc('weight'),
-                    'subjects' => $exercise->subjects()->getResults(),
-                    'evaluators' => $exercise->evaluators()->getResults(),
+                    'courseComments'     => $exercise->courseComments()->getResults()->sortByDesc('grade'),
+                    'instructorComments' => $exercise->instructorComments()->getResults()->sortByDesc('grade'),
+                    'courseFactors'      => $exercise->courseFactors,
+                    'instructorFactors'  => $exercise->instructorFactors,
+                    'subjects'           => $exercise->subjects,
+                    'evaluators'         => $exercise->evaluators,
                 ],
             ],
         ];
@@ -109,7 +105,7 @@ class ExerciseController extends Controller
      *
      * @param Request $request
      *
-     * @return string
+     * @return array
      */
     public function create(Request $request)
     {
@@ -133,21 +129,6 @@ class ExerciseController extends Controller
     }
 
     /**
-     * Set Fuzzy Comparison Variables for Factor Comparisons
-     * The FCV ids are passed through a post request
-     *
-     * @param Request $request
-     *
-     * @return string
-     */
-    public function setFuzzyCVs(Request $request)
-    {
-        $data = [];
-
-        return $data;
-    }
-
-    /**
      * Set evaluation comment set for an Exercise
      *
      * @param Request $request
@@ -162,8 +143,8 @@ class ExerciseController extends Controller
     }
 
     /**
-     * Set exercise evaluators by passing an array of user ids and their respective evaluation roles through a post request
-     * Evaluation roles could be
+     * Set exercise evaluators by passing an array of user ids and their respective evaluation roles through a post
+     * request Evaluation roles could be
      *      1. Factor Comparison
      *      2. Subject Evaluation
      *
@@ -183,7 +164,7 @@ class ExerciseController extends Controller
      *
      * @param Request $request
      *
-     * @return string
+     * @return array
      */
     public function setSubjects(Request $request)
     {
@@ -201,43 +182,12 @@ class ExerciseController extends Controller
      */
     public function saveSubjectEvaluation(Evaluator $evaluator, Subject $subject, array $evaluations)
     {
-        try{
+        try {
             $evaluator->evaluations()->where('subject_id', $subject->id)->delete();
 
             foreach ($evaluations as $factorId => $commentId) {
                 $evaluator->evaluations()->create(['subject_id' => $subject->id, 'factor_id' => $factorId, 'comment_id' => $commentId]);
             }
-            return true;
-        }
-        catch (\Exception $exception) {
-            return false;
-        }
-    }
-
-    /**
-     * @param Evaluator $evaluator
-     * @param array $comparisons
-     *
-     * @return bool
-     */
-    public function saveFactorComparisons(Evaluator $evaluator, array $comparisons)
-    {
-        $C = [];
-
-        try {
-            foreach ($comparisons as $FX_ID => $FX_Comparisons) {
-                foreach ($FX_Comparisons as $FY_ID => $FCV_ID) {
-                    $C[] = new Comparison([
-                        'f1_id' => $FX_ID,
-                        'f2_id' => $FY_ID,
-                        'fcv__id' => $FCV_ID,
-                        'evaluator_id' => $evaluator->id
-                    ]);
-                }
-            }
-
-            $evaluator->comparisons()->forceDelete();
-            $evaluator->comparisons()->saveMany($C);
 
             return true;
         }
